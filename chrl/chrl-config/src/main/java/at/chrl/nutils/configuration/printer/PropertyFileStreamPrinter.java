@@ -1,0 +1,63 @@
+/**
+ * (C) ChRL 2014 - chrl-utils - at.chrl.nutils.configuration.printer - PrintStreamPrinter.java
+ * Created: 03.08.2014 - 16:53:21
+ */
+package at.chrl.nutils.configuration.printer;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
+
+import at.chrl.logging.Logger;
+import at.chrl.nutils.FileUtil;
+import at.chrl.nutils.JVMInfoUtil;
+import at.chrl.nutils.configuration.IConfigPrinter;
+import at.chrl.nutils.configuration.Property;
+import at.chrl.utils.StringUtils;
+
+/**
+ * @author Vinzynth
+ *
+ */
+public class PropertyFileStreamPrinter implements IConfigPrinter{
+	
+	public static final Logger log = new Logger();
+	
+	private final File targetFile;
+	
+	private boolean recreated = false;
+	
+	public PropertyFileStreamPrinter(final File targetFile) {
+		this.targetFile = targetFile;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * @see at.chrl.nutils.configuration.IConfigPrinter#printConfigField(at.chrl.nutils.configuration.Property, java.lang.String)
+	 */
+	@Override
+	public void printConfigField(Property property, String currentValue){
+		if(!recreated){
+			FileUtil.recreate(this.targetFile);
+			this.targetFile.setReadable(true, false);
+			this.targetFile.setWritable(true, false);
+			recreated = true;
+		}
+		try (BufferedWriter writer = Files.newBufferedWriter(targetFile.toPath(), Charset.forName("UTF-8"), StandardOpenOption.APPEND, StandardOpenOption.CREATE)){
+			writer.write("# " + JVMInfoUtil.printSection(property.key()) + System.lineSeparator());
+			writer.write("# Description:" + System.lineSeparator());
+			writer.write("# " + StringUtils.insertRepetitive(property.description(), JVMInfoUtil.PRINT_SECTION_LENGTH-(property.key().length()+5), "\n# ") + System.lineSeparator());
+			
+			writer.write("# " + System.lineSeparator());
+			
+			writer.write("# Default Value: " + property.defaultValue() + System.lineSeparator());
+			writer.write(property.key()+"="+currentValue + System.lineSeparator());
+			
+			writer.write(System.lineSeparator());
+		} catch (Exception e) {
+			log.error("Exception during property exportation: " + targetFile.getAbsolutePath() + " | " + e.getMessage(), e);
+		}
+	}
+}

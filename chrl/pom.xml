@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>at.chrl</groupId>
+	<artifactId>chrl</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>chrl</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.1</version>
+				<configuration>
+					<server>tomcat</server>
+					<url>http://192.168.1.101:8080/manager/text</url>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<distributionManagement>
+		<repository>
+			<id>bravestone_releases</id>
+			<url>http://office64.bravestone.at/nexus/content/repositories/bravestone_releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>bravestone</id>
+			<url>http://office64.bravestone.at/nexus/content/repositories/bravestone</url>
+		</snapshotRepository>
+		<site>
+			<id>bravestone_site</id>
+			<url>dav:http://office64.bravestone.at:8080/nexus/content/sites/bravestone_site/bravestone</url>
+		</site>
+	</distributionManagement>
+
+	<modules>
+		<module>chrl-utils</module>
+		<module>chrl-cron</module>
+		<module>chrl-iryna</module>
+		<module>chrl-exodus</module>
+		<module>chrl-config</module>
+		<module>chrl-webapps</module>
+		<module>chrl-search</module>
+	</modules>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.11</version>
+				<scope>test</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+</project>
