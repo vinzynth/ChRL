@@ -36,21 +36,6 @@
 		</plugins>
 	</build>
 
-	<distributionManagement>
-		<repository>
-			<id>bravestone_releases</id>
-			<url>http://office64.bravestone.at/nexus/content/repositories/bravestone_releases</url>
-		</repository>
-		<snapshotRepository>
-			<id>bravestone</id>
-			<url>http://office64.bravestone.at/nexus/content/repositories/bravestone</url>
-		</snapshotRepository>
-		<site>
-			<id>bravestone_site</id>
-			<url>dav:http://office64.bravestone.at:8080/nexus/content/sites/bravestone_site/bravestone</url>
-		</site>
-	</distributionManagement>
-
 	<modules>
 		<module>chrl-utils</module>
 		<module>chrl-cron</module>
