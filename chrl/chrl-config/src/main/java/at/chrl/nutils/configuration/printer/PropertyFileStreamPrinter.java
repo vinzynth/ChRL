@@ -38,7 +38,7 @@ public class PropertyFileStreamPrinter implements IConfigPrinter{
 	 * @see at.chrl.nutils.configuration.IConfigPrinter#printConfigField(at.chrl.nutils.configuration.Property, java.lang.String)
 	 */
 	@Override
-	public void printConfigField(Property property, String currentValue){
+	public <T> void printConfigField(Property property, String currentValue, Class<T> annotatedType) {
 		if(!recreated){
 			FileUtil.recreate(this.targetFile);
 			this.targetFile.setReadable(true, false);
@@ -51,6 +51,21 @@ public class PropertyFileStreamPrinter implements IConfigPrinter{
 			writer.write("# " + StringUtils.insertRepetitive(property.description(), JVMInfoUtil.PRINT_SECTION_LENGTH-(property.key().length()+5), "\n# ") + System.lineSeparator());
 			
 			writer.write("# " + System.lineSeparator());
+			
+			if(property.examples().length > 0){
+				writer.write("# Examples:" + System.lineSeparator());
+				for (String example : property.examples())
+					writer.write("# " + example + System.lineSeparator());
+				
+				writer.write("# " + System.lineSeparator());
+			}
+			else if(annotatedType.isEnum()){
+				writer.write("# Valid Examples:" + System.lineSeparator());
+				for (T example : annotatedType.getEnumConstants())
+					writer.write("# " + example.toString() + System.lineSeparator());
+				
+				writer.write("# " + System.lineSeparator());
+			}
 			
 			writer.write("# Default Value: " + property.defaultValue() + System.lineSeparator());
 			writer.write(property.key()+"="+currentValue + System.lineSeparator());

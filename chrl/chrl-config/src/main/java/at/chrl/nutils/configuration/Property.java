@@ -31,7 +31,7 @@ public @interface Property
 	 * Default description value
 	 */
 	public static final String	DEFAULT_DESCRIPTION	=	"No Description available";
-
+	
 	/**
 	 * Property name in configuration
 	 * 
@@ -73,13 +73,22 @@ public @interface Property
 	 * @return default value of the property
 	 */
 	public String defaultValue() default DEFAULT_VALUE;
+	
 	/**
-	 * Represents defautt value for property description. Equals {@link #DEFAULT_DESCRIPTION}
+	 * Represents default value for property description. Equals {@link #DEFAULT_DESCRIPTION}
 	 * 
-	 * @return default value of the property
+	 * @return description the property
 	 */
 	public String description() default DEFAULT_DESCRIPTION;
 	
+	/**
+	 * Represents a array with (hopefully) working example configurations.
+	 * <br>
+	 * if your target class is a enumeration, use
+	 * 
+	 * @return array wiith valid examples
+	 */
+	public String[] examples() default {};
 	
 	/**
 	 * Represents method types for Function Transformer

@@ -99,9 +99,9 @@ public class ConfigurationExporter {
 		{
 			Property property = f.getAnnotation(Property.class);
 			if(ConfigurableProcessor.isKeyPresent(property.key(), props))
-				os.printConfigField(property, ConfigurableProcessor.findPropertyByKey(property.key(), props));
+				os.printConfigField(property, ConfigurableProcessor.findPropertyByKey(property.key(), props), f.getType());
 			else
-				os.printConfigField(property, property.defaultValue());
+				os.printConfigField(property, property.defaultValue(), f.getType());
 		}
 		catch(Exception e)
 		{

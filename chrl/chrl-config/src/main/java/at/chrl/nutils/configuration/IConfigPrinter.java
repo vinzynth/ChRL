@@ -17,5 +17,5 @@ public interface IConfigPrinter {
 	 * @param currentValue
 	 * 				current value in application
 	 */
-	public void printConfigField(Property property, String currentValue);
+	public <T> void printConfigField(Property property, String currentValue, Class<T> annotatedType);
 }

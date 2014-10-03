@@ -29,12 +29,27 @@ public class PrintStreamPrinter implements IConfigPrinter{
 	 * @see at.chrl.nutils.configuration.IConfigPrinter#printConfigField(at.chrl.nutils.configuration.Property, java.lang.String)
 	 */
 	@Override
-	public void printConfigField(Property property, String currentValue){
+	public <T> void printConfigField(Property property, String currentValue, Class<T> annotatedType) {
 		ps.println("# " + JVMInfoUtil.printSection(property.key()));
 		ps.println("# Description:");
 		ps.println("# " + StringUtils.insertRepetitive(property.description(), JVMInfoUtil.PRINT_SECTION_LENGTH-(property.key().length()+6), "\n# "));
 		
 		ps.println();
+		
+		if(property.examples().length > 0){
+			ps.println("# Examples:" + System.lineSeparator());
+			for (String example : property.examples())
+				ps.println("# " + example + System.lineSeparator());
+			
+			ps.println("# " + System.lineSeparator());
+		}
+		else if(annotatedType.isEnum()){
+			ps.println("# Valid Examples:" + System.lineSeparator());
+			for (T example : annotatedType.getEnumConstants())
+				ps.println("# " + example.toString() + System.lineSeparator());
+			
+				ps.println("# " + System.lineSeparator());
+		}
 		
 		ps.println("# Default Value: " + property.defaultValue());
 		ps.println(property.key()+"="+currentValue);

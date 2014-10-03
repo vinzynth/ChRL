@@ -32,13 +32,28 @@ public class OutputStreamPrinter implements IConfigPrinter {
 	 * @see at.chrl.nutils.configuration.IConfigPrinter#printConfigField(at.chrl.nutils.configuration.Property, java.lang.String)
 	 */
 	@Override
-	public void printConfigField(Property property, String currentValue) {
+	public <T> void printConfigField(Property property, String currentValue, Class<T> annotatedType) {
 		try {
 			os.write(("# " + JVMInfoUtil.printSection(property.key()) + System.lineSeparator()).getBytes());
 			os.write(("# Description:" + System.lineSeparator()).getBytes());
 			os.write(("# " + StringUtils.insertRepetitive(property.description(), JVMInfoUtil.PRINT_SECTION_LENGTH-(property.key().length()+6), "\n# ") + System.lineSeparator()).getBytes());
 			
 			os.write(("# " + System.lineSeparator()).getBytes());
+			
+			if(property.examples().length > 0){
+				os.write(("# Examples:" + System.lineSeparator()).getBytes());
+				for (String example : property.examples())
+					os.write(("# " + example + System.lineSeparator()).getBytes());
+				
+				os.write(("# " + System.lineSeparator()).getBytes());
+			}
+			else if(annotatedType.isEnum()){
+				os.write(("# Valid Examples:" + System.lineSeparator()).getBytes());
+				for (T example : annotatedType.getEnumConstants())
+					os.write(("# " + example.toString() + System.lineSeparator()).getBytes());
+				
+				os.write(("# " + System.lineSeparator()).getBytes());
+			}
 			
 			os.write(("# Default Value: " + property.defaultValue() + System.lineSeparator()).getBytes());
 			os.write((property.key()+"="+currentValue + System.lineSeparator()).getBytes());
