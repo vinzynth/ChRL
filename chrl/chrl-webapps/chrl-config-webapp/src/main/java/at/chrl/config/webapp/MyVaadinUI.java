@@ -6,11 +6,8 @@ import javax.servlet.annotation.WebServlet;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
-import com.vaadin.client.ui.calendar.schedule.WeekGrid.Timebar;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
-import com.vaadin.server.VaadinSession;
-import com.vaadin.shared.Position;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Calendar;
 import com.vaadin.ui.Label;
