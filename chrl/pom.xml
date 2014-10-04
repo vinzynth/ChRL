@@ -44,6 +44,8 @@
 		<module>chrl-config</module>
 		<module>chrl-webapps</module>
 		<module>chrl-search</module>
+		<module>chrl-database</module>
+		<module>chrl-rebellion</module>
 	</modules>
 	<dependencyManagement>
 		<dependencies>
