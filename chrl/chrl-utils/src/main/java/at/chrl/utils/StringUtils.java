@@ -4,6 +4,8 @@
  */
 package at.chrl.utils;
 
+import at.chrl.nutils.ArrayUtils;
+
 /**
  * @author Vinzynth
  *
@@ -40,8 +42,9 @@ public final class StringUtils {
 	public static String reverseFragments(final String regex, final String data){
 		final String[] split = data.split(regex);
 		final StringBuilder sb = new StringBuilder(data.length());
-		for (int i = split.length-1; i >= 0; i--)
-			sb.append(split[i]).append(regex);
+		sb.append(ArrayUtils.lastOf(split));
+		for (int i = split.length-2; i >= 0; i--)
+			sb.append(regex).append(split[i]);
 		return sb.toString();
 	}
 	

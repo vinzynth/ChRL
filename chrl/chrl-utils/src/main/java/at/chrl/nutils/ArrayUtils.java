@@ -1456,6 +1456,18 @@ public class ArrayUtils {
         }
     }
 
+    /**
+     * Returns last element of given array
+     * 
+     * @throws ArrayIndexOutOfBoundsException if array length is 0
+     * @param array
+     * @return
+     * 		last element of given array
+     */
+    public static <T> T lastOf(T[] array){
+    	return array[array.length-1];
+    }
+    
     // IndexOf search
     // ----------------------------------------------------------------------
 
