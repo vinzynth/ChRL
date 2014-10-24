@@ -19,9 +19,9 @@ import java.util.Iterator;
  * 		Type of elements in the nested collection
  */
 public interface INestedCollection<C extends Collection<E>, E> extends Collection<E>{
-
+	
 	/**
-	 * returns nested collection of type T
+	 * returns nested collection of type C
 	 * 
 	 * @see {@link java.util.Collection}
 	 * @see {@link INestedCollection}
