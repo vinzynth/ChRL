@@ -65,6 +65,18 @@ public final class StringUtils {
     }
     
     /**
+     * Equal to {@link #trim(char, String)} with ' ' as char parameter
+     * 
+     * @param data
+     * 		string to trim
+     * @return
+     * 		trimmed string
+     */
+    public static String trimSpaces(final String data){
+    	return trim(' ', data);
+    }
+    
+    /**
      * Trims "data" String like {@link String#trim()}, but uses defined "trimChars". <p>
      * 
      * @param data
