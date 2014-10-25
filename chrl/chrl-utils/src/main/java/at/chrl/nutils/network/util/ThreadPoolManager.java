@@ -116,7 +116,7 @@ public class ThreadPoolManager implements Executor
 	{
 		new DeadLockDetector(60, DeadLockDetector.RESTART).start();
 
-		scheduledThreadPool = new ScheduledThreadPoolExecutor(4, new PriorityThreadFactory("ScheduledThreadPool", Thread.NORM_PRIORITY));
+		scheduledThreadPool = new ScheduledThreadPoolExecutor(Runtime.getRuntime().availableProcessors() * 5, new PriorityThreadFactory("ScheduledThreadPool", Thread.NORM_PRIORITY));
 
 		generalPacketsThreadPool = new ThreadPoolExecutor(1, Integer.MAX_VALUE, 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>());
 
