@@ -18,7 +18,7 @@ public class GenericValidator {
 	}
 
 	public static boolean isBlankOrNull(Number n) {
-		return n == null || n.doubleValue() == 0;
+		return n == null || n.intValue() == 0;
 	}
 
 	public static boolean isBlankOrNull(Object[] a) {

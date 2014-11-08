@@ -1,6 +1,7 @@
 package at.chrl.nutils;
 
 import java.io.PrintStream;
+import java.lang.management.ManagementFactory;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -81,14 +82,37 @@ public final class JVMInfoUtil
 			String.format("JVM installation directory: %s",System.getProperty("java.home")), //
 			String.format("JVM version: %s",System.getProperty("java.vm.version")), //
 			String.format("JVM Vendor: %s",System.getProperty("java.vm.vendor")), //
-			String.format("JVM Info: %s",System.getProperty("java.vm.info"))
+			String.format("JVM Info: %s",System.getProperty("java.vm.info")),
+			String.format("JVM Specification: %s",System.getProperty("java.vm.specification.name"))
 		};
 	}
 
+	public static String getJVMProcess(){
+		return ManagementFactory.getRuntimeMXBean().getName();
+	}
+	
+	public static String getHostMachineName(){
+		String proc = getJVMProcess();
+		return proc.substring(proc.indexOf("@")+1);
+	}
+	
+	public static int getJVMProcessId(){
+		String proc = getJVMProcess();
+		try {
+			return Integer.parseInt(proc.substring(0, proc.indexOf("@")));			
+		} catch (NumberFormatException e) {
+			return -1;
+		}
+	}
+	
 	public static String getRealTime()
 	{
 		SimpleDateFormat String = new SimpleDateFormat("H:mm:ss");
 		return String.format(new Date());
+	}
+	
+	public static void printJVMProcessId(){
+		log.info(getJVMProcessId());
 	}
 	
 	public static void printMemoryInfo()
@@ -119,6 +143,14 @@ public final class JVMInfoUtil
 	{
 		for(String line : getJVMInfo())
 			log.info(line);
+	}
+	
+	public static void printJVMProcessId(PrintStream out){
+		printSection(out, "JVM Process ID: " + getJVMProcessId());
+	}
+	
+	public static void printHostMachineName(PrintStream out){
+		printSection(out, "JVM Host: " + getHostMachineName());
 	}
 	
 	public static void printMemoryInfo(PrintStream out)
@@ -162,6 +194,7 @@ public final class JVMInfoUtil
 		printCPUInfo();
 		printJREInfo();
 		printJVMInfo();
+		printJVMProcessId();
 		printMemoryInfo();
 	}
 	
@@ -171,6 +204,8 @@ public final class JVMInfoUtil
 		printCPUInfo(out);
 		printJREInfo(out);
 		printJVMInfo(out);
+		printJVMProcessId(out);
+		printHostMachineName(out);
 		printMemoryInfo(out);
 		printSection(out, "-");
 	}

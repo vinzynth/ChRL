@@ -22,6 +22,7 @@ import java.lang.management.MonitorInfo;
 import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
 
+import at.chrl.nutils.ExitCode;
 import static at.chrl.nutils.Constants.log;
 /**
  * @author -Nemesiss-, ATracer
