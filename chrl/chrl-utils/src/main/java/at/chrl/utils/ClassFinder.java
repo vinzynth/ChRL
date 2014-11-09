@@ -13,6 +13,13 @@ import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * use {@link at.chrl.nutils.ClassUtils} instead
+ * @author Vinzynth
+ * 08.11.2014 - 16:38:14
+ *
+ */
+@Deprecated
 public final class ClassFinder {
 
 	private final static char	DOT					= '.';

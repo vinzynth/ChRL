@@ -15,26 +15,35 @@
  * along with ChRL Util Collection.
  * If not, see <http://www.gnu.org/licenses/>.
  */
-package at.chrl.callbacks;
+package at.chrl.nutils;
 
+import java.util.Map;
+import java.util.function.Function;
 
 /**
  * @author Vinzynth
- * 08.11.2014 - 01:15:45
- *
+ * 08.11.2014 - 16:39:32
+ * 
+ * @see http://java.dzone.com/articles/java-8-automatic-memoization
  */
-public class TestCallback implements Callback<Object>{
+public class Memoizer {
 	
-	@Override
-	public CallbackResult<Object> beforeCall(Object obj, Object[] args){
-		Thread.dumpStack();
-		System.out.println("before Call");
-		return CallbackResult.newContinue();
+	/**
+	 * No lambda expressions here, since Javaagent does not support that yet
+	 * @param function
+	 * @return
+	 */
+	private static <T, U> Function<T, U> doMemoize(final Function<T, U> function) {
+		Map<T, U> cache = CollectionUtils.newMap();
+		return new Function<T, U>() {
+			@Override
+			public U apply(T t) {
+				return cache.computeIfAbsent(t, function::apply);
+			}
+		};
 	}
 	
-	@Override
-	public CallbackResult<Object> afterCall(Object obj, Object[] args, Object methodResult){
-		System.out.println("after Call");
-		return CallbackResult.newContinue();
+	public static <T, U> Function<T, U> memoize(final Function<T, U> function) {
+		return doMemoize(function);
 	}
 }

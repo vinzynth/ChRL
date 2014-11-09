@@ -48,6 +48,7 @@
 		<module>chrl-rebellion</module>
 		<module>chrl-datastructures</module>
 		<module>chrl-callbacks</module>
+		<module>chrl-callback-utils</module>
 	</modules>
 	<dependencyManagement>
 		<dependencies>
