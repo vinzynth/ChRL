@@ -55,7 +55,7 @@ public class MemoizeCallback implements Callback<Object> {
 	}
 	
 	private static String getCallingMethod() {
-		String string = Thread.currentThread().getStackTrace()[4].toString();
+		String string = new Throwable().getStackTrace()[3].toString();
 		string = string.substring(string.lastIndexOf('$') + 1, string.lastIndexOf('('));
 		return string;
 	}

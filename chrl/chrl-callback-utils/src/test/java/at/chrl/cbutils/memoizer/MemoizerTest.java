@@ -36,7 +36,7 @@ public class MemoizerTest {
 	@Test
 	public void test() {
 		System.out.println("test");
-		
+
 		TestClass testClass = new TestClass();
 		TestClass testClass2 = new TestClass();
 		
