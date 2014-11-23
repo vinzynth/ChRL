@@ -146,5 +146,4 @@ public interface INestedCollection<C extends Collection<E>, E> extends Collectio
 	public default void clear() {
 		getNestedCollection().clear();
 	}
-
 }

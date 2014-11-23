@@ -5,8 +5,12 @@
 package at.chrl.nutils;
 
 import gnu.trove.map.hash.THashMap;
+import gnu.trove.set.hash.THashSet;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
@@ -36,7 +40,15 @@ public class CollectionUtils {
 	public static <K, V> Supplier<Map<K, V>> getMapSupplier() {
 		return THashMap<K, V>::new;
 	}
+	
+	public static <T> Supplier<Set<T>> getSetSupplier() {
+		return THashSet<T>::new;
+	}
 
+	public static <T> Supplier<List<T>> getListSupplier() {
+		return ArrayList<T>::new;
+	}
+	
 	public static <K, V> Supplier<Map<K, V>> getWeakMapSupplier() {
 		return WeakHashMap<K, V>::new;
 	}
@@ -57,7 +69,24 @@ public class CollectionUtils {
 		return get(getMapSupplier());
 	}
 	
+	public static <K> Set<K> newSet(){
+		return get(getSetSupplier());
+	}
+	
+	public static <K> List<K> newList(){
+		return get(getListSupplier());
+	}
+	
 	public static <K,V> Map<K,V> newConcurrentMap(){
 		return get(getConcurrentMapSupplier());
+	}
+	
+	public static <T> List<List<T>> chopped(List<T> list, final int length) {
+		List<List<T>> parts = new ArrayList<List<T>>();
+		final int n = list.size();
+		for (int i = 0; i < n; i += length) {
+			parts.add(new ArrayList<T>(list.subList(i, Math.min(n, i + length))));
+		}
+		return parts;
 	}
 }
