@@ -1,15 +1,18 @@
 package at.chrl.nutils.cron;
 
-import org.quartz.*;
+import org.quartz.Job;
+import org.quartz.JobDataMap;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 
-public abstract class RunnableRunner implements Job {
+public interface RunnableRunner extends Job {
 
 	public static final String KEY_RUNNABLE_OBJECT = "cronservice.scheduled.runnable.instance";
 	public static final String KEY_PROPERTY_IS_LONGRUNNING_TASK  = "cronservice.scheduled.runnable.islognrunning";
 	public static final String KEY_CRON_EXPRESSION = "cronservice.scheduled.runnable.cronexpression";
 
 	@Override
-	public void execute(JobExecutionContext context) throws JobExecutionException {
+	public default void execute(JobExecutionContext context) throws JobExecutionException {
 
 		JobDataMap jdm = context.getJobDetail().getJobDataMap();
 
@@ -23,7 +26,11 @@ public abstract class RunnableRunner implements Job {
 		}
 	}
 
-	public abstract void executeRunnable(Runnable r);
+	public default void executeRunnable(Runnable r){
+		r.run();
+	}
 
-	public abstract void executeLongRunningRunnable(Runnable r);
+	public default void executeLongRunningRunnable(Runnable r){
+		r.run();
+	};
 }
