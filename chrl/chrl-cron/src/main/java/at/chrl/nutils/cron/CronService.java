@@ -2,6 +2,7 @@ package at.chrl.nutils.cron;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -25,7 +26,7 @@ import at.chrl.nutils.CollectionUtils;
 import at.chrl.nutils.GenericValidator;
 
 /**
- * @author SoulKeeper
+ * @author ChRL
  */
 public final class CronService {
 	
@@ -105,11 +106,24 @@ public final class CronService {
 		}
 	}
 
-	public void schedule(Runnable r, String cronExpression) {
-		schedule(r, cronExpression, false);
+	/**
+	 * 
+	 * @param r
+	 * @param cronExpression
+	 * @return next execution Date
+	 */
+	public Date schedule(Runnable r, String cronExpression) {
+		return schedule(r, cronExpression, false);
 	}
 
-	public void schedule(Runnable r, String cronExpression, boolean longRunning) {
+	/**
+	 * 
+	 * @param r
+	 * @param cronExpression
+	 * @param longRunning
+	 * @return next execution Date
+	 */
+	public Date schedule(Runnable r, String cronExpression, boolean longRunning) {
 		try {
 			JobDataMap jdm = new JobDataMap();
 			jdm.put(RunnableRunner.KEY_RUNNABLE_OBJECT, r);
@@ -123,7 +137,7 @@ public final class CronService {
 			CronScheduleBuilder csb = CronScheduleBuilder.cronSchedule(cronExpression);
 			CronTrigger trigger = TriggerBuilder.newTrigger().withSchedule(csb).build();
 
-			scheduler.scheduleJob(jobDetail, trigger);
+			return scheduler.scheduleJob(jobDetail, trigger);
 		} catch (Exception e) {
 			throw new CronServiceException("Failed to start job", e);
 		}
