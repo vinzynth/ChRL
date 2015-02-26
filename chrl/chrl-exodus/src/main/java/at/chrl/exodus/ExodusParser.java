@@ -16,10 +16,9 @@ import at.chrl.exodus.engine.OutputType;
  *
  */
 public class ExodusParser {
-	
+
 	final Map<InputType, File> inputFiles;
 	final Map<OutputType, File> outputFiles;
-	
 
 	/**
 	 * 
@@ -34,5 +33,5 @@ public class ExodusParser {
 			this.inputFiles.put(InputType.DATA_FILE, file);
 		}
 	}
-	
+
 }

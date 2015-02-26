@@ -1,18 +1,18 @@
 /**
  * This file is part of aion-lightning <aion-lightning.org>.
  * 
- * aion-lightning is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * aion-lightning is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  * 
- * aion-lightning is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * aion-lightning is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  * 
- * You should have received a copy of the GNU General Public License
- * along with aion-lightning.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with
+ * aion-lightning. If not, see <http://www.gnu.org/licenses/>.
  */
 package at.chrl.rebellion;
 
@@ -28,24 +28,27 @@ public interface ScriptContext {
 
 	/**
 	 * Initializes script context. Calls the compilation task.<br>
-	 * After compilation static methods marked with {@link at.chrl.rebellion.metadata.OnClassLoad} are invoked
+	 * After compilation static methods marked with
+	 * {@link at.chrl.rebellion.metadata.OnClassLoad} are invoked
 	 */
 	public void init();
 
 	/**
-	 * Notifies all script classes that they must save their data and release resources to prevent memory leaks. It's done
-	 * via static methods with {@link at.chrl.rebellion.metadata.OnClassUnload} annotation
+	 * Notifies all script classes that they must save their data and release
+	 * resources to prevent memory leaks. It's done via static methods with
+	 * {@link at.chrl.rebellion.metadata.OnClassUnload} annotation
 	 */
 	public void shutdown();
 
 	/**
-	 * Invokes {@link #shutdown()}, after that invokes {@link #init()}. Root folder remains the same, but new compiler and
-	 * classloader are used.
+	 * Invokes {@link #shutdown()}, after that invokes {@link #init()}. Root
+	 * folder remains the same, but new compiler and classloader are used.
 	 */
 	public void reload();
 
 	/**
-	 * Returns the root directory for script engine. Only one script engine per root directory is allowed.
+	 * Returns the root directory for script engine. Only one script engine per
+	 * root directory is allowed.
 	 * 
 	 * @return root directory for script engine
 	 */
@@ -69,7 +72,7 @@ public interface ScriptContext {
 	 * Sets files that represents jar files, they will be used as libraries
 	 * 
 	 * @param files
-	 *          that points to jar file, will be used as libraries
+	 *            that points to jar file, will be used as libraries
 	 */
 	public void setLibraries(Iterable<File> files);
 
@@ -95,12 +98,14 @@ public interface ScriptContext {
 	public Collection<ScriptContext> getChildScriptContexts();
 
 	/**
-	 * Adds child contexts to this context. If this context is initialized - chiled context will be initialized
-	 * immideatly. In other case child context will be just added and initialized when {@link #init()} would be called.
-	 * Duplicated child contexts are not allowed, in such case child will be ignored
+	 * Adds child contexts to this context. If this context is initialized -
+	 * chiled context will be initialized immideatly. In other case child
+	 * context will be just added and initialized when {@link #init()} would be
+	 * called. Duplicated child contexts are not allowed, in such case child
+	 * will be ignored
 	 * 
 	 * @param context
-	 *          child context
+	 *            child context
 	 */
 	public void addChildScriptContext(ScriptContext context);
 
@@ -108,19 +113,20 @@ public interface ScriptContext {
 	 * Sets the class listener for this script context.
 	 * 
 	 * @param cl
-	 *          class listener
+	 *            class listener
 	 */
 	public void setClassListener(ClassListener cl);
 
 	/**
 	 * Returns class listener associated with this ScriptContext.<br>
 	 * If it's null - returns parent classListener.<br>
-	 * If parent is null and classListener is null - it will add the following class listeners
-	 * as default implementation (order saved):
+	 * If parent is null and classListener is null - it will add the following
+	 * class listeners as default implementation (order saved):
+	 * 
 	 * <pre>
-	 *     	AggregatedClassListener acl = new AggregatedClassListener();
-			acl.addClassListener(new OnClassLoadUnloadListener());
-			acl.addClassListener(new ScheduledTaskClassListener());
+	 * AggregatedClassListener acl = new AggregatedClassListener();
+	 * acl.addClassListener(new OnClassLoadUnloadListener());
+	 * acl.addClassListener(new ScheduledTaskClassListener());
 	 * </pre>
 	 *
 	 * @see at.chrl.rebellion.classlistener.AggregatedClassListener
@@ -135,7 +141,7 @@ public interface ScriptContext {
 	 * Compiler is not inherrited by children.<br>
 	 * 
 	 * @param className
-	 *          compiler class name
+	 *            compiler class name
 	 */
 	public void setCompilerClassName(String className);
 
@@ -147,18 +153,20 @@ public interface ScriptContext {
 	public String getCompilerClassName();
 
 	/**
-	 * Tests if this ScriptContext is equal to another ScriptContext. Comparation is done by comparing root files and
-	 * parent contexts (if there is any parent)
+	 * Tests if this ScriptContext is equal to another ScriptContext.
+	 * Comparation is done by comparing root files and parent contexts (if there
+	 * is any parent)
 	 * 
 	 * @param obj
-	 *          object to compare with
+	 *            object to compare with
 	 * @return result of comparation
 	 */
 	@Override
 	public boolean equals(Object obj);
 
 	/**
-	 * Returns hashCoded of this ScriptContext. Hashcode is calculated using root file and parent context(if available)
+	 * Returns hashCoded of this ScriptContext. Hashcode is calculated using
+	 * root file and parent context(if available)
 	 * 
 	 * @return hashCode
 	 */
@@ -166,11 +174,12 @@ public interface ScriptContext {
 	public int hashCode();
 
 	/**
-	 * This method overrides finalization to ensure that active script context will not be collected by GC. If such
-	 * situation happens - {@link #shutdown()} is called to ensure that resources were released.
+	 * This method overrides finalization to ensure that active script context
+	 * will not be collected by GC. If such situation happens -
+	 * {@link #shutdown()} is called to ensure that resources were released.
 	 * 
 	 * @throws Throwable
-	 *           if something goes wrong during finalization
+	 *             if something goes wrong during finalization
 	 */
 	void finalize() throws Throwable;
 }

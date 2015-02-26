@@ -40,7 +40,7 @@ public class CollectionUtils {
 	public static <K, V> Supplier<Map<K, V>> getMapSupplier() {
 		return THashMap<K, V>::new;
 	}
-	
+
 	public static <T> Supplier<Set<T>> getSetSupplier() {
 		return THashSet<T>::new;
 	}
@@ -48,7 +48,7 @@ public class CollectionUtils {
 	public static <T> Supplier<List<T>> getListSupplier() {
 		return ArrayList<T>::new;
 	}
-	
+
 	public static <K, V> Supplier<Map<K, V>> getWeakMapSupplier() {
 		return WeakHashMap<K, V>::new;
 	}
@@ -60,27 +60,27 @@ public class CollectionUtils {
 	public static <K, V> Supplier<Map<K, V>> getConcurrentWeakMapSupplier() {
 		return () -> mapMaker.concurrencyLevel(16).weakKeys().<K, V> makeMap();
 	}
-	
-	private static <T> T get(Supplier<T> sup){
+
+	private static <T> T get(Supplier<T> sup) {
 		return sup.get();
 	}
-	
-	public static <K,V> Map<K,V> newMap(){
+
+	public static <K, V> Map<K, V> newMap() {
 		return get(getMapSupplier());
 	}
-	
-	public static <K> Set<K> newSet(){
+
+	public static <K> Set<K> newSet() {
 		return get(getSetSupplier());
 	}
-	
-	public static <K> List<K> newList(){
+
+	public static <K> List<K> newList() {
 		return get(getListSupplier());
 	}
-	
-	public static <K,V> Map<K,V> newConcurrentMap(){
+
+	public static <K, V> Map<K, V> newConcurrentMap() {
 		return get(getConcurrentMapSupplier());
 	}
-	
+
 	public static <T> List<List<T>> chopped(List<T> list, final int length) {
 		List<List<T>> parts = new ArrayList<List<T>>();
 		final int n = list.size();

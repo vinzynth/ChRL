@@ -5,8 +5,7 @@ import java.net.InetAddress;
 /**
  * @author KID, -Nemesiss-, ggadv2
  */
-public class NetworkUtils
-{
+public class NetworkUtils {
 	/**
 	 * check if IP address match pattern
 	 * 
@@ -20,45 +19,38 @@ public class NetworkUtils
 	 *                address = 10.2.88.12  pattern = 10.2.88.13-125   result: false<BR></code>
 	 * @return true if address match pattern
 	 */
-	public static boolean checkIPMatching(String pattern, String address)
-	{
-		if(pattern.equals("*.*.*.*") || pattern.equals("*"))
+	public static boolean checkIPMatching(String pattern, String address) {
+		if (pattern.equals("*.*.*.*") || pattern.equals("*"))
 			return true;
 
 		InetAddress ia1;
 		InetAddress ia2;
 		String addressToCheck1 = null;
 		String addressToCheck2 = null;
-		try
-		{
+		try {
 			ia1 = InetAddress.getByName(pattern);
 			ia2 = InetAddress.getByName(address);
 			addressToCheck1 = ia1.getHostAddress();
 			addressToCheck2 = ia2.getHostAddress();
-		}
-		catch(Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		if(addressToCheck1 == null || addressToCheck2 == null)
+		if (addressToCheck1 == null || addressToCheck2 == null)
 			return false;
 
 		String[] mask = addressToCheck1.split("\\.");
 		String[] ip_address = addressToCheck2.split("\\.");
-		for(int i = 0; i < mask.length; i++)
-		{
-			if(mask[i].equals("*") || mask[i].equals(ip_address[i]))
+		for (int i = 0; i < mask.length; i++) {
+			if (mask[i].equals("*") || mask[i].equals(ip_address[i]))
 				continue;
-			else if(mask[i].contains("-"))
-			{
+			else if (mask[i].contains("-")) {
 				byte min = Byte.parseByte(mask[i].split("-")[0]);
 				byte max = Byte.parseByte(mask[i].split("-")[1]);
 				byte ip = Byte.parseByte(ip_address[i]);
-				if(ip < min || ip > max)
+				if (ip < min || ip > max)
 					return false;
-			}
-			else
+			} else
 				return false;
 		}
 		return true;

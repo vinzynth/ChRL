@@ -1,8 +1,6 @@
 /**
- * @author bravestone
- * Feb 20, 2015 - 6:08:05 PM
- * bravestone-spring
- * com.bravestone.vaadin.ui
+ * @author bravestone Feb 20, 2015 - 6:08:05 PM bravestone-spring
+ *         com.bravestone.vaadin.ui
  */
 package at.chrl.vaadin.ui;
 
@@ -25,19 +23,19 @@ public abstract class BasicUIView extends VerticalLayout implements View {
 	 * 
 	 */
 	public BasicUIView() {
-		
+
 		MenuBar mb = new MenuBar();
 		for (Views views : BasicUI.Views.values()) {
 			mb.addItem(views.toString(), null, new Command() {
-				
+
 				@Override
 				public void menuSelected(MenuItem selectedItem) {
 					getUI().getNavigator().navigateTo(views.name());
 				}
 			});
 		}
-		
+
 		addComponent(mb);
 	}
-	
+
 }

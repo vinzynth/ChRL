@@ -1,6 +1,6 @@
 /**
- * (C) ChRL 2014 - chrl-utils - at.chrl.nutils.configuration.transformers - FunctionTransformer.java
- * Created: 10.08.2014 - 21:05:46
+ * (C) ChRL 2014 - chrl-utils - at.chrl.nutils.configuration.transformers -
+ * FunctionTransformer.java Created: 10.08.2014 - 21:05:46
  */
 package at.chrl.nutils.configuration.transformers;
 
@@ -23,25 +23,27 @@ import at.chrl.nutils.configuration.TransformationException;
 public class FunctionTransformer<T, R> implements PropertyTransformer<Function<T, R>> {
 
 	public static final FunctionTransformer<Object, Object> SHARED_INSTANCE = new FunctionTransformer<>();
-	
+
 	public static final Class<?>[] EMPTY_ARRAY = new Class<?>[0];
-	
+
 	/**
 	 * {@inheritDoc}
-	 * @see at.chrl.nutils.configuration.PropertyTransformer#transform(java.lang.String, java.lang.reflect.Field)
+	 * 
+	 * @see at.chrl.nutils.configuration.PropertyTransformer#transform(java.lang.String,
+	 *      java.lang.reflect.Field)
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public Function<T, R> transform(String value, Field field, Class<?>... types) throws TransformationException {
 		try {
-			if(!value.contains("::"))
+			if (!value.contains("::"))
 				throw new IllegalArgumentException("Syntax for Function Property: <class>::<method reference>");
 			String clazzString = value.substring(0, value.indexOf("::"));
-			String methodString = value.substring(value.indexOf("::")+ 2);
+			String methodString = value.substring(value.indexOf("::") + 2);
 			Class<T> clazz = (Class<T>) Class.forName(clazzString);
 			types = Arrays.stream(types).map(ClassUtils::getPrimitiveClass).toArray(Class[]::new);
 			Method m = clazz.getDeclaredMethod(methodString, types);
-			
+
 			return new Function<T, R>() {
 
 				@Override
@@ -54,7 +56,7 @@ public class FunctionTransformer<T, R> implements PropertyTransformer<Function<T
 					return null;
 				}
 			};
-			
+
 		} catch (Exception e) {
 			throw new TransformationException(e);
 		}
@@ -62,7 +64,9 @@ public class FunctionTransformer<T, R> implements PropertyTransformer<Function<T
 
 	/**
 	 * {@inheritDoc}
-	 * @see at.chrl.nutils.configuration.PropertyTransformer#transform(java.lang.String, java.lang.reflect.Field)
+	 * 
+	 * @see at.chrl.nutils.configuration.PropertyTransformer#transform(java.lang.String,
+	 *      java.lang.reflect.Field)
 	 */
 	@Override
 	public Function<T, R> transform(String value, Field field) throws TransformationException {

@@ -3,28 +3,29 @@ package at.chrl.nutils.network;
 import java.util.Arrays;
 
 /**
- * Utility class that is designed to check belongings of one address to the range.<br>
- * This class is designed in the way that we won't need any changes to external classes in case of migration to IPv6.
+ * Utility class that is designed to check belongings of one address to the
+ * range.<br>
+ * This class is designed in the way that we won't need any changes to external
+ * classes in case of migration to IPv6.
  * 
  * @author Taran
  * @author SoulKeeper
  */
-public class IPRange
-{
+public class IPRange {
 	/**
 	 * Minimal ip address of the range
 	 */
-	private final long		min;
+	private final long min;
 
 	/**
 	 * Maximum ip address of the range
 	 */
-	private final long		max;
+	private final long max;
 
 	/**
 	 * Address that is host for this range
 	 */
-	private final byte[]	address;
+	private final byte[] address;
 
 	/**
 	 * Creates new IPRange object.
@@ -36,8 +37,7 @@ public class IPRange
 	 * @param address
 	 *            ip address that will be used as host for this range
 	 */
-	public IPRange(String min, String max, String address)
-	{
+	public IPRange(String min, String max, String address) {
 		this.min = toLong(toByteArray(min));
 		this.max = toLong(toByteArray(max));
 		this.address = toByteArray(address);
@@ -53,8 +53,7 @@ public class IPRange
 	 * @param address
 	 *            ip address that will be used as host for this range
 	 */
-	public IPRange(byte[] min, byte[] max, byte[] address)
-	{
+	public IPRange(byte[] min, byte[] max, byte[] address) {
 		this.min = toLong(min);
 		this.max = toLong(max);
 		this.address = address;
@@ -67,8 +66,7 @@ public class IPRange
 	 *            address to check if is in range
 	 * @return true if is in range, false in other case
 	 */
-	public boolean isInRange(String address)
-	{
+	public boolean isInRange(String address) {
 		long addr = toLong(toByteArray(address));
 		return addr >= min && addr <= max;
 	}
@@ -78,8 +76,7 @@ public class IPRange
 	 * 
 	 * @return address that is assigned to this range
 	 */
-	public byte[] getAddress()
-	{
+	public byte[] getAddress() {
 		return address;
 	}
 
@@ -88,8 +85,7 @@ public class IPRange
 	 * 
 	 * @return minimal ip address of the range
 	 */
-	public byte[] getMinAsByteArray()
-	{
+	public byte[] getMinAsByteArray() {
 		return toBytes(min);
 	}
 
@@ -98,8 +94,7 @@ public class IPRange
 	 * 
 	 * @return maximal ip address of the range
 	 */
-	public byte[] getMaxAsByteArray()
-	{
+	public byte[] getMaxAsByteArray() {
 		return toBytes(max);
 	}
 
@@ -110,8 +105,7 @@ public class IPRange
 	 *            byte array to convert
 	 * @return long that represents address
 	 */
-	private static long toLong(byte[] bytes)
-	{
+	private static long toLong(byte[] bytes) {
 		long result = 0;
 		result += (bytes[3] & 0xFF);
 		result += ((bytes[2] & 0xFF) << 8);
@@ -127,8 +121,7 @@ public class IPRange
 	 *            long to convert
 	 * @return byte array
 	 */
-	private static byte[] toBytes(long val)
-	{
+	private static byte[] toBytes(long val) {
 		byte[] result = new byte[4];
 		result[3] = (byte) (val & 0xFF);
 		result[2] = (byte) ((val >> 8) & 0xFF);
@@ -144,12 +137,10 @@ public class IPRange
 	 *            String to convert
 	 * @return byte array that represents string
 	 */
-	public static byte[] toByteArray(String address)
-	{
+	public static byte[] toByteArray(String address) {
 		byte[] result = new byte[4];
 		String[] strings = address.split("\\.");
-		for(int i = 0, n = strings.length; i < n; i++)
-		{
+		for (int i = 0, n = strings.length; i < n; i++) {
 			result[i] = (byte) Integer.parseInt(strings[i]);
 		}
 
@@ -164,11 +155,10 @@ public class IPRange
 	 * @return true if IPRanges are equal, false in other case
 	 */
 	@Override
-	public boolean equals(Object o)
-	{
-		if(this == o)
+	public boolean equals(Object o) {
+		if (this == o)
 			return true;
-		if(!(o instanceof IPRange))
+		if (!(o instanceof IPRange))
 			return false;
 
 		IPRange ipRange = (IPRange) o;
@@ -181,8 +171,7 @@ public class IPRange
 	 * @return hashcode
 	 */
 	@Override
-	public int hashCode()
-	{
+	public int hashCode() {
 		int result = (int) (min ^ (min >>> 32));
 		result = 31 * result + (int) (max ^ (max >>> 32));
 		result = 31 * result + Arrays.hashCode(address);

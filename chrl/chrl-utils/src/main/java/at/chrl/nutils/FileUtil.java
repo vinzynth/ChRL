@@ -1,6 +1,6 @@
 /**
- * (C) ChRL 2014 - chrl-utils - at.chrl.nutils - FileUtil.java
- * Created: 03.08.2014 - 22:08:29
+ * (C) ChRL 2014 - chrl-utils - at.chrl.nutils - FileUtil.java Created:
+ * 03.08.2014 - 22:08:29
  */
 package at.chrl.nutils;
 
@@ -14,19 +14,19 @@ import at.chrl.logging.Logger;
  *
  */
 public final class FileUtil {
-	
+
 	private static final Logger log = new Logger();
-	
+
 	/**
 	 * Creates specified File. <br>
 	 * Deletes File if it already exists.
 	 * 
 	 * @param f
-	 * 			File to recreate
+	 *            File to recreate
 	 */
 	public static final void recreate(final File f) {
 		try {
-			if(!f.createNewFile()){
+			if (!f.createNewFile()) {
 				f.delete();
 				f.createNewFile();
 			}

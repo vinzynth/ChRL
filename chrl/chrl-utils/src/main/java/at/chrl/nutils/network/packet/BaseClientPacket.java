@@ -13,16 +13,15 @@ import static at.chrl.nutils.Constants.log;
  * @param <T>
  *            AConnection - owner of this client packet.
  */
-public abstract class BaseClientPacket<T extends AConnection> extends BasePacket implements Runnable
-{
+public abstract class BaseClientPacket<T extends AConnection> extends BasePacket implements Runnable {
 	/**
 	 * Owner of this packet.
 	 */
-	private T					client;
+	private T client;
 	/**
 	 * ByteBuffer that contains this packet data
 	 */
-	private ByteBuffer			buf;
+	private ByteBuffer buf;
 
 	/**
 	 * Constructs a new client packet with specified id and data buffer.
@@ -32,20 +31,19 @@ public abstract class BaseClientPacket<T extends AConnection> extends BasePacket
 	 * @param opcode
 	 *            packet opcode.
 	 */
-	public BaseClientPacket(ByteBuffer buf, int opcode)
-	{
+	public BaseClientPacket(ByteBuffer buf, int opcode) {
 		this(opcode);
 		this.buf = buf;
 	}
 
 	/**
-	 * Constructs a new client packet with specified id. ByteBuffer must be later set with setBuffer method.
+	 * Constructs a new client packet with specified id. ByteBuffer must be
+	 * later set with setBuffer method.
 	 * 
 	 * @param opcode
 	 *            packet opcode.
 	 */
-	public BaseClientPacket(int opcode)
-	{
+	public BaseClientPacket(int opcode) {
 		super(PacketType.CLIENT, opcode);
 	}
 
@@ -54,8 +52,7 @@ public abstract class BaseClientPacket<T extends AConnection> extends BasePacket
 	 * 
 	 * @param buf
 	 */
-	public void setBuffer(ByteBuffer buf)
-	{
+	public void setBuffer(ByteBuffer buf) {
 		this.buf = buf;
 	}
 
@@ -64,30 +61,27 @@ public abstract class BaseClientPacket<T extends AConnection> extends BasePacket
 	 * 
 	 * @param client
 	 */
-	public void setConnection(T client)
-	{
+	public void setConnection(T client) {
 		this.client = client;
 	}
 
 	/**
-	 * This method reads data from a packet buffer. If the error occurred while reading data, the connection is closed.
+	 * This method reads data from a packet buffer. If the error occurred while
+	 * reading data, the connection is closed.
 	 * 
-	 * @return <code>true</code> if reading was successful, otherwise <code>false</code>
+	 * @return <code>true</code> if reading was successful, otherwise
+	 *         <code>false</code>
 	 * 
 	 */
-	public final boolean read()
-	{
-		try
-		{
+	public final boolean read() {
+		try {
 			readImpl();
 
-			if(getRemainingBytes() > 0)
+			if (getRemainingBytes() > 0)
 				log.debug("Packet " + this + " not fully readed!");
 
 			return true;
-		}
-		catch(Exception re)
-		{
+		} catch (Exception re) {
 			log.error("Reading failed for packet " + this, re);
 			return false;
 		}
@@ -101,8 +95,7 @@ public abstract class BaseClientPacket<T extends AConnection> extends BasePacket
 	/**
 	 * @return number of bytes remaining in this packet buffer.
 	 */
-	public final int getRemainingBytes()
-	{
+	public final int getRemainingBytes() {
 		return buf.remaining();
 	}
 
@@ -111,14 +104,10 @@ public abstract class BaseClientPacket<T extends AConnection> extends BasePacket
 	 * 
 	 * @return int
 	 */
-	protected final int readD()
-	{
-		try
-		{
+	protected final int readD() {
+		try {
 			return buf.getInt();
-		}
-		catch(Exception e)
-		{
+		} catch (Exception e) {
 			log.error("Missing D for: " + this);
 		}
 		return 0;
@@ -129,14 +118,10 @@ public abstract class BaseClientPacket<T extends AConnection> extends BasePacket
 	 * 
 	 * @return int
 	 */
-	protected final int readC()
-	{
-		try
-		{
+	protected final int readC() {
+		try {
 			return buf.get() & 0xFF;
-		}
-		catch(Exception e)
-		{
+		} catch (Exception e) {
 			log.error("Missing C for: " + this);
 		}
 		return 0;
@@ -147,14 +132,10 @@ public abstract class BaseClientPacket<T extends AConnection> extends BasePacket
 	 * 
 	 * @return int
 	 */
-	protected final int readH()
-	{
-		try
-		{
+	protected final int readH() {
+		try {
 			return buf.getShort() & 0xFFFF;
-		}
-		catch(Exception e)
-		{
+		} catch (Exception e) {
 			log.error("Missing H for: " + this);
 		}
 		return 0;
@@ -165,14 +146,10 @@ public abstract class BaseClientPacket<T extends AConnection> extends BasePacket
 	 * 
 	 * @return double
 	 */
-	protected final double readDF()
-	{
-		try
-		{
+	protected final double readDF() {
+		try {
 			return buf.getDouble();
-		}
-		catch(Exception e)
-		{
+		} catch (Exception e) {
 			log.error("Missing DF for: " + this);
 		}
 		return 0;
@@ -183,14 +160,10 @@ public abstract class BaseClientPacket<T extends AConnection> extends BasePacket
 	 * 
 	 * @return double
 	 */
-	protected final float readF()
-	{
-		try
-		{
+	protected final float readF() {
+		try {
 			return buf.getFloat();
-		}
-		catch(Exception e)
-		{
+		} catch (Exception e) {
 			log.error("Missing F for: " + this);
 		}
 		return 0;
@@ -201,14 +174,10 @@ public abstract class BaseClientPacket<T extends AConnection> extends BasePacket
 	 * 
 	 * @return long
 	 */
-	protected final long readQ()
-	{
-		try
-		{
+	protected final long readQ() {
+		try {
 			return buf.getLong();
-		}
-		catch(Exception e)
-		{
+		} catch (Exception e) {
 			log.error("Missing Q for: " + this);
 		}
 		return 0;
@@ -219,17 +188,13 @@ public abstract class BaseClientPacket<T extends AConnection> extends BasePacket
 	 * 
 	 * @return String
 	 */
-	protected final String readS()
-	{
+	protected final String readS() {
 		StringBuffer sb = new StringBuffer();
 		char ch;
-		try
-		{
-			while((ch = buf.getChar()) != 0)
+		try {
+			while ((ch = buf.getChar()) != 0)
 				sb.append(ch);
-		}
-		catch(Exception e)
-		{
+		} catch (Exception e) {
 			log.error("Missing S for: " + this);
 		}
 		return sb.toString();
@@ -241,15 +206,11 @@ public abstract class BaseClientPacket<T extends AConnection> extends BasePacket
 	 * @param length
 	 * @return byte[]
 	 */
-	protected final byte[] readB(int length)
-	{
+	protected final byte[] readB(int length) {
 		byte[] result = new byte[length];
-		try
-		{
+		try {
 			buf.get(result);
-		}
-		catch(Exception e)
-		{
+		} catch (Exception e) {
 			log.error("Missing byte[] for: " + this);
 		}
 		return result;
@@ -263,8 +224,7 @@ public abstract class BaseClientPacket<T extends AConnection> extends BasePacket
 	/**
 	 * @return Connection that is owner of this packet.
 	 */
-	public final T getConnection()
-	{
+	public final T getConnection() {
 		return client;
 	}
 }

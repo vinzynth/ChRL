@@ -7,28 +7,28 @@ package at.chrl.nutils.network;
  * @see at.chrl.nutils.network.ConnectionFactory
  * @see at.chrl.nutils.network.AConnection
  */
-public class ServerCfg
-{
+public class ServerCfg {
 	/**
 	 * Host Name on wich we will listen for connections.
 	 */
-	public final String				hostName;
+	public final String hostName;
 	/**
 	 * Port number on wich we will listen for connections.
 	 */
-	public final int				port;
+	public final int port;
 	/**
 	 * Connection Name only for logging purposes.
 	 */
-	public final String				connectionName;
+	public final String connectionName;
 	/**
-	 * <code>ConnectionFactory</code> that will create <code>AConection</code> object<br>
+	 * <code>ConnectionFactory</code> that will create <code>AConection</code>
+	 * object<br>
 	 * representing new socket connection.
 	 * 
 	 * @see at.chrl.nutils.network.ConnectionFactory
 	 * @see at.chrl.nutils.network.AConnection
 	 */
-	public final ConnectionFactory	factory;
+	public final ConnectionFactory factory;
 
 	/**
 	 * Constructor
@@ -40,10 +40,10 @@ public class ServerCfg
 	 * @param connectionName
 	 *            - only for logging purposes.
 	 * @param factory
-	 *            <code>ConnectionFactory</code> that will create <code>AConection</code> object
+	 *            <code>ConnectionFactory</code> that will create
+	 *            <code>AConection</code> object
 	 */
-	public ServerCfg(String hostName, int port, String connectionName, ConnectionFactory factory)
-	{
+	public ServerCfg(String hostName, int port, String connectionName, ConnectionFactory factory) {
 		this.hostName = hostName;
 		this.port = port;
 		this.connectionName = connectionName;

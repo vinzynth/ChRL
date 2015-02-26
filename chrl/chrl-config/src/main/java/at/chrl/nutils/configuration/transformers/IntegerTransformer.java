@@ -5,18 +5,18 @@ import java.lang.reflect.Field;
 import at.chrl.nutils.configuration.PropertyTransformer;
 import at.chrl.nutils.configuration.TransformationException;
 
-
 /**
- * Transfomrs string to integer. Integer can be represented both as decimal or hex value.
+ * Transfomrs string to integer. Integer can be represented both as decimal or
+ * hex value.
  * 
  * @author SoulKeeper
  */
-public class IntegerTransformer implements PropertyTransformer<Integer>
-{
+public class IntegerTransformer implements PropertyTransformer<Integer> {
 	/**
-	 * Shared instance of this transformer. It's thread-safe so no need of multiple instances
+	 * Shared instance of this transformer. It's thread-safe so no need of
+	 * multiple instances
 	 */
-	public static final IntegerTransformer	SHARED_INSTANCE	= new IntegerTransformer();
+	public static final IntegerTransformer SHARED_INSTANCE = new IntegerTransformer();
 
 	/**
 	 * Transforms value to integer
@@ -30,14 +30,10 @@ public class IntegerTransformer implements PropertyTransformer<Integer>
 	 *             if something went wrong
 	 */
 	@Override
-	public Integer transform(String value, Field field) throws TransformationException
-	{
-		try
-		{
+	public Integer transform(String value, Field field) throws TransformationException {
+		try {
 			return Integer.decode(value);
-		}
-		catch(Exception e)
-		{
+		} catch (Exception e) {
 			throw new TransformationException(e);
 		}
 	}

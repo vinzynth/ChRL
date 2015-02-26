@@ -7,16 +7,14 @@ import java.nio.ByteBuffer;
  * 
  * @author -Nemesiss-
  */
-public abstract class BaseServerPacket extends BasePacket
-{
+public abstract class BaseServerPacket extends BasePacket {
 	/**
 	 * Constructs a new server packet with specified id.
 	 * 
 	 * @param opcode
 	 *            packet opcode.
 	 */
-	protected BaseServerPacket(int opcode)
-	{
+	protected BaseServerPacket(int opcode) {
 		super(PacketType.SERVER, opcode);
 	}
 
@@ -24,8 +22,7 @@ public abstract class BaseServerPacket extends BasePacket
 	 * Constructs a new server packet.<br>
 	 * If this constructor was used, then {@link #setOpcode(int)} must be called
 	 */
-	protected BaseServerPacket()
-	{
+	protected BaseServerPacket() {
 		super(PacketType.SERVER);
 	}
 
@@ -35,8 +32,7 @@ public abstract class BaseServerPacket extends BasePacket
 	 * @param buf
 	 * @param value
 	 */
-	protected final void writeD(ByteBuffer buf, int value)
-	{
+	protected final void writeD(ByteBuffer buf, int value) {
 		buf.putInt(value);
 	}
 
@@ -46,8 +42,7 @@ public abstract class BaseServerPacket extends BasePacket
 	 * @param buf
 	 * @param value
 	 */
-	protected final void writeH(ByteBuffer buf, int value)
-	{
+	protected final void writeH(ByteBuffer buf, int value) {
 		buf.putShort((short) value);
 	}
 
@@ -57,8 +52,7 @@ public abstract class BaseServerPacket extends BasePacket
 	 * @param buf
 	 * @param value
 	 */
-	protected final void writeC(ByteBuffer buf, int value)
-	{
+	protected final void writeC(ByteBuffer buf, int value) {
 		buf.put((byte) value);
 	}
 
@@ -68,8 +62,7 @@ public abstract class BaseServerPacket extends BasePacket
 	 * @param buf
 	 * @param value
 	 */
-	protected final void writeDF(ByteBuffer buf, double value)
-	{
+	protected final void writeDF(ByteBuffer buf, double value) {
 		buf.putDouble(value);
 	}
 
@@ -79,8 +72,7 @@ public abstract class BaseServerPacket extends BasePacket
 	 * @param buf
 	 * @param value
 	 */
-	protected final void writeF(ByteBuffer buf, float value)
-	{
+	protected final void writeF(ByteBuffer buf, float value) {
 		buf.putFloat(value);
 	}
 
@@ -90,8 +82,7 @@ public abstract class BaseServerPacket extends BasePacket
 	 * @param buf
 	 * @param value
 	 */
-	protected final void writeQ(ByteBuffer buf, long value)
-	{
+	protected final void writeQ(ByteBuffer buf, long value) {
 		buf.putLong(value);
 	}
 
@@ -101,16 +92,12 @@ public abstract class BaseServerPacket extends BasePacket
 	 * @param buf
 	 * @param text
 	 */
-	protected final void writeS(ByteBuffer buf, String text)
-	{
-		if(text == null)
-		{
+	protected final void writeS(ByteBuffer buf, String text) {
+		if (text == null) {
 			buf.putChar('\000');
-		}
-		else
-		{
+		} else {
 			final int len = text.length();
-			for(int i = 0; i < len; i++)
+			for (int i = 0; i < len; i++)
 				buf.putChar(text.charAt(i));
 			buf.putChar('\000');
 		}
@@ -122,8 +109,7 @@ public abstract class BaseServerPacket extends BasePacket
 	 * @param buf
 	 * @param data
 	 */
-	protected final void writeB(ByteBuffer buf, byte[] data)
-	{
+	protected final void writeB(ByteBuffer buf, byte[] data) {
 		buf.put(data);
 	}
 }

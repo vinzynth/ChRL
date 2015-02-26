@@ -12,38 +12,36 @@ import at.chrl.nutils.ArrayUtils;
 import at.chrl.nutils.ClassUtils;
 
 /**
- * This class is designed to process classes and interfaces that have fields marked with {@link Property} annotation
+ * This class is designed to process classes and interfaces that have fields
+ * marked with {@link Property} annotation
  * 
  * @author SoulKeeper
  */
-public class ConfigurableProcessor
-{
+public class ConfigurableProcessor {
 
 	/**
 	 * This method is an entry point to the parser logic.<br>
-	 * Any object or class that have {@link Property} annotation in it or it's parent class/interface can be submitted
-	 * here.<br>
-	 * If object(new Something()) is submitted, object fields are parsed. (non-static)<br>
+	 * Any object or class that have {@link Property} annotation in it or it's
+	 * parent class/interface can be submitted here.<br>
+	 * If object(new Something()) is submitted, object fields are parsed.
+	 * (non-static)<br>
 	 * If class is submitted(Sotmething.class), static fields are parsed.<br>
 	 * <p/>
 	 * 
 	 * @param object
 	 *            Class or Object that has {@link Property} annotations.
 	 * @param properties
-	 *            Properties that should be used while seraching for a {@link Property#key()}
+	 *            Properties that should be used while seraching for a
+	 *            {@link Property#key()}
 	 */
 	@SuppressWarnings("rawtypes")
-	public static void process(Object object, Properties... properties)
-	{
+	public static void process(Object object, Properties... properties) {
 		Class clazz;
 
-		if(object instanceof Class)
-		{
+		if (object instanceof Class) {
 			clazz = (Class) object;
 			object = null;
-		}
-		else
-		{
+		} else {
 			clazz = object.getClass();
 		}
 
@@ -51,8 +49,8 @@ public class ConfigurableProcessor
 	}
 
 	/**
-	 * This method uses recurcieve calls to launch search for {@link Property} annotation on itself and
-	 * parents\interfaces.
+	 * This method uses recurcieve calls to launch search for {@link Property}
+	 * annotation on itself and parents\interfaces.
 	 * 
 	 * @param clazz
 	 *            Class of object
@@ -62,31 +60,29 @@ public class ConfigurableProcessor
 	 *            Properties with keys\values
 	 */
 	@SuppressWarnings("rawtypes")
-	private static void process(Class clazz, Object obj, Properties[] props)
-	{
+	private static void process(Class clazz, Object obj, Properties[] props) {
 		processFields(clazz, obj, props);
 
 		// Interfaces can't have any object fields, only static
 		// So there is no need to parse interfaces for instances of objects
 		// Only classes (static fields) can be located in interfaces
-		if(obj == null)
-		{
-			for(Class itf : clazz.getInterfaces())
-			{
+		if (obj == null) {
+			for (Class itf : clazz.getInterfaces()) {
 				process(itf, obj, props);
 			}
 		}
 
 		Class superClass = clazz.getSuperclass();
-		if(superClass != null && superClass != Object.class)
-		{
+		if (superClass != null && superClass != Object.class) {
 			process(superClass, obj, props);
 		}
 	}
 
 	/**
-	 * This method runs throught the declared fields watching for the {@link Property} annotation. It also watches for
-	 * the field modifiers like {@link java.lang.reflect.Modifier#STATIC} and {@link java.lang.reflect.Modifier#FINAL}
+	 * This method runs throught the declared fields watching for the
+	 * {@link Property} annotation. It also watches for the field modifiers like
+	 * {@link java.lang.reflect.Modifier#STATIC} and
+	 * {@link java.lang.reflect.Modifier#FINAL}
 	 * 
 	 * @param clazz
 	 *            Class of object
@@ -96,34 +92,25 @@ public class ConfigurableProcessor
 	 *            Properties with keys\values
 	 */
 	@SuppressWarnings("rawtypes")
-	private static void processFields(Class clazz, Object obj, Properties[] props)
-	{
-		for(Field f : clazz.getDeclaredFields())
-		{
+	private static void processFields(Class clazz, Object obj, Properties[] props) {
+		for (Field f : clazz.getDeclaredFields()) {
 			// Static fields should not be modified when processing object
-			if(Modifier.isStatic(f.getModifiers()) && obj != null)
-			{
+			if (Modifier.isStatic(f.getModifiers()) && obj != null) {
 				continue;
 			}
 
 			// Not static field should not be processed when parsing class
-			if(!Modifier.isStatic(f.getModifiers()) && obj == null)
-			{
+			if (!Modifier.isStatic(f.getModifiers()) && obj == null) {
 				continue;
 			}
 
-			if(f.isAnnotationPresent(Property.class))
-			{
+			if (f.isAnnotationPresent(Property.class)) {
 				// Final fields should not be processed
-				if(Modifier.isFinal(f.getModifiers()))
-				{
-					RuntimeException re = new RuntimeException("Attempt to proceed final field " + f.getName()
-						+ " of class " + clazz.getName());
+				if (Modifier.isFinal(f.getModifiers())) {
+					RuntimeException re = new RuntimeException("Attempt to proceed final field " + f.getName() + " of class " + clazz.getName());
 					log.error(re.toString());
 					throw re;
-				}
-				else
-				{
+				} else {
 					processField(f, obj, props);
 				}
 			}
@@ -131,11 +118,14 @@ public class ConfigurableProcessor
 	}
 
 	/**
-	 * This method takes {@link Property} annotation and does sets value according to annotation property. For this
-	 * reason {@link #getFieldValue(java.lang.reflect.Field, java.util.Properties[])} can be called, however if method
-	 * sees that there is no need - field can remain with it's initial value.
+	 * This method takes {@link Property} annotation and does sets value
+	 * according to annotation property. For this reason
+	 * {@link #getFieldValue(java.lang.reflect.Field, java.util.Properties[])}
+	 * can be called, however if method sees that there is no need - field can
+	 * remain with it's initial value.
 	 * <p/>
-	 * Also this method is capturing and logging all {@link Exception} that are thrown by underlying methods.
+	 * Also this method is capturing and logging all {@link Exception} that are
+	 * thrown by underlying methods.
 	 * 
 	 * @param f
 	 *            field that is going to be processed
@@ -145,18 +135,15 @@ public class ConfigurableProcessor
 	 *            Properties with kyes\values
 	 */
 	@SuppressWarnings("unchecked")
-	private static void processField(Field f, Object obj, Properties[] props)
-	{
+	private static void processField(Field f, Object obj, Properties[] props) {
 		boolean oldAccessible = f.isAccessible();
 		f.setAccessible(true);
-		try
-		{
+		try {
 			Property property = f.getAnnotation(Property.class);
-			if(!Property.DEFAULT_VALUE.equals(property.defaultValue()) || isKeyPresent(property.key(), props))
-			{
+			if (!Property.DEFAULT_VALUE.equals(property.defaultValue()) || isKeyPresent(property.key(), props)) {
 				Object toSet = getFieldValue(f, props);
-				
-				if(f.getType().isArray() && f.getType().getComponentType().isArray()){
+
+				if (f.getType().isArray() && f.getType().getComponentType().isArray()) {
 					Class<?> componentType = ClassUtils.getNonPrimitiveClass(f.getType().getComponentType().getComponentType());
 					Class<?> componentType1 = ClassUtils.getNonPrimitiveClass(f.getType().getComponentType());
 					Object[] arr = (Object[]) toSet;
@@ -169,39 +156,32 @@ public class ConfigurableProcessor
 						Object[] arr2 = (Object[]) object;
 						Object arr2New = Array.newInstance(componentType, arr2.length);
 						System.arraycopy(arr2, 0, arr2New, 0, arr2.length);
-						if(isPrimitiv)
+						if (isPrimitiv)
 							arr2New = function.apply(arr2New);
 						setMe[i++] = arr2New;
 					}
-					
+
 					f.set(obj, setMe);
-				}
-				else if(f.getType().isArray()){
+				} else if (f.getType().isArray()) {
 					Class<?> componentType = ClassUtils.getNonPrimitiveClass(f.getType().getComponentType());
-					
+
 					Object[] arr = (Object[]) toSet;
 					Object arr2 = Array.newInstance(componentType, arr.length);
 					System.arraycopy(arr, 0, arr2, 0, arr.length);
-					
-					if(f.getType().getComponentType().isPrimitive()){
+
+					if (f.getType().getComponentType().isPrimitive()) {
 						@SuppressWarnings("rawtypes")
 						Function function = ArrayUtils.getToPrimitive(componentType);
 						arr2 = function.apply(arr2);
 					}
 					f.set(obj, arr2);
-				}
-				else
+				} else
 					f.set(obj, toSet);
-			}
-			else if(log.isDebugEnabled())
-			{
+			} else if (log.isDebugEnabled()) {
 				log.debug("Field " + f.getName() + " of class " + f.getDeclaringClass().getName() + " wasn't modified");
 			}
-		}
-		catch(Exception e)
-		{
-			RuntimeException re = new RuntimeException("Can't transform field " + f.getName() + " of class "
-				+ f.getDeclaringClass(), e);
+		} catch (Exception e) {
+			RuntimeException re = new RuntimeException("Can't transform field " + f.getName() + " of class " + f.getDeclaringClass(), e);
 			log.error(re.toString());
 			throw re;
 		}
@@ -211,7 +191,8 @@ public class ConfigurableProcessor
 	/**
 	 * This method is responsible for receiving field value.<br>
 	 * It tries to load property by key, if not found - it uses default value.<br>
-	 * Transformation is done using {@link commons.configuration.PropertyTransformerFactory}
+	 * Transformation is done using
+	 * {@link commons.configuration.PropertyTransformerFactory}
 	 * 
 	 * @param field
 	 *            field that has to be transformed
@@ -222,35 +203,26 @@ public class ConfigurableProcessor
 	 *             if something goes wrong during transformation
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private static Object getFieldValue(Field field, Properties... props) throws TransformationException
-	{
+	private static Object getFieldValue(Field field, Properties... props) throws TransformationException {
 		Property property = field.getAnnotation(Property.class);
 		String defaultValue = property.defaultValue();
 		String key = property.key();
 		String value = null;
 
-		if(key.isEmpty())
-		{
-			log.warn("Property " + field.getName() + " of class " + field.getDeclaringClass().getName()
-				+ " has empty key");
-		}
-		else
-		{
+		if (key.isEmpty()) {
+			log.warn("Property " + field.getName() + " of class " + field.getDeclaringClass().getName() + " has empty key");
+		} else {
 			value = findPropertyByKey(key, props);
 		}
 
-		if(value == null)
-		{
+		if (value == null) {
 			value = defaultValue;
-			if(log.isDebugEnabled())
-			{
-				log.debug("Using default value for field " + field.getName() + " of class "
-					+ field.getDeclaringClass().getName());
+			if (log.isDebugEnabled()) {
+				log.debug("Using default value for field " + field.getName() + " of class " + field.getDeclaringClass().getName());
 			}
 		}
 
-		PropertyTransformer pt = PropertyTransformerFactory.newTransformer(field.getType(), property
-			.propertyTransformer());
+		PropertyTransformer pt = PropertyTransformerFactory.newTransformer(field.getType(), property.propertyTransformer());
 		return pt.transform(value, field, property.types());
 	}
 
@@ -263,12 +235,9 @@ public class ConfigurableProcessor
 	 *            properties to loook for the key
 	 * @return value if found, null otherwise
 	 */
-	static String findPropertyByKey(String key, Properties[] props)
-	{
-		for(Properties p : props)
-		{
-			if(p.containsKey(key))
-			{
+	static String findPropertyByKey(String key, Properties[] props) {
+		for (Properties p : props) {
+			if (p.containsKey(key)) {
 				return p.getProperty(key);
 			}
 		}
@@ -285,8 +254,7 @@ public class ConfigurableProcessor
 	 *            prperties to look for key
 	 * @return true if key present, false in other case
 	 */
-	static boolean isKeyPresent(String key, Properties[] props)
-	{
+	static boolean isKeyPresent(String key, Properties[] props) {
 		return findPropertyByKey(key, props) != null;
 	}
 }

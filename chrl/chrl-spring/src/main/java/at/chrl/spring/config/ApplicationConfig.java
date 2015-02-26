@@ -1,8 +1,6 @@
 /**
- * @author bravestone
- * Feb 20, 2015 - 11:38:57 AM
- * bravestone-spring
- * com.bravestone.spring.config
+ * @author bravestone Feb 20, 2015 - 11:38:57 AM bravestone-spring
+ *         com.bravestone.spring.config
  */
 package at.chrl.spring.config;
 

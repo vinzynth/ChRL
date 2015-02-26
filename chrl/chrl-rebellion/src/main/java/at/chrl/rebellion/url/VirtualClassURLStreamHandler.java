@@ -1,18 +1,18 @@
 /**
  * This file is part of aion-lightning <aion-lightning.org>.
  * 
- * aion-lightning is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * aion-lightning is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  * 
- * aion-lightning is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * aion-lightning is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  * 
- * You should have received a copy of the GNU General Public License
- * along with aion-lightning.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with
+ * aion-lightning. If not, see <http://www.gnu.org/licenses/>.
  */
 package at.chrl.rebellion.url;
 
@@ -24,7 +24,8 @@ import java.net.URLStreamHandler;
 import at.chrl.rebellion.ScriptClassLoader;
 
 /**
- * This class represents URL Stream handler that accepts {@value #HANDLER_PROTOCOL} protocol
+ * This class represents URL Stream handler that accepts
+ * {@value #HANDLER_PROTOCOL} protocol
  * 
  * @author SoulKeeper
  */
@@ -44,7 +45,7 @@ public class VirtualClassURLStreamHandler extends URLStreamHandler {
 	 * Creates new instance of url stream handler with given classloader
 	 * 
 	 * @param cl
-	 *          ScriptClassLoaderImpl that was used to load compiled class
+	 *            ScriptClassLoaderImpl that was used to load compiled class
 	 */
 	public VirtualClassURLStreamHandler(ScriptClassLoader cl) {
 		this.cl = cl;
@@ -54,10 +55,10 @@ public class VirtualClassURLStreamHandler extends URLStreamHandler {
 	 * Opens new URL connection for URL
 	 * 
 	 * @param u
-	 *          url
+	 *            url
 	 * @return Opened connection
 	 * @throws IOException
-	 *           never thrown
+	 *             never thrown
 	 */
 	@Override
 	protected URLConnection openConnection(URL u) throws IOException {

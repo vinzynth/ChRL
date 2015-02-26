@@ -1,8 +1,6 @@
 /**
- * @author bravestone
- * Feb 20, 2015 - 5:37:59 PM
- * bravestone-spring
- * com.bravestone.vaadin.ui.views
+ * @author bravestone Feb 20, 2015 - 5:37:59 PM bravestone-spring
+ *         com.bravestone.vaadin.ui.views
  */
 package at.chrl.vaadin.ui.views;
 
@@ -24,7 +22,7 @@ import com.vaadin.ui.Notification.Type;
  *
  */
 @SuppressWarnings("serial")
-public class MainView extends BasicUIView{
+public class MainView extends BasicUIView {
 
 	private Label[] lbls;
 
@@ -34,29 +32,30 @@ public class MainView extends BasicUIView{
 	public MainView() {
 		super();
 		Label header = new Label("JVM Information");
-		
+
 		addComponent(header);
 		setComponentAlignment(header, Alignment.TOP_CENTER);
-		
-		lbls = new Label[]{};
+
+		lbls = new Label[] {};
 	}
 
 	/**
 	 * {@inheritDoc}
+	 * 
 	 * @see com.vaadin.navigator.View#enter(com.vaadin.navigator.ViewChangeListener.ViewChangeEvent)
 	 */
 	@Override
 	public void enter(ViewChangeEvent event) {
 		for (Label component : lbls)
 			removeComponent(component);
-		
+
 		lbls = loadLabls();
-		
+
 		addComponents(lbls);
 		Notification.show("Welcome", "to Backend UI", Type.TRAY_NOTIFICATION);
 	}
-	
-	public Label[] loadLabls(){
+
+	public Label[] loadLabls() {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		JVMInfoUtil.printAllInfos(new PrintStream(baos));
 		String[] infos = baos.toString().split(System.lineSeparator());

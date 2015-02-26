@@ -32,55 +32,54 @@ import at.chrl.nutils.configuration.PropertiesUtils;
 public class BasicController {
 
 	@RequestMapping("exception")
-	public boolean throwException(){
+	public boolean throwException() {
 		throw new RuntimeException("Test Exception thrown by request at " + new Date().toString());
 	}
-	
+
 	@RequestMapping("jvm")
-	public String getJVMInfo(){
+	public String getJVMInfo() {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		JVMInfoUtil.printAllInfos(new PrintStream(baos));
 		return baos.toString().replace(System.lineSeparator(), "<br>");
 	}
-	
+
 	@RequestMapping("config")
-	public String getConfigs() throws IOException{
+	public String getConfigs() throws IOException {
 		return prettyPrinted(getActiveProperties());
 	}
-	
+
 	@RequestMapping("properties")
-	public Properties[] getProperties() throws IOException{
+	public Properties[] getProperties() throws IOException {
 		return getActiveProperties();
 	}
-	
+
 	@RequestMapping("property")
-	public Object getProperty(@RequestParam(value = "id") String id) throws IOException{
+	public Object getProperty(@RequestParam(value = "id") String id) throws IOException {
 		for (Properties properties : getActiveProperties()) {
 			Object object = properties.get(id);
-			if(Objects.nonNull(object))
+			if (Objects.nonNull(object))
 				return object;
 		}
 		return null;
 	}
-	
-	private static String prettyPrinted(Object json) throws JsonGenerationException, JsonMappingException, IOException{
-		ObjectMapper mapper = new ObjectMapper(); 
-	    ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
-	    return writer.writeValueAsString(json).replace(System.lineSeparator(), "<br>");
+
+	private static String prettyPrinted(Object json) throws JsonGenerationException, JsonMappingException, IOException {
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
+		return writer.writeValueAsString(json).replace(System.lineSeparator(), "<br>");
 	}
-	
-	private static Properties[] getActiveProperties() throws IOException{
-		if(Objects.nonNull(ConfigUtil.getConfigDirectory()))
+
+	private static Properties[] getActiveProperties() throws IOException {
+		if (Objects.nonNull(ConfigUtil.getConfigDirectory()))
 			return PropertiesUtils.loadAllFromDirectory(ConfigUtil.getConfigDirectory(), false);
 		return PropertiesUtils.loadAllFromDirectory(new File("."), false);
 	}
 }
 
-
 @ControllerAdvice
 @EnableWebMvc
 class DefaultExceptionHandler {
-	
+
 	public DefaultExceptionHandler() {
 		// TODO Auto-generated constructor stub
 	}
@@ -89,18 +88,18 @@ class DefaultExceptionHandler {
 	 * Handle exceptions thrown by handlers.
 	 */
 	@ExceptionHandler(value = Exception.class)
-    public ModelAndView defaultErrorHandler(HttpServletRequest req, Exception e) throws Exception {
+	public ModelAndView defaultErrorHandler(HttpServletRequest req, Exception e) throws Exception {
 		e.printStackTrace();
-        // If the exception is annotated with @ResponseStatus rethrow it and let
-        // the framework handle it
-        if (AnnotationUtils.findAnnotation(e.getClass(), ResponseStatus.class) != null)
-            throw e;
+		// If the exception is annotated with @ResponseStatus rethrow it and let
+		// the framework handle it
+		if (AnnotationUtils.findAnnotation(e.getClass(), ResponseStatus.class) != null)
+			throw e;
 
-        // Otherwise setup and send the user to a default error-view.
-        ModelAndView mav = new ModelAndView();
-        mav.addObject("exception", e);
-        mav.addObject("url", req.getRequestURL());
-        mav.setViewName("error");
-        return mav;
-    }
+		// Otherwise setup and send the user to a default error-view.
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("exception", e);
+		mav.addObject("url", req.getRequestURL());
+		mav.setViewName("error");
+		return mav;
+	}
 }

@@ -1,8 +1,6 @@
 /**
- * @author Vinzynth
- * Aug 12, 2014 - 10:31:10 AM
- * chrl-utils
- * at.chrl.nutils.interfaces
+ * @author Vinzynth Aug 12, 2014 - 10:31:10 AM chrl-utils
+ *         at.chrl.nutils.interfaces
  */
 package at.chrl.nutils.interfaces;
 
@@ -14,24 +12,24 @@ import java.util.Iterator;
  * @author Vinzynth
  *
  * @param <C>
- * 		Subtype of nested collection with E elements
+ *            Subtype of nested collection with E elements
  * @param <E>
- * 		Type of elements in the nested collection
+ *            Type of elements in the nested collection
  */
-public interface INestedCollection<C extends Collection<E>, E> extends Collection<E>{
-	
+public interface INestedCollection<C extends Collection<E>, E> extends Collection<E> {
+
 	/**
 	 * returns nested collection of type C
 	 * 
 	 * @see {@link java.util.Collection}
 	 * @see {@link INestedCollection}
-	 * @return
-	 * 		nested collection
+	 * @return nested collection
 	 */
 	public C getNestedCollection();
-	
+
 	/**
 	 * {@inheritDoc}
+	 * 
 	 * @see java.util.Collection#size()
 	 */
 	@Override
@@ -41,6 +39,7 @@ public interface INestedCollection<C extends Collection<E>, E> extends Collectio
 
 	/**
 	 * {@inheritDoc}
+	 * 
 	 * @see java.util.Collection#isEmpty()
 	 */
 	@Override
@@ -50,6 +49,7 @@ public interface INestedCollection<C extends Collection<E>, E> extends Collectio
 
 	/**
 	 * {@inheritDoc}
+	 * 
 	 * @see java.util.Collection#contains(java.lang.Object)
 	 */
 	@Override
@@ -59,6 +59,7 @@ public interface INestedCollection<C extends Collection<E>, E> extends Collectio
 
 	/**
 	 * {@inheritDoc}
+	 * 
 	 * @see java.util.Collection#iterator()
 	 */
 	@Override
@@ -68,6 +69,7 @@ public interface INestedCollection<C extends Collection<E>, E> extends Collectio
 
 	/**
 	 * {@inheritDoc}
+	 * 
 	 * @see java.util.Collection#toArray()
 	 */
 	@Override
@@ -77,6 +79,7 @@ public interface INestedCollection<C extends Collection<E>, E> extends Collectio
 
 	/**
 	 * {@inheritDoc}
+	 * 
 	 * @see java.util.Collection#toArray(java.lang.Object[])
 	 */
 	@Override
@@ -86,6 +89,7 @@ public interface INestedCollection<C extends Collection<E>, E> extends Collectio
 
 	/**
 	 * {@inheritDoc}
+	 * 
 	 * @see java.util.Collection#add(java.lang.Object)
 	 */
 	@Override
@@ -95,6 +99,7 @@ public interface INestedCollection<C extends Collection<E>, E> extends Collectio
 
 	/**
 	 * {@inheritDoc}
+	 * 
 	 * @see java.util.Collection#remove(java.lang.Object)
 	 */
 	@Override
@@ -104,6 +109,7 @@ public interface INestedCollection<C extends Collection<E>, E> extends Collectio
 
 	/**
 	 * {@inheritDoc}
+	 * 
 	 * @see java.util.Collection#containsAll(java.util.Collection)
 	 */
 	@Override
@@ -113,6 +119,7 @@ public interface INestedCollection<C extends Collection<E>, E> extends Collectio
 
 	/**
 	 * {@inheritDoc}
+	 * 
 	 * @see java.util.Collection#addAll(java.util.Collection)
 	 */
 	@Override
@@ -122,6 +129,7 @@ public interface INestedCollection<C extends Collection<E>, E> extends Collectio
 
 	/**
 	 * {@inheritDoc}
+	 * 
 	 * @see java.util.Collection#removeAll(java.util.Collection)
 	 */
 	@Override
@@ -131,6 +139,7 @@ public interface INestedCollection<C extends Collection<E>, E> extends Collectio
 
 	/**
 	 * {@inheritDoc}
+	 * 
 	 * @see java.util.Collection#retainAll(java.util.Collection)
 	 */
 	@Override
@@ -140,6 +149,7 @@ public interface INestedCollection<C extends Collection<E>, E> extends Collectio
 
 	/**
 	 * {@inheritDoc}
+	 * 
 	 * @see java.util.Collection#clear()
 	 */
 	@Override

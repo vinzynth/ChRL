@@ -1,6 +1,6 @@
 /**
- * (C) ChRL 2014 - chrl-utils - at.chrl.nutils.configuration.transformers - PrintStreamTransformer.java
- * Created: 29.07.2014 - 22:35:43
+ * (C) ChRL 2014 - chrl-utils - at.chrl.nutils.configuration.transformers -
+ * PrintStreamTransformer.java Created: 29.07.2014 - 22:35:43
  */
 package at.chrl.nutils.configuration.transformers;
 
@@ -19,8 +19,8 @@ import at.chrl.nutils.configuration.TransformationException;
  */
 public class PrintStreamTransformer implements PropertyTransformer<PrintStream> {
 
-	public static final PrintStreamTransformer	SHARED_INSTANCE	= new PrintStreamTransformer();
-	
+	public static final PrintStreamTransformer SHARED_INSTANCE = new PrintStreamTransformer();
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -48,10 +48,10 @@ public class PrintStreamTransformer implements PropertyTransformer<PrintStream> 
 			case "syserr":
 			case "system.err":
 				return System.err;
-				
+
 			case "nop":
 				return Constants.NOP_PRINT_STREAM;
-			
+
 			default:
 				try {
 					return new PrintStream(new File(value.endsWith(".log") ? value : value.concat(".log")));

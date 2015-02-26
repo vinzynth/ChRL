@@ -1,18 +1,18 @@
 /**
  * This file is part of aion-lightning <aion-lightning.org>.
  * 
- * aion-lightning is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * aion-lightning is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  * 
- * aion-lightning is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * aion-lightning is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  * 
- * You should have received a copy of the GNU General Public License
- * along with aion-lightning.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with
+ * aion-lightning. If not, see <http://www.gnu.org/licenses/>.
  */
 package at.chrl.rebellion.impl.javacompiler;
 
@@ -31,8 +31,8 @@ import javax.lang.model.element.NestingKind;
 import javax.tools.JavaFileObject;
 
 /**
- * This class is just a hack to make javac compiler work with classes loaded by prevoius classloader. Also it's used as
- * container for loaded class
+ * This class is just a hack to make javac compiler work with classes loaded by
+ * prevoius classloader. Also it's used as container for loaded class
  * 
  * @author SoulKeeper
  */
@@ -57,7 +57,7 @@ public class BinaryClass implements JavaFileObject {
 	 * Constructor that accepts class name as parameter
 	 * 
 	 * @param name
-	 *          class name
+	 *            class name
 	 */
 	protected BinaryClass(String name) {
 		this.name = name;
@@ -90,7 +90,7 @@ public class BinaryClass implements JavaFileObject {
 	 * 
 	 * @return input stream for class data
 	 * @throws IOException
-	 *           never thrown
+	 *             never thrown
 	 */
 	@Override
 	public InputStream openInputStream() throws IOException {
@@ -102,7 +102,7 @@ public class BinaryClass implements JavaFileObject {
 	 * 
 	 * @return output stream
 	 * @throws IOException
-	 *           never thrown
+	 *             never thrown
 	 */
 	@Override
 	public OutputStream openOutputStream() throws IOException {
@@ -153,7 +153,7 @@ public class BinaryClass implements JavaFileObject {
 	 * Returns class name
 	 * 
 	 * @param path
-	 *          doesn't matter
+	 *            doesn't matter
 	 * @return class name
 	 */
 	protected String inferBinaryName(Iterable<? extends File> path) {
@@ -164,9 +164,9 @@ public class BinaryClass implements JavaFileObject {
 	 * Returns true if {@link javax.tools.JavaFileObject.Kind#CLASS}
 	 * 
 	 * @param simpleName
-	 *          doesn't matter
+	 *            doesn't matter
 	 * @param kind
-	 *          kind to compare
+	 *            kind to compare
 	 * @return true if Kind is {@link javax.tools.JavaFileObject.Kind#CLASS}
 	 */
 	@Override
@@ -196,13 +196,15 @@ public class BinaryClass implements JavaFileObject {
 	 * Sets class that was loaded by this object
 	 * 
 	 * @param definedClass
-	 *          class that was loaded
+	 *            class that was loaded
 	 */
 	public void setDefinedClass(Class<?> definedClass) {
 		this.definedClass = definedClass;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.tools.JavaFileObject#getKind()
 	 */
 	@Override

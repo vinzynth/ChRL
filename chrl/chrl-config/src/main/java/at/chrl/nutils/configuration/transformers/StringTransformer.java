@@ -5,18 +5,17 @@ import java.lang.reflect.Field;
 import at.chrl.nutils.configuration.PropertyTransformer;
 import at.chrl.nutils.configuration.TransformationException;
 
-
 /**
  * This class is here just for writing less "ifs" in the code. Does nothing
  * 
  * @author SoulKeeper
  */
-public class StringTransformer implements PropertyTransformer<String>
-{
+public class StringTransformer implements PropertyTransformer<String> {
 	/**
-	 * Shared instance of this transformer. It's thread-safe so no need of multiple instances
+	 * Shared instance of this transformer. It's thread-safe so no need of
+	 * multiple instances
 	 */
-	public static final StringTransformer	SHARED_INSTANCE	= new StringTransformer();
+	public static final StringTransformer SHARED_INSTANCE = new StringTransformer();
 
 	/**
 	 * Just returns value object
@@ -30,8 +29,7 @@ public class StringTransformer implements PropertyTransformer<String>
 	 *             never thrown
 	 */
 	@Override
-	public String transform(String value, Field field) throws TransformationException
-	{
+	public String transform(String value, Field field) throws TransformationException {
 		return value;
 	}
 }

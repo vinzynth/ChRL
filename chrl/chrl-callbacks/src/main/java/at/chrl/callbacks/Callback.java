@@ -45,7 +45,7 @@ public interface Callback<T> {
 	 *            method args
 	 * @return see {@link CallbackResult}
 	 */
-	public default CallbackResult beforeCall(T obj, Object[] args){
+	public default CallbackResult beforeCall(T obj, Object[] args) {
 		return CallbackResult.newContinue();
 	}
 
@@ -71,7 +71,7 @@ public interface Callback<T> {
 	 *            result of method invocation
 	 * @return see {@link CallbackResult}
 	 */
-	public default CallbackResult afterCall(T obj, Object[] args, Object methodResult){
+	public default CallbackResult afterCall(T obj, Object[] args, Object methodResult) {
 		return CallbackResult.newContinue();
 	}
 
@@ -83,7 +83,7 @@ public interface Callback<T> {
 	 * @return base class of callback
 	 */
 	@SuppressWarnings("unchecked")
-	public default Class<? extends Callback<?>> getBaseClass(){
+	public default Class<? extends Callback<?>> getBaseClass() {
 		return (Class<? extends Callback<?>>) this.getClass();
 	}
 }

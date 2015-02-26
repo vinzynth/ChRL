@@ -1,21 +1,20 @@
 /**
  * This file is part of aion-lightning <aion-lightning.org>.
  * 
- * aion-lightning is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * aion-lightning is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  * 
- * aion-lightning is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * aion-lightning is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  * 
- * You should have received a copy of the GNU General Public License
- * along with aion-lightning.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with
+ * aion-lightning. If not, see <http://www.gnu.org/licenses/>.
  */
 package at.chrl.database.dao;
-
 
 import java.lang.reflect.Modifier;
 
@@ -24,7 +23,8 @@ import at.chrl.rebellion.classlistener.ClassListener;
 
 /**
  * Utility class that loads all DAO's after script context initialization.<br>
- * DAO should be public, not abstract, not interface, must have default no-arg public constructor.
+ * DAO should be public, not abstract, not interface, must have default no-arg
+ * public constructor.
  * 
  * @author SoulKeeper, Aquanox
  */
@@ -40,8 +40,7 @@ public class DAOLoader implements ClassListener {
 
 			try {
 				DAOManager.registerDAO((Class<? extends DAO>) clazz);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				throw new Error("Can't register DAO class", e);
 			}
 		}
@@ -57,8 +56,7 @@ public class DAOLoader implements ClassListener {
 
 			try {
 				DAOManager.unregisterDAO((Class<? extends DAO>) clazz);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				throw new Error("Can't unregister DAO class", e);
 			}
 		}

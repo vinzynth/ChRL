@@ -7,25 +7,24 @@ package at.chrl.nutils.network.packet;
  * 
  * @author Aquanox
  */
-public abstract class BasePacket
-{
+public abstract class BasePacket {
 	/**
 	 * Default packet string representation pattern.
 	 * 
 	 * @see java.util.Formatter
 	 * @see String#format(String, Object[])
 	 */
-	public static final String	TYPE_PATTERN	= "[%s] 0x%02X %s";
+	public static final String TYPE_PATTERN = "[%s] 0x%02X %s";
 
 	/**
 	 * Packet type field.
 	 */
-	private final PacketType	packetType;
+	private final PacketType packetType;
 
 	/**
 	 * Packet opcode field
 	 */
-	private int					opcode;
+	private int opcode;
 
 	/**
 	 * Constructs a new packet with specified type and id.
@@ -35,8 +34,7 @@ public abstract class BasePacket
 	 * @param opcode
 	 *            Id of packet
 	 */
-	protected BasePacket(PacketType packetType, int opcode)
-	{
+	protected BasePacket(PacketType packetType, int opcode) {
 		this.packetType = packetType;
 		this.opcode = opcode;
 	}
@@ -47,19 +45,18 @@ public abstract class BasePacket
 	 * 
 	 * @param packetType
 	 */
-	protected BasePacket(PacketType packetType)
-	{
+	protected BasePacket(PacketType packetType) {
 		this.packetType = packetType;
 	}
 
 	/**
 	 * Sets opcode of this packet.<br>
-	 * <font color='red'>NOTICE: </font> Use only if BasePacket(PacketType) constructor was use
+	 * <font color='red'>NOTICE: </font> Use only if BasePacket(PacketType)
+	 * constructor was use
 	 * 
 	 * @param opcode
 	 */
-	protected void setOpcode(int opcode)
-	{
+	protected void setOpcode(int opcode) {
 		this.opcode = opcode;
 	}
 
@@ -68,8 +65,7 @@ public abstract class BasePacket
 	 * 
 	 * @return packet id
 	 */
-	public final int getOpcode()
-	{
+	public final int getOpcode() {
 		return opcode;
 	}
 
@@ -80,8 +76,7 @@ public abstract class BasePacket
 	 * 
 	 * @see at.chrl.nutils.network.packet.BasePacket.PacketType
 	 */
-	public final PacketType getPacketType()
-	{
+	public final PacketType getPacketType() {
 		return packetType;
 	}
 
@@ -94,16 +89,14 @@ public abstract class BasePacket
 	 * 
 	 * @see Class#getSimpleName()
 	 */
-	public String getPacketName()
-	{
+	public String getPacketName() {
 		return this.getClass().getSimpleName();
 	}
 
 	/**
 	 * Enumeration of packet types.
 	 */
-	public static enum PacketType
-	{
+	public static enum PacketType {
 		/** Server packet */
 		SERVER("S"),
 
@@ -113,15 +106,14 @@ public abstract class BasePacket
 		/**
 		 * String representing packet type.
 		 */
-		private final String	name;
+		private final String name;
 
 		/**
 		 * Constructor.
 		 * 
 		 * @param name
 		 */
-		private PacketType(String name)
-		{
+		private PacketType(String name) {
 			this.name = name;
 		}
 
@@ -130,14 +122,14 @@ public abstract class BasePacket
 		 * 
 		 * @return packet type name.
 		 */
-		public String getName()
-		{
+		public String getName() {
 			return name;
 		}
 	}
 
 	/**
-	 * Returns string representation of this packet based on packet type, opcode and name.
+	 * Returns string representation of this packet based on packet type, opcode
+	 * and name.
 	 * 
 	 * @return packet type string
 	 * 
@@ -146,8 +138,7 @@ public abstract class BasePacket
 	 * @see String#format(String, Object[])
 	 */
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return String.format(TYPE_PATTERN, getPacketType().getName(), getOpcode(), getPacketName());
 	}
 }

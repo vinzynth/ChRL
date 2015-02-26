@@ -22,46 +22,46 @@ import at.chrl.Application;
 @ComponentScan(basePackageClasses = Application.class)
 class WebMvcConfig extends WebMvcConfigurationSupport {
 
-    private static final String MESSAGE_SOURCE = "/WEB-INF/i18n/messages";
-    @SuppressWarnings("unused")
+	private static final String MESSAGE_SOURCE = "/WEB-INF/i18n/messages";
+	@SuppressWarnings("unused")
 	private static final String VIEWS = "/WEB-INF/views/";
 
-    private static final String RESOURCES_LOCATION = "/resources/";
-    private static final String RESOURCES_HANDLER = RESOURCES_LOCATION + "**";
+	private static final String RESOURCES_LOCATION = "/resources/";
+	private static final String RESOURCES_HANDLER = RESOURCES_LOCATION + "**";
 
-    @Override
-    public RequestMappingHandlerMapping requestMappingHandlerMapping() {
-        RequestMappingHandlerMapping requestMappingHandlerMapping = super.requestMappingHandlerMapping();
-        requestMappingHandlerMapping.setUseSuffixPatternMatch(false);
-        requestMappingHandlerMapping.setUseTrailingSlashMatch(false);
-        return requestMappingHandlerMapping;
-    }
+	@Override
+	public RequestMappingHandlerMapping requestMappingHandlerMapping() {
+		RequestMappingHandlerMapping requestMappingHandlerMapping = super.requestMappingHandlerMapping();
+		requestMappingHandlerMapping.setUseSuffixPatternMatch(false);
+		requestMappingHandlerMapping.setUseTrailingSlashMatch(false);
+		return requestMappingHandlerMapping;
+	}
 
-    @Bean(name = "messageSource")
-    public MessageSource messageSource() {
-        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename(MESSAGE_SOURCE);
-        messageSource.setCacheSeconds(5);
-        return messageSource;
-    }
+	@Bean(name = "messageSource")
+	public MessageSource messageSource() {
+		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+		messageSource.setBasename(MESSAGE_SOURCE);
+		messageSource.setCacheSeconds(5);
+		return messageSource;
+	}
 
-    @Override
-    public Validator getValidator() {
-        LocalValidatorFactoryBean validator = new LocalValidatorFactoryBean();
-        validator.setValidationMessageSource(messageSource());
-        return validator;
-    }
+	@Override
+	public Validator getValidator() {
+		LocalValidatorFactoryBean validator = new LocalValidatorFactoryBean();
+		validator.setValidationMessageSource(messageSource());
+		return validator;
+	}
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler(RESOURCES_HANDLER).addResourceLocations(RESOURCES_LOCATION);
-    }
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler(RESOURCES_HANDLER).addResourceLocations(RESOURCES_LOCATION);
+	}
 
-    @Override
-    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-        configurer.enable();
-    }
-    
+	@Override
+	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+		configurer.enable();
+	}
+
 	/**
 	 * For RSS Feeds
 	 */
@@ -70,14 +70,15 @@ class WebMvcConfig extends WebMvcConfigurationSupport {
 		return new BeanNameViewResolver();
 	}
 
-    /**
-     * Handles favicon.ico requests assuring no <code>404 Not Found</code> error is returned.
-     */
-    @Controller
-    static class FaviconController {
-        @RequestMapping("favicon.ico")
-        String favicon() {
-            return "forward:/resources/images/favicon.ico";
-        }
-    }
+	/**
+	 * Handles favicon.ico requests assuring no <code>404 Not Found</code> error
+	 * is returned.
+	 */
+	@Controller
+	static class FaviconController {
+		@RequestMapping("favicon.ico")
+		String favicon() {
+			return "forward:/resources/images/favicon.ico";
+		}
+	}
 }

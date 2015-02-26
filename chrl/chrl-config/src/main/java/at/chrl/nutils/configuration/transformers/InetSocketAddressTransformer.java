@@ -7,9 +7,9 @@ import java.net.InetSocketAddress;
 import at.chrl.nutils.configuration.PropertyTransformer;
 import at.chrl.nutils.configuration.TransformationException;
 
-
 /**
- * Thransforms string to InetSocketAddress. InetSocketAddress can be represented in following ways:
+ * Thransforms string to InetSocketAddress. InetSocketAddress can be represented
+ * in following ways:
  * <ul>
  * <li>address:port</li>
  * <li>*:port - will use all avaiable network interfaces</li>
@@ -17,12 +17,12 @@ import at.chrl.nutils.configuration.TransformationException;
  * 
  * @author SoulKeeper
  */
-public class InetSocketAddressTransformer implements PropertyTransformer<InetSocketAddress>
-{
+public class InetSocketAddressTransformer implements PropertyTransformer<InetSocketAddress> {
 	/**
-	 * Shared instance of this transformer. It's thread-safe so no need of multiple instances
+	 * Shared instance of this transformer. It's thread-safe so no need of
+	 * multiple instances
 	 */
-	public static final InetSocketAddressTransformer	SHARED_INSTANCE	= new InetSocketAddressTransformer();
+	public static final InetSocketAddressTransformer SHARED_INSTANCE = new InetSocketAddressTransformer();
 
 	/**
 	 * Transforms string to InetSocketAddress
@@ -36,30 +36,22 @@ public class InetSocketAddressTransformer implements PropertyTransformer<InetSoc
 	 *             if somehting went wrong
 	 */
 	@Override
-	public InetSocketAddress transform(String value, Field field) throws TransformationException
-	{
+	public InetSocketAddress transform(String value, Field field) throws TransformationException {
 		String[] parts = value.split(":");
 
-		if(parts.length != 2)
-		{
+		if (parts.length != 2) {
 			throw new TransformationException("Can't transform property, must be in format \"address:port\"");
 		}
 
-		try
-		{
-			if("*".equals(parts[0]))
-			{
+		try {
+			if ("*".equals(parts[0])) {
 				return new InetSocketAddress(Integer.parseInt(parts[1]));
-			}
-			else
-			{
+			} else {
 				InetAddress address = InetAddress.getByName(parts[0]);
 				int port = Integer.parseInt(parts[1]);
 				return new InetSocketAddress(address, port);
 			}
-		}
-		catch(Exception e)
-		{
+		} catch (Exception e) {
 			throw new TransformationException(e);
 		}
 	}

@@ -1,6 +1,6 @@
 /**
- * (C) ChRL 2013 - chrl-utils - at.chrl.utils - ClassFinder.java
- * Created: 30.12.2013 - 14:56:02
+ * (C) ChRL 2013 - chrl-utils - at.chrl.utils - ClassFinder.java Created:
+ * 30.12.2013 - 14:56:02
  */
 package at.chrl.utils;
 
@@ -15,18 +15,18 @@ import java.util.List;
 
 /**
  * use {@link at.chrl.nutils.ClassUtils} instead
- * @author Vinzynth
- * 08.11.2014 - 16:38:14
+ * 
+ * @author Vinzynth 08.11.2014 - 16:38:14
  *
  */
 @Deprecated
 public final class ClassFinder {
 
-	private final static char	DOT					= '.';
-	private final static char	SLASH				= '/';
-	private final static String	CLASS_SUFFIX		= ".class";
-	private final static String	BAD_PACKAGE_ERROR	= "Unable to get resources from path '%s'. Are you sure the given '%s' package exists?";
-    
+	private final static char DOT = '.';
+	private final static char SLASH = '/';
+	private final static String CLASS_SUFFIX = ".class";
+	private final static String BAD_PACKAGE_ERROR = "Unable to get resources from path '%s'. Are you sure the given '%s' package exists?";
+
 	public static List<Class<?>> find(final String scannedPackage) {
 		final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		final String scannedPath = scannedPackage.replace(DOT, SLASH);

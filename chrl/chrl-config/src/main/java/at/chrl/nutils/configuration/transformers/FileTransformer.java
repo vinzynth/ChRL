@@ -6,18 +6,18 @@ import java.lang.reflect.Field;
 import at.chrl.nutils.configuration.PropertyTransformer;
 import at.chrl.nutils.configuration.TransformationException;
 
-
 /**
- * Transforms string to file by creating new file instance. It's not checked if file exists.
+ * Transforms string to file by creating new file instance. It's not checked if
+ * file exists.
  * 
  * @author SoulKeeper
  */
-public class FileTransformer implements PropertyTransformer<File>
-{
+public class FileTransformer implements PropertyTransformer<File> {
 	/**
-	 * Shared instance of this transformer. It's thread-safe so no need of multiple instances
+	 * Shared instance of this transformer. It's thread-safe so no need of
+	 * multiple instances
 	 */
-	public static final FileTransformer	SHARED_INSTANCE	= new FileTransformer();
+	public static final FileTransformer SHARED_INSTANCE = new FileTransformer();
 
 	/**
 	 * Transforms String to the file
@@ -29,8 +29,7 @@ public class FileTransformer implements PropertyTransformer<File>
 	 * @return File object that represents string
 	 */
 	@Override
-	public File transform(String value, Field field) throws TransformationException
-	{
+	public File transform(String value, Field field) throws TransformationException {
 		return new File(value);
 	}
 }

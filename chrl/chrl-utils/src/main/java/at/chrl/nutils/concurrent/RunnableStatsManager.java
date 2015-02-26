@@ -125,7 +125,8 @@ public final class RunnableStatsManager {
 	}
 
 	public static enum SortBy {
-		AVG("average"), COUNT("count"), TOTAL("total"), NAME("class"), METHOD("method"), MIN("min"), MAX("max"), ;
+		AVG("average"), COUNT("count"), TOTAL("total"), NAME("class"), METHOD(
+				"method"), MIN("min"), MAX("max"), ;
 
 		private final String xmlAttributeName;
 

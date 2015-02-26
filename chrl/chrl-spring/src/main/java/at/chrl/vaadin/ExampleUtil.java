@@ -1,8 +1,6 @@
 /**
- * @author bravestone
- * Feb 20, 2015 - 6:23:30 PM
- * bravestone-spring
- * com.bravestone.vaadin
+ * @author bravestone Feb 20, 2015 - 6:23:30 PM bravestone-spring
+ *         com.bravestone.vaadin
  */
 package at.chrl.vaadin;
 

@@ -1,18 +1,18 @@
 /**
  * This file is part of aion-lightning <aion-lightning.org>.
  * 
- * aion-lightning is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * aion-lightning is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  * 
- * aion-lightning is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * aion-lightning is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  * 
- * You should have received a copy of the GNU General Public License
- * along with aion-lightning.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with
+ * aion-lightning. If not, see <http://www.gnu.org/licenses/>.
  */
 package at.chrl.rebellion.scriptmanager;
 
@@ -37,7 +37,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ScriptInfo {
 
 	/**
-	 * Root of this script context. Child directories of root will be scanned for script files
+	 * Root of this script context. Child directories of root will be scanned
+	 * for script files
 	 */
 	@XmlAttribute(required = true)
 	private File root;
@@ -73,14 +74,15 @@ public class ScriptInfo {
 	 * Sets root for script context
 	 * 
 	 * @param root
-	 *          root for script context
+	 *            root for script context
 	 */
 	public void setRoot(File root) {
 		this.root = root;
 	}
 
 	/**
-	 * Returns list of libraries that will be used byscript context and it's children
+	 * Returns list of libraries that will be used byscript context and it's
+	 * children
 	 * 
 	 * @return lib of libraries
 	 */
@@ -89,10 +91,11 @@ public class ScriptInfo {
 	}
 
 	/**
-	 * Sets list of libraries that will be used by script context and it's children
+	 * Sets list of libraries that will be used by script context and it's
+	 * children
 	 * 
 	 * @param libraries
-	 *          sets list of libraries
+	 *            sets list of libraries
 	 */
 	public void setLibraries(List<File> libraries) {
 		this.libraries = libraries;
@@ -111,7 +114,7 @@ public class ScriptInfo {
 	 * Sets list of child context descriptors
 	 * 
 	 * @param scriptInfos
-	 *          list of child context descriptors
+	 *            list of child context descriptors
 	 */
 	public void setScriptInfos(List<ScriptInfo> scriptInfos) {
 		this.scriptInfos = scriptInfos;
@@ -130,7 +133,7 @@ public class ScriptInfo {
 	 * Sets compiler class name
 	 * 
 	 * @param compilerClass
-	 *          name of compiler class
+	 *            name of compiler class
 	 */
 	public void setCompilerClass(String compilerClass) {
 		this.compilerClass = compilerClass;
@@ -140,7 +143,7 @@ public class ScriptInfo {
 	 * Returns true if roots are quals
 	 * 
 	 * @param o
-	 *          object to compare with
+	 *            object to compare with
 	 * @return true if this ScriptInfo and anothers ScriptInfo has same root
 	 */
 	@Override

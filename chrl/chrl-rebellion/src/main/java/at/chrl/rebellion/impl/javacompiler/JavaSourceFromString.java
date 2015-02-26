@@ -1,18 +1,18 @@
 /**
  * This file is part of aion-lightning <aion-lightning.org>.
  * 
- * aion-lightning is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * aion-lightning is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  * 
- * aion-lightning is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * aion-lightning is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  * 
- * You should have received a copy of the GNU General Public License
- * along with aion-lightning.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with
+ * aion-lightning. If not, see <http://www.gnu.org/licenses/>.
  */
 package at.chrl.rebellion.impl.javacompiler;
 
@@ -37,13 +37,12 @@ public class JavaSourceFromString extends SimpleJavaFileObject {
 	 * Creates new object that contains sources of java class
 	 * 
 	 * @param className
-	 *          class name of class
+	 *            class name of class
 	 * @param code
-	 *          source code of class
+	 *            source code of class
 	 */
 	public JavaSourceFromString(String className, String code) {
-		super(URI.create("string:///" + className.replace('.', '/') + JavaFileObject.Kind.SOURCE.extension),
-			JavaFileObject.Kind.SOURCE);
+		super(URI.create("string:///" + className.replace('.', '/') + JavaFileObject.Kind.SOURCE.extension), JavaFileObject.Kind.SOURCE);
 		this.code = code;
 	}
 
@@ -51,7 +50,7 @@ public class JavaSourceFromString extends SimpleJavaFileObject {
 	 * Returns class source code
 	 * 
 	 * @param ignoreEncodingErrors
-	 *          not used
+	 *            not used
 	 * @return class source code
 	 */
 	@Override

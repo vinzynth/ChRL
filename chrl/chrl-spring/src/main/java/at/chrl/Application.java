@@ -1,3 +1,4 @@
 package at.chrl;
 
-public interface Application {}
+public interface Application {
+}

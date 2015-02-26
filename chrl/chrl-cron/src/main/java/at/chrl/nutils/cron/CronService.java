@@ -29,7 +29,7 @@ import at.chrl.nutils.GenericValidator;
  * @author ChRL
  */
 public final class CronService {
-	
+
 	/**
 	 * We really should use some dependency injection (Spring?)<br>
 	 * Current code is bloated, should be much cleaner
@@ -56,7 +56,8 @@ public final class CronService {
 
 	/**
 	 * Empty private constructor to prevent initialization.<br>
-	 * Can be instantiated using reflection (for tests), but no real use for application please!
+	 * Can be instantiated using reflection (for tests), but no real use for
+	 * application please!
 	 */
 	private CronService() {
 

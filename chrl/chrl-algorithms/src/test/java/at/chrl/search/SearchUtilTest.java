@@ -53,44 +53,42 @@ public class SearchUtilTest {
 		TreeSet<String> index = new TreeSet<>();
 
 		for (int i = 0; i < 100_000; i++) {
-			index.add("dsgaesauiwetgspfhga"+Rnd.nextInt(Integer.MAX_VALUE));
+			index.add("dsgaesauiwetgspfhga" + Rnd.nextInt(Integer.MAX_VALUE));
 		}
 
 		int scount = 100;
 		long t = System.nanoTime();
 		System.out.println("Start Search");
 		for (int i = 0; i < scount; i++) {
-			SearchUtil.search(index, Rnd.nextInt(Integer.MAX_VALUE)+"");
+			SearchUtil.search(index, Rnd.nextInt(Integer.MAX_VALUE) + "");
 		}
-		System.out.println("Finished: " + (System.nanoTime() - t)/1_000/scount +"µs pre search");
+		System.out.println("Finished: " + (System.nanoTime() - t) / 1_000 / scount + "µs pre search");
 	}
-
 
 	@Test
 	public void testIndexSearch() throws Exception {
-		double[] arr = new double[]{1,2,4,8,12,25,34,50};
+		double[] arr = new double[] { 1, 2, 4, 8, 12, 25, 34, 50 };
 
 		int size = arr.length;
 		assertTrue(0 == SearchUtil.indexSearch(.5, size, arr));
-		assertTrue(1 == SearchUtil.indexSearch(1.5,size,arr));
-		assertTrue(4 == SearchUtil.indexSearch(9.,size,arr));
-		assertTrue(7 == SearchUtil.indexSearch(35,size,arr));
-		assertTrue(8 == SearchUtil.indexSearch(51,size,arr));
+		assertTrue(1 == SearchUtil.indexSearch(1.5, size, arr));
+		assertTrue(4 == SearchUtil.indexSearch(9., size, arr));
+		assertTrue(7 == SearchUtil.indexSearch(35, size, arr));
+		assertTrue(8 == SearchUtil.indexSearch(51, size, arr));
 
-
-		arr = new double[]{-14,-12,-8,-5,0,1,2,4,8,12,25,34,50};
+		arr = new double[] { -14, -12, -8, -5, 0, 1, 2, 4, 8, 12, 25, 34, 50 };
 
 		size = arr.length;
 
 		assertTrue(0 == SearchUtil.indexSearch(-15., size, arr));
-		assertTrue(1 == SearchUtil.indexSearch(-13.,size,arr));
-		assertTrue(4 == SearchUtil.indexSearch(0.,size,arr));
-		assertTrue(7 == SearchUtil.indexSearch(3.,size,arr));
-		assertTrue(10 == SearchUtil.indexSearch(12,size,arr));
+		assertTrue(1 == SearchUtil.indexSearch(-13., size, arr));
+		assertTrue(4 == SearchUtil.indexSearch(0., size, arr));
+		assertTrue(7 == SearchUtil.indexSearch(3., size, arr));
+		assertTrue(10 == SearchUtil.indexSearch(12, size, arr));
 		assertTrue(5 == SearchUtil.indexSearch(.5, size, arr));
-		assertTrue(6 == SearchUtil.indexSearch(1.5,size,arr));
-		assertTrue(9 == SearchUtil.indexSearch(9.,size,arr));
-		assertTrue(size - 1 == SearchUtil.indexSearch(35,size,arr));
-		assertTrue(size == SearchUtil.indexSearch(51,size,arr));
+		assertTrue(6 == SearchUtil.indexSearch(1.5, size, arr));
+		assertTrue(9 == SearchUtil.indexSearch(9., size, arr));
+		assertTrue(size - 1 == SearchUtil.indexSearch(35, size, arr));
+		assertTrue(size == SearchUtil.indexSearch(51, size, arr));
 	}
 }

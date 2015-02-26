@@ -2,23 +2,21 @@ package at.chrl.nutils.configuration;
 
 /**
  * This exception is internal for configuration process. Thrown by
- * {@link commons.configuration.PropertyTransformer} when transformaton error occurs and is catched by
- * {@link commons.configuration.ConfigurableProcessor}
+ * {@link commons.configuration.PropertyTransformer} when transformaton error
+ * occurs and is catched by {@link commons.configuration.ConfigurableProcessor}
  * 
  * @author SoulKeeper
  */
-public class TransformationException extends RuntimeException
-{
+public class TransformationException extends RuntimeException {
 	/**
 	 * SerialID
 	 */
-	private static final long	serialVersionUID	= -6641235751743285902L;
+	private static final long serialVersionUID = -6641235751743285902L;
 
 	/**
 	 * Creates new instance of exception
 	 */
-	public TransformationException()
-	{
+	public TransformationException() {
 	}
 
 	/**
@@ -27,8 +25,7 @@ public class TransformationException extends RuntimeException
 	 * @param message
 	 *            exception message
 	 */
-	public TransformationException(String message)
-	{
+	public TransformationException(String message) {
 		super(message);
 	}
 
@@ -40,8 +37,7 @@ public class TransformationException extends RuntimeException
 	 * @param cause
 	 *            exception that is the reason of this exception
 	 */
-	public TransformationException(String message, Throwable cause)
-	{
+	public TransformationException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
@@ -51,8 +47,7 @@ public class TransformationException extends RuntimeException
 	 * @param cause
 	 *            exception that is the reason of this exception
 	 */
-	public TransformationException(Throwable cause)
-	{
+	public TransformationException(Throwable cause) {
 		super(cause);
 	}
 }

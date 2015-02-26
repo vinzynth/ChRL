@@ -16,8 +16,7 @@ import org.apache.commons.io.FileUtils;
  * 
  * @author SoulKeeper
  */
-public class PropertiesUtils
-{
+public class PropertiesUtils {
 	/**
 	 * Loads properties by given file
 	 * 
@@ -27,8 +26,7 @@ public class PropertiesUtils
 	 * @throws java.io.IOException
 	 *             if can't load file
 	 */
-	public static Properties load(String file) throws IOException
-	{
+	public static Properties load(String file) throws IOException {
 		return load(new File(file));
 	}
 
@@ -41,9 +39,8 @@ public class PropertiesUtils
 	 * @throws java.io.IOException
 	 *             if can't load file
 	 */
-	public static Properties load(File file) throws IOException
-	{
-		BufferedReader br = new BufferedReader(new InputStreamReader( new FileInputStream(file)), 8192 << 4);
+	public static Properties load(File file) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)), 8192 << 4);
 		Properties p = new Properties();
 		p.load(br);
 		br.close();
@@ -59,11 +56,9 @@ public class PropertiesUtils
 	 * @throws IOException
 	 *             if was unable to read properties
 	 */
-	public static Properties[] load(String... files) throws IOException
-	{
+	public static Properties[] load(String... files) throws IOException {
 		Properties[] result = new Properties[files.length];
-		for(int i = 0; i < result.length; i++)
-		{
+		for (int i = 0; i < result.length; i++) {
 			result[i] = load(files[i]);
 		}
 		return result;
@@ -78,11 +73,9 @@ public class PropertiesUtils
 	 * @throws IOException
 	 *             if was unable to read properties
 	 */
-	public static Properties[] load(File... files) throws IOException
-	{
+	public static Properties[] load(File... files) throws IOException {
 		Properties[] result = new Properties[files.length];
-		for(int i = 0; i < result.length; i++)
-		{
+		for (int i = 0; i < result.length; i++) {
 			result[i] = load(files[i]);
 		}
 		return result;
@@ -97,8 +90,7 @@ public class PropertiesUtils
 	 * @throws IOException
 	 *             if was unable to read properties
 	 */
-	public static Properties[] loadAllFromDirectory(String dir) throws IOException
-	{
+	public static Properties[] loadAllFromDirectory(String dir) throws IOException {
 		return loadAllFromDirectory(new File(dir), false);
 	}
 
@@ -111,8 +103,7 @@ public class PropertiesUtils
 	 * @throws IOException
 	 *             if was unable to read properties
 	 */
-	public static Properties[] loadAllFromDirectory(File dir) throws IOException
-	{
+	public static Properties[] loadAllFromDirectory(File dir) throws IOException {
 		return loadAllFromDirectory(dir, false);
 	}
 
@@ -127,8 +118,7 @@ public class PropertiesUtils
 	 * @throws IOException
 	 *             if was unable to read properties
 	 */
-	public static Properties[] loadAllFromDirectory(String dir, boolean recursive) throws IOException
-	{
+	public static Properties[] loadAllFromDirectory(String dir, boolean recursive) throws IOException {
 		return loadAllFromDirectory(new File(dir), recursive);
 	}
 
@@ -143,17 +133,16 @@ public class PropertiesUtils
 	 * @throws IOException
 	 *             if was unable to read properties
 	 */
-	public static Properties[] loadAllFromDirectory(File dir, boolean recursive) throws IOException
-	{
+	public static Properties[] loadAllFromDirectory(File dir, boolean recursive) throws IOException {
 		Collection<File> files = FileUtils.listFiles(dir, new String[] { "properties" }, recursive);
 		return load(files.toArray(new File[files.size()]));
 	}
-	
-	public static Properties filterEmtpyValues(final Properties props){
+
+	public static Properties filterEmtpyValues(final Properties props) {
 		Properties returnMe = new Properties();
 		for (Entry<Object, Object> iterable_element : props.entrySet()) {
-			if(!((String)iterable_element.getValue()).isEmpty()){
-				returnMe.setProperty((String)iterable_element.getKey(), (String)iterable_element.getValue());
+			if (!((String) iterable_element.getValue()).isEmpty()) {
+				returnMe.setProperty((String) iterable_element.getKey(), (String) iterable_element.getValue());
 			}
 		}
 		return returnMe;

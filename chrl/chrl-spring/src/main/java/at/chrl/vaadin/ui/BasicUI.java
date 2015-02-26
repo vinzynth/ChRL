@@ -19,13 +19,14 @@ import com.vaadin.ui.UI;
 @PreserveOnRefresh
 @Scope("request")
 public class BasicUI extends UI {
-	
+
 	Navigator nav;
 
-	enum Views{
-		MAIN("Main", MainView.class),
-		CONFIG("Active Configuration", ConfigView.class);
-		
+	enum Views {
+		MAIN("Main", MainView.class), CONFIG(
+				"Active Configuration",
+				ConfigView.class);
+
 		private String string;
 		private Class<? extends View> viewClass;
 
@@ -33,9 +34,10 @@ public class BasicUI extends UI {
 			this.string = string;
 			this.viewClass = viewClass;
 		}
-		
+
 		/**
 		 * {@inheritDoc}
+		 * 
 		 * @see java.lang.Enum#toString()
 		 */
 		@Override
@@ -47,13 +49,13 @@ public class BasicUI extends UI {
 	@Override
 	protected void init(VaadinRequest request) {
 		nav = new Navigator(this, this);
-		
+
 		for (Views view : Views.values()) {
 			nav.addView(view.name(), view.viewClass);
 		}
-		
+
 		nav.navigateTo(Views.MAIN.name());
-		
+
 	}
 
 }

@@ -11,18 +11,19 @@ import java.util.concurrent.PriorityBlockingQueue;
 
 public abstract class ThresholdTimeoutService<T> {
 
-	private PriorityBlockingQueue<T>			queue;
-	private volatile int						threshold;
-	private volatile int						timeout;
-	private volatile int						processesRunning;
-	private volatile Timer						timer;
+	private PriorityBlockingQueue<T> queue;
+	private volatile int threshold;
+	private volatile int timeout;
+	private volatile int processesRunning;
+	private volatile Timer timer;
 
 	/**
 	 * fires {@link #processBeforeAll(Object)}, {@link #processAll(Collection)}
-	 * and {@link #processAfterAll(Object)}
-	 * when threshold or timeout is reached
+	 * and {@link #processAfterAll(Object)} when threshold or timeout is reached
+	 * 
 	 * @param threshold
-	 * @param timeout in Seconds
+	 * @param timeout
+	 *            in Seconds
 	 */
 	public ThresholdTimeoutService(int threshold, int timeout) {
 		this(threshold, timeout, null);
@@ -37,7 +38,7 @@ public abstract class ThresholdTimeoutService<T> {
 	}
 
 	private void replaceTimer(int timeout) {
-		if (this.timer != null){
+		if (this.timer != null) {
 			this.timer.cancel();
 			this.timer.purge();
 		}
@@ -52,11 +53,11 @@ public abstract class ThresholdTimeoutService<T> {
 	}
 
 	@SafeVarargs
-	public final boolean addToQueue(T... data){
+	public final boolean addToQueue(T... data) {
 		return addToQueue(Arrays.asList(data));
 	}
-	
-	public final boolean addToQueue(Iterable<T> data){
+
+	public final boolean addToQueue(Iterable<T> data) {
 		boolean returnMe = true;
 		for (T t : data)
 			returnMe = queue.add(t) && returnMe;
@@ -67,7 +68,7 @@ public abstract class ThresholdTimeoutService<T> {
 				refresh(true);
 			}
 		}).start();
-		
+
 		return returnMe;
 	}
 
@@ -121,7 +122,7 @@ public abstract class ThresholdTimeoutService<T> {
 		while (err.peek() != null)
 			curr.remove(err.poll());
 
-		if (curr.size() > 0){
+		if (curr.size() > 0) {
 			if (this.processAll(curr)) {
 				// process after
 				for (T t : curr) {

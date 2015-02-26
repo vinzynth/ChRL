@@ -9,24 +9,20 @@ import java.util.concurrent.TimeoutException;
 /**
  * @author NB4L1
  */
-public final class ScheduledFutureWrapper implements ScheduledFuture<Object>
-{
-	private final ScheduledFuture<?>	future;
+public final class ScheduledFutureWrapper implements ScheduledFuture<Object> {
+	private final ScheduledFuture<?> future;
 
-	public ScheduledFutureWrapper(ScheduledFuture<?> future)
-	{
+	public ScheduledFutureWrapper(ScheduledFuture<?> future) {
 		this.future = future;
 	}
 
 	@Override
-	public long getDelay(TimeUnit unit)
-	{
+	public long getDelay(TimeUnit unit) {
 		return future.getDelay(unit);
 	}
 
 	@Override
-	public int compareTo(Delayed o)
-	{
+	public int compareTo(Delayed o) {
 		return future.compareTo(o);
 	}
 
@@ -34,32 +30,27 @@ public final class ScheduledFutureWrapper implements ScheduledFuture<Object>
 	 * Just make sure to avoid wrong usage of Future.cancel(true).
 	 */
 	@Override
-	public boolean cancel(boolean mayInterruptIfRunning)
-	{
+	public boolean cancel(boolean mayInterruptIfRunning) {
 		return future.cancel(false);
 	}
 
 	@Override
-	public Object get() throws InterruptedException, ExecutionException
-	{
+	public Object get() throws InterruptedException, ExecutionException {
 		return future.get();
 	}
 
 	@Override
-	public Object get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException
-	{
+	public Object get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
 		return future.get(timeout, unit);
 	}
 
 	@Override
-	public boolean isCancelled()
-	{
+	public boolean isCancelled() {
 		return future.isCancelled();
 	}
 
 	@Override
-	public boolean isDone()
-	{
+	public boolean isDone() {
 		return future.isDone();
 	}
 }

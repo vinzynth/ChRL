@@ -1,6 +1,6 @@
 /**
- * (C) ChRL 2014 - chrl-exodus - at.chrl.exodus.tasks - PropertyGenerationTask.java
- * Created: 03.08.2014 - 21:59:31
+ * (C) ChRL 2014 - chrl-exodus - at.chrl.exodus.tasks -
+ * PropertyGenerationTask.java Created: 03.08.2014 - 21:59:31
  */
 package at.chrl.exodus.tasks;
 
@@ -19,10 +19,10 @@ import at.chrl.utils.TaskExecutor.Task;
  * @author Vinzynth
  *
  */
-public class PropertyGenerationTask extends Task{
+public class PropertyGenerationTask extends Task {
 
 	private static final Logger log = new Logger();
-	
+
 	private final File f;
 	private final Properties[] props;
 
@@ -30,18 +30,17 @@ public class PropertyGenerationTask extends Task{
 		this.f = f;
 		this.props = props;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
+	 * 
 	 * @see at.chrl.utils.TaskExecutor.Task#runTask()
 	 */
 	@Override
 	public void runTask() {
 		FileUtil.recreate(this.f);
-		try 
-		(BufferedWriter writer = Files.newBufferedWriter(this.f.toPath(), StandardOpenOption.APPEND))
-		{
-			for (Properties properties : props) 
+		try (BufferedWriter writer = Files.newBufferedWriter(this.f.toPath(), StandardOpenOption.APPEND)) {
+			for (Properties properties : props)
 				properties.store(writer, null);
 		} catch (Exception e) {
 			log.error("Error writing property Files", e);
@@ -57,8 +56,8 @@ public class PropertyGenerationTask extends Task{
 		return f;
 	}
 
-	public int getPropertiesSize(){
+	public int getPropertiesSize() {
 		return Arrays.stream(props).mapToInt(Properties::size).sum();
 	}
-	
+
 }

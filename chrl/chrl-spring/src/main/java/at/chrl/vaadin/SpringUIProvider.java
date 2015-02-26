@@ -1,8 +1,6 @@
 /**
- * @author bravestone
- * Feb 20, 2015 - 4:34:35 PM
- * bravestone-spring
- * com.bravestone.vaadin
+ * @author bravestone Feb 20, 2015 - 4:34:35 PM bravestone-spring
+ *         com.bravestone.vaadin
  */
 package at.chrl.vaadin;
 
@@ -44,9 +42,7 @@ public class SpringUIProvider extends DefaultUIProvider {
 			System.err.println("Couldn't get current instance of VaadinServlet");
 			return;
 		}
-		context = WebApplicationContextUtils
-				.getRequiredWebApplicationContext(vaadinServlet
-						.getServletContext());
+		context = WebApplicationContextUtils.getRequiredWebApplicationContext(vaadinServlet.getServletContext());
 	}
 
 }

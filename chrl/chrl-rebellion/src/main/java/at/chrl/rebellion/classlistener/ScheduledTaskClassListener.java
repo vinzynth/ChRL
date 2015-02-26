@@ -1,18 +1,18 @@
 /**
  * This file is part of aion-lightning <aion-lightning.org>.
  * 
- * aion-lightning is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * aion-lightning is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  * 
- * aion-lightning is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * aion-lightning is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  * 
- * You should have received a copy of the GNU General Public License
- * along with aion-lightning.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with
+ * aion-lightning. If not, see <http://www.gnu.org/licenses/>.
  */
 package at.chrl.rebellion.classlistener;
 
@@ -28,7 +28,7 @@ import at.chrl.rebellion.metadata.Scheduled;
 public class ScheduledTaskClassListener implements ClassListener {
 
 	@Override
-	@SuppressWarnings({"unchecked"})
+	@SuppressWarnings({ "unchecked" })
 	public void postLoad(Class<?>[] classes) {
 		for (Class<?> clazz : classes) {
 			if (isValidClass(clazz)) {
@@ -38,7 +38,7 @@ public class ScheduledTaskClassListener implements ClassListener {
 	}
 
 	@Override
-	@SuppressWarnings({"unchecked"})
+	@SuppressWarnings({ "unchecked" })
 	public void preUnload(Class<?>[] classes) {
 		for (Class<?> clazz : classes) {
 			if (isValidClass(clazz)) {
@@ -81,13 +81,13 @@ public class ScheduledTaskClassListener implements ClassListener {
 		Scheduled metadata = clazz.getAnnotation(Scheduled.class);
 
 		try {
-			if(metadata.instancePerCronExpression()){
-				for(String s : metadata.value()){
+			if (metadata.instancePerCronExpression()) {
+				for (String s : metadata.value()) {
 					getCronService().schedule(clazz.newInstance(), s, metadata.longRunningTask());
 				}
 			} else {
 				Runnable r = clazz.newInstance();
-				for(String s : metadata.value()){
+				for (String s : metadata.value()) {
 					getCronService().schedule(r, s, metadata.longRunningTask());
 				}
 			}
@@ -105,7 +105,7 @@ public class ScheduledTaskClassListener implements ClassListener {
 		}
 	}
 
-	protected CronService getCronService(){
+	protected CronService getCronService() {
 		if (CronService.getInstance() == null) {
 			throw new RuntimeException("CronService is not initialized");
 		}

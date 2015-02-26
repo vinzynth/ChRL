@@ -29,31 +29,31 @@ import at.chrl.callbacks.util.GlobalCallbackHelper;
  * @author Vinzynth 08.11.2014 - 16:51:03
  *
  */
-@SuppressWarnings({"rawtypes", "unchecked", "deprecation"})
-public class MemoizeCallback implements Callback<Object> {	
-	
+@SuppressWarnings({ "rawtypes", "unchecked", "deprecation" })
+public class MemoizeCallback implements Callback<Object> {
+
 	private static final Object STATIC;
-	
-	static{
+
+	static {
 		GlobalCallbackHelper.addCallback(SingletonHolder.instance);
 		STATIC = new Object();
 	}
-	
+
 	private final Map<String, Map<Object, Map<Object, Object>>> cache;
 	private final Supplier<Map> mapSupplier;
 	private final Supplier<Map> weakMapSupplier;
 
 	private long hits;
 	private long misses;
-	
-	private MemoizeCallback(final Supplier<Map> mapSupplier, final Supplier<Map> weakMapSupplier){
+
+	private MemoizeCallback(final Supplier<Map> mapSupplier, final Supplier<Map> weakMapSupplier) {
 		this.cache = mapSupplier.get();
 		this.mapSupplier = mapSupplier;
 		this.weakMapSupplier = weakMapSupplier;
 		this.hits = 0;
 		this.misses = 0;
 	}
-	
+
 	private static String getCallingMethod() {
 		String string = new Throwable().getStackTrace()[3].toString();
 		string = string.substring(string.lastIndexOf('$') + 1, string.lastIndexOf('('));
@@ -71,7 +71,7 @@ public class MemoizeCallback implements Callback<Object> {
 		String callingMethod = getCallingMethod();
 		if (!cache.containsKey(callingMethod))
 			cache.putIfAbsent(callingMethod, mapSupplier.get());
-		
+
 		Map<Object, Map<Object, Object>> cache2 = cache.get(callingMethod);
 		if (!cache2.containsKey(obj))
 			if (Objects.nonNull(obj))
@@ -89,7 +89,7 @@ public class MemoizeCallback implements Callback<Object> {
 		else
 			object = cache2.get(STATIC).get(hash);
 
-		if (Objects.nonNull(object)){
+		if (Objects.nonNull(object)) {
 			++hits;
 			return CallbackResult.newFullBlocker(object);
 		}
@@ -105,38 +105,36 @@ public class MemoizeCallback implements Callback<Object> {
 	 * @param methodResult
 	 * @return
 	 */
-	public CallbackResult afterCall(Object obj, Object[] args, Object methodResult){
+	public CallbackResult afterCall(Object obj, Object[] args, Object methodResult) {
 		String callingMethod = getCallingMethod();
-		
+
 		int hash = 0;
 		for (Object object : args)
 			hash = hash * 31 + object.hashCode();
-		
-		if(Objects.nonNull(obj))
+
+		if (Objects.nonNull(obj))
 			cache.get(callingMethod).get(obj).put(hash, methodResult);
 		else
 			cache.get(callingMethod).get(STATIC).put(hash, methodResult);
-		
+
 		return CallbackResult.newContinue();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "Memoize Cache | Hits: " + hits + " | Misses: " + misses + " | Hit Ratio: " + ((float)hits/(hits+misses)) + " | " +super.toString();
+		return "Memoize Cache | Hits: " + hits + " | Misses: " + misses + " | Hit Ratio: " + ((float) hits / (hits + misses)) + " | " + super.toString();
 	}
-	
-	public static String printString(){
+
+	public static String printString() {
 		return SingletonHolder.instance.toString();
 	}
 
 	private static final class SingletonHolder {
-		private static final MemoizeCallback instance = new MemoizeCallback(
-				CollectionSupplier.rawSupplier(CollectionSupplier.getMapSupplier()),
-				CollectionSupplier.rawSupplier(CollectionSupplier.getWeakMapSupplier())
-		);
+		private static final MemoizeCallback instance = new MemoizeCallback(CollectionSupplier.rawSupplier(CollectionSupplier.getMapSupplier()), CollectionSupplier.rawSupplier(CollectionSupplier.getWeakMapSupplier()));
 	}
 }

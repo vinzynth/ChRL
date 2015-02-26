@@ -70,9 +70,9 @@ public abstract class AbstractWebAppInitializer extends AbstractAnnotationConfig
 		AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
 
 		rootContext.register(getRootConfigClasses());
-		
+
 		registerSpringContextLoaderListener(servletContext, rootContext);
-		
+
 		registerVaadinServlet(servletContext);
 		registerDispatcherServlet(servletContext);
 	}

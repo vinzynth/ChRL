@@ -1,18 +1,17 @@
 /**
  * This file is part of aion-emu <aion-emu.com>.
  *
- *  aion-emu is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
+ * aion-emu is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *  aion-emu is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * aion-emu is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with aion-emu.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with
+ * aion-emu. If not, see <http://www.gnu.org/licenses/>.
  */
 package at.chrl.nutils.network.util;
 
@@ -24,6 +23,7 @@ import java.lang.management.ThreadMXBean;
 
 import at.chrl.nutils.ExitCode;
 import static at.chrl.nutils.Constants.log;
+
 /**
  * @author -Nemesiss-, ATracer
  */
@@ -84,8 +84,7 @@ public class DeadLockDetector extends Thread {
 						ThreadInfo dl = ti;
 						info += "Java-level deadlock:\n";
 						info += createShortLockInfo(dl);
-						while ((dl = tmx.getThreadInfo(new long[] { dl.getLockOwnerId() }, true, true)[0]).getThreadId() != ti
-							.getThreadId())
+						while ((dl = tmx.getThreadInfo(new long[] { dl.getLockOwnerId() }, true, true)[0]).getThreadId() != ti.getThreadId())
 							info += createShortLockInfo(dl);
 
 						info += "\nDumping all threads:\n";
@@ -99,8 +98,7 @@ public class DeadLockDetector extends Thread {
 						System.exit(ExitCode.CODE_RESTART);
 				}
 				Thread.sleep(sleepTime);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				log.warn("DeadLockDetector: " + e, e);
 			}
 	}
@@ -109,8 +107,10 @@ public class DeadLockDetector extends Thread {
 	 * Example:
 	 * <p>
 	 * Java-level deadlock:<br>
-	 * Thread-0 is waiting to lock java.lang.Object@276af2 which is held by main. Locked synchronizers:0 monitors:1<br>
-	 * main is waiting to lock java.lang.Object@fa3ac1 which is held by Thread-0. Locked synchronizers:0 monitors:1<br>
+	 * Thread-0 is waiting to lock java.lang.Object@276af2 which is held by
+	 * main. Locked synchronizers:0 monitors:1<br>
+	 * main is waiting to lock java.lang.Object@fa3ac1 which is held by
+	 * Thread-0. Locked synchronizers:0 monitors:1<br>
 	 * </p>
 	 */
 	private String createShortLockInfo(ThreadInfo threadInfo) {
@@ -140,8 +140,7 @@ public class DeadLockDetector extends Thread {
 	 */
 	private String printDumpedThreadInfo(ThreadInfo threadInfo) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("\n\"" + threadInfo.getThreadName() + "\"" + " Id=" + threadInfo.getThreadId() + " "
-			+ threadInfo.getThreadState() + "\n");
+		sb.append("\n\"" + threadInfo.getThreadName() + "\"" + " Id=" + threadInfo.getThreadId() + " " + threadInfo.getThreadState() + "\n");
 		StackTraceElement[] stacktrace = threadInfo.getStackTrace();
 		for (int i = 0; i < stacktrace.length; i++) {
 			StackTraceElement ste = stacktrace[i];

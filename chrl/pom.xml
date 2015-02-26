@@ -49,6 +49,9 @@
 		<module>chrl-datastructures</module>
 		<module>chrl-callbacks</module>
 		<module>chrl-callback-utils</module>
+		<module>chrl-spring</module>
+		<module>chrl-orm</module>
+		<module>chrl-orm-spring-integration</module>
 	</modules>
 	<dependencyManagement>
 		<dependencies>

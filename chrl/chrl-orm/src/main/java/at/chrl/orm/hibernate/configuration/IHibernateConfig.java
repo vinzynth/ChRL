@@ -8,8 +8,7 @@ import org.hibernate.cfg.Configuration;
 
 /**
  * 
- * Configuration Interface for Hibernate Database Connections.
- * <br>
+ * Configuration Interface for Hibernate Database Connections. <br>
  * Configuration for Hibernate Core 4.3.6
  * 
  * 
@@ -22,14 +21,14 @@ import org.hibernate.cfg.Configuration;
  * @see {@link org.hibernate.jpa.AvailableSettings}
  */
 public interface IHibernateConfig {
-	
+
 	/**
 	 * Empty collection (Set)
 	 */
 	static List<Class<?>> NO_ANNOTATED_CLASSES = Collections.emptyList();
-	
+
 	/**
-	 * Returns classes for {@link Configuration} object to build a 
+	 * Returns classes for {@link Configuration} object to build a
 	 * {@link SessionFactory}.
 	 * 
 	 * <p>
@@ -40,14 +39,13 @@ public interface IHibernateConfig {
 	 * @see {@link org.hibernate.cfg.Configuration}
 	 * @see {@link org.hibernate.SessionFactory}
 	 * 
-	 * @return 
-	 * 		collection with classes to add to the configuration or
+	 * @return collection with classes to add to the configuration or
 	 */
-	public default List<Class<?>> getAnnotatedClasses(){
-		return NO_ANNOTATED_CLASSES; 
+	public default List<Class<?>> getAnnotatedClasses() {
+		return NO_ANNOTATED_CLASSES;
 	}
-	
-	public default String getConnectionName(){
+
+	public default String getConnectionName() {
 		return this.getClass().getSimpleName();
 	}
 }

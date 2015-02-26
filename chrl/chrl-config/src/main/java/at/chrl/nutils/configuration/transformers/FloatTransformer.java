@@ -5,18 +5,17 @@ import java.lang.reflect.Field;
 import at.chrl.nutils.configuration.PropertyTransformer;
 import at.chrl.nutils.configuration.TransformationException;
 
-
 /**
  * Thransforms string that represents float in decimal format
  * 
  * @author SoulKeeper
  */
-public class FloatTransformer implements PropertyTransformer<Float>
-{
+public class FloatTransformer implements PropertyTransformer<Float> {
 	/**
-	 * Shared instance of this transformer. It's thread-safe so no need of multiple instances
+	 * Shared instance of this transformer. It's thread-safe so no need of
+	 * multiple instances
 	 */
-	public static final FloatTransformer	SHARED_INSTANCE	= new FloatTransformer();
+	public static final FloatTransformer SHARED_INSTANCE = new FloatTransformer();
 
 	/**
 	 * Thransforms string to float
@@ -30,14 +29,10 @@ public class FloatTransformer implements PropertyTransformer<Float>
 	 *             if something went wrong
 	 */
 	@Override
-	public Float transform(String value, Field field) throws TransformationException
-	{
-		try
-		{
+	public Float transform(String value, Field field) throws TransformationException {
+		try {
 			return Float.parseFloat(value);
-		}
-		catch(Exception e)
-		{
+		} catch (Exception e) {
 			throw new TransformationException(e);
 		}
 	}

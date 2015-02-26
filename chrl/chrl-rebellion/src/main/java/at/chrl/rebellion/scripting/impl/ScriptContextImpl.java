@@ -1,18 +1,18 @@
 /**
  * This file is part of aion-lightning <aion-lightning.org>.
  * 
- * aion-lightning is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * aion-lightning is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  * 
- * aion-lightning is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * aion-lightning is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  * 
- * You should have received a copy of the GNU General Public License
- * along with aion-lightning.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with
+ * aion-lightning. If not, see <http://www.gnu.org/licenses/>.
  */
 package at.chrl.rebellion.scripting.impl;
 
@@ -34,7 +34,8 @@ import at.chrl.rebellion.classlistener.OnClassLoadUnloadListener;
 import at.chrl.rebellion.classlistener.ScheduledTaskClassListener;
 
 /**
- * This class is actual implementation of {@link at.chrl.rebellion.ScriptContext}
+ * This class is actual implementation of
+ * {@link at.chrl.rebellion.ScriptContext}
  * 
  * @author SoulKeeper
  */
@@ -56,7 +57,8 @@ public class ScriptContextImpl implements ScriptContext {
 	private Iterable<File> libraries;
 
 	/**
-	 * Root directory of this script context. It and it's subdirectories will be scanned for .java files.
+	 * Root directory of this script context. It and it's subdirectories will be
+	 * scanned for .java files.
 	 */
 	private final File root;
 
@@ -84,27 +86,29 @@ public class ScriptContextImpl implements ScriptContext {
 	 * Creates new scriptcontext with given root file
 	 * 
 	 * @param root
-	 *          file that represents root directory of this script context
+	 *            file that represents root directory of this script context
 	 * @throws NullPointerException
-	 *           if root is null
+	 *             if root is null
 	 * @throws IllegalArgumentException
-	 *           if root directory doesn't exists or is not a directory
+	 *             if root directory doesn't exists or is not a directory
 	 */
 	public ScriptContextImpl(File root) {
 		this(root, null);
 	}
 
 	/**
-	 * Creates new ScriptContext with given file as root and another ScriptContext as parent
+	 * Creates new ScriptContext with given file as root and another
+	 * ScriptContext as parent
 	 * 
 	 * @param root
-	 *          file that represents root directory of this script context
+	 *            file that represents root directory of this script context
 	 * @param parent
-	 *          parent ScriptContex. It's classes and libraries will be accessible for this script context
+	 *            parent ScriptContex. It's classes and libraries will be
+	 *            accessible for this script context
 	 * @throws NullPointerException
-	 *           if root is null
+	 *             if root is null
 	 * @throws IllegalArgumentException
-	 *           if root directory doesn't exists or is not a directory
+	 *             if root directory doesn't exists or is not a directory
 	 */
 	public ScriptContextImpl(File root, ScriptContext parent) {
 		if (root == null) {
@@ -248,8 +252,7 @@ public class ScriptContextImpl implements ScriptContext {
 			}
 
 			if (childScriptContexts.contains(context)) {
-				log.error("Double child definition, root: " + root.getAbsolutePath() + ", child: "
-					+ context.getRoot().getAbsolutePath());
+				log.error("Double child definition, root: " + root.getAbsolutePath() + ", child: " + context.getRoot().getAbsolutePath());
 				return;
 			}
 
@@ -304,11 +307,12 @@ public class ScriptContextImpl implements ScriptContext {
 	}
 
 	/**
-	 * Creates new instance of ScriptCompiler that should be used with this ScriptContext
+	 * Creates new instance of ScriptCompiler that should be used with this
+	 * ScriptContext
 	 * 
 	 * @return instance of ScriptCompiler
 	 * @throws RuntimeException
-	 *           if failed to create instance
+	 *             if failed to create instance
 	 */
 	protected ScriptCompiler instantiateCompiler() throws RuntimeException {
 		ClassLoader cl = getClass().getClassLoader();
@@ -319,8 +323,7 @@ public class ScriptContextImpl implements ScriptContext {
 		ScriptCompiler sc;
 		try {
 			sc = (ScriptCompiler) Class.forName(getCompilerClassName(), true, cl).newInstance();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			log.error("Can't create instance of compiler");
 			throw new RuntimeException(e);
 		}

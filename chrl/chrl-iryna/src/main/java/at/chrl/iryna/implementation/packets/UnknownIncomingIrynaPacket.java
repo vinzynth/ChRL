@@ -1,6 +1,6 @@
 /**
- * (C) ChRL 2014 - chrl-iryna - at.chrl.iryna.implementation.packets - UnknownIncomingIrynaPacket.java
- * Created: 02.08.2014 - 23:07:40
+ * (C) ChRL 2014 - chrl-iryna - at.chrl.iryna.implementation.packets -
+ * UnknownIncomingIrynaPacket.java Created: 02.08.2014 - 23:07:40
  */
 package at.chrl.iryna.implementation.packets;
 
@@ -13,7 +13,7 @@ import at.chrl.iryna.implementation.IrynaPacketIncoming;
  * @author Vinzynth
  *
  */
-public class UnknownIncomingIrynaPacket extends IrynaPacketIncoming{
+public class UnknownIncomingIrynaPacket extends IrynaPacketIncoming {
 
 	/**
 	 * @param buf
@@ -30,7 +30,8 @@ public class UnknownIncomingIrynaPacket extends IrynaPacketIncoming{
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected void readImpl() {	}
+	protected void readImpl() {
+	}
 
 	/**
 	 * does nothing
@@ -38,6 +39,7 @@ public class UnknownIncomingIrynaPacket extends IrynaPacketIncoming{
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected void runImpl() { }
+	protected void runImpl() {
+	}
 
 }

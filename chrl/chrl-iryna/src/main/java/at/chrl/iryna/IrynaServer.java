@@ -1,6 +1,6 @@
 /**
- * (C) ChRL 2014 - chrl-utils - at.chrl.iryna - IrynaServer.java
- * Created: 29.07.2014 - 22:06:33
+ * (C) ChRL 2014 - chrl-utils - at.chrl.iryna - IrynaServer.java Created:
+ * 29.07.2014 - 22:06:33
  */
 package at.chrl.iryna;
 
@@ -16,34 +16,31 @@ import at.chrl.nutils.network.ServerCfg;
  */
 public final class IrynaServer {
 
-	private IrynaServer() {}
-	
-	private static final class SingletonHolder{
+	private IrynaServer() {
+	}
+
+	private static final class SingletonHolder {
 		private final static IrynaServer instance;
 		private final static NioServer nioInstance;
-		
-		static{
-			ServerCfg config = new ServerCfg(
-					IrynaConfig.BIND_ADDRESS,
-					IrynaConfig.PORT,
-					IrynaConfig.CONNECTION_NAME,
-					new IrynaConnectionFactoryImpl()
-			);
+
+		static {
+			ServerCfg config = new ServerCfg(IrynaConfig.BIND_ADDRESS, IrynaConfig.PORT, IrynaConfig.CONNECTION_NAME, new IrynaConnectionFactoryImpl());
 			nioInstance = new NioServer(IrynaConfig.DISPATCHER_THREAD_COUNT, config);
 			instance = new IrynaServer();
 		}
 	}
-	
-	public static final IrynaServer getInstace(){
+
+	public static final IrynaServer getInstace() {
 		return SingletonHolder.instance;
 	}
-	
-	public NioServer getNioServerInstance(){
+
+	public NioServer getNioServerInstance() {
 		return SingletonHolder.nioInstance;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -55,7 +52,7 @@ public final class IrynaServer {
 		sb.append(System.lineSeparator());
 		return sb.toString();
 	}
-	
+
 	public static void main(String[] args) {
 		Iryna.out.print(getInstace());
 	}

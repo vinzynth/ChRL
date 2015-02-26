@@ -19,19 +19,18 @@ import at.chrl.nutils.configuration.transformers.*;
 @Documented
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Property
-{
+public @interface Property {
 	/**
-	 * This string shows to {@link commons.configuration.ConfigurableProcessor} that init value of the
-	 * object should not be overridden.
+	 * This string shows to {@link commons.configuration.ConfigurableProcessor}
+	 * that init value of the object should not be overridden.
 	 */
-	public static final String	DEFAULT_VALUE	= "DO_NOT_OVERWRITE_INITIALIAZION_VALUE";
+	public static final String DEFAULT_VALUE = "DO_NOT_OVERWRITE_INITIALIAZION_VALUE";
 
 	/**
 	 * Default description value
 	 */
-	public static final String	DEFAULT_DESCRIPTION	=	"No Description available";
-	
+	public static final String DEFAULT_DESCRIPTION = "No Description available";
+
 	/**
 	 * Property name in configuration
 	 * 
@@ -55,7 +54,8 @@ public @interface Property
 	 * <li>{@link PrintStream} by {@link PrintStreamTransformer}
 	 * <li>{@link Enum} and enum by {@link EnumTransformer}</li>
 	 * <li>{@link java.io.File} by {@link FileTransformer}</li>
-	 * <li>{@link java.net.InetSocketAddress} by {@link InetSocketAddressTransformer}</li>
+	 * <li>{@link java.net.InetSocketAddress} by
+	 * {@link InetSocketAddressTransformer}</li>
 	 * <li>{@link java.util.regex.Pattern} by {@link PatternTransformer}
 	 * </ul>
 	 * <p/>
@@ -67,29 +67,30 @@ public @interface Property
 	public Class<? extends PropertyTransformer> propertyTransformer() default PropertyTransformer.class;
 
 	/**
-	 * Represents default value that will be parsed if key not found. If this key equals(default) {@link #DEFAULT_VALUE}
-	 * initial value of the object won't be overridden
+	 * Represents default value that will be parsed if key not found. If this
+	 * key equals(default) {@link #DEFAULT_VALUE} initial value of the object
+	 * won't be overridden
 	 * 
 	 * @return default value of the property
 	 */
 	public String defaultValue() default DEFAULT_VALUE;
-	
+
 	/**
-	 * Represents default value for property description. Equals {@link #DEFAULT_DESCRIPTION}
+	 * Represents default value for property description. Equals
+	 * {@link #DEFAULT_DESCRIPTION}
 	 * 
 	 * @return description the property
 	 */
 	public String description() default DEFAULT_DESCRIPTION;
-	
+
 	/**
-	 * Represents a array with (hopefully) working example configurations.
-	 * <br>
+	 * Represents a array with (hopefully) working example configurations. <br>
 	 * if your target class is a enumeration, use
 	 * 
 	 * @return array wiith valid examples
 	 */
 	public String[] examples() default {};
-	
+
 	/**
 	 * Represents method types for Function Transformer
 	 * 
@@ -98,5 +99,5 @@ public @interface Property
 	 * @return type arrays
 	 */
 	public Class<?>[] types() default {};
-	
+
 }

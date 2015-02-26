@@ -11,17 +11,18 @@ import java.util.HashMap;
  *
  */
 @SuppressWarnings({ "unchecked" })
-public final class SingletonHolder{
-	
-	protected SingletonHolder(){}
-	
+public final class SingletonHolder {
+
+	protected SingletonHolder() {
+	}
+
 	private static HashMap<Class<?>, Object> instances = new HashMap<>();
-	
-	public static <T> T getInstance(Class<T> clazz){
+
+	public static <T> T getInstance(Class<T> clazz) {
 		return (T) (instances.containsKey(clazz) ? instances.get(clazz) : createInstance(clazz));
 	}
-	
-	private static <T> T createInstance(Class<T> clazz){
+
+	private static <T> T createInstance(Class<T> clazz) {
 		try {
 			instances.put(clazz, clazz.newInstance());
 		} catch (InstantiationException | IllegalAccessException e) {
@@ -29,5 +30,5 @@ public final class SingletonHolder{
 		}
 		return (T) instances.get(clazz);
 	}
-	
+
 }

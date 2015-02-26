@@ -5,16 +5,16 @@ import java.lang.reflect.Field;
 import at.chrl.nutils.configuration.PropertyTransformer;
 import at.chrl.nutils.configuration.TransformationException;
 
-
 /**
- * Transforms value that represents long to long. Value can be in decimal or hex format.
+ * Transforms value that represents long to long. Value can be in decimal or hex
+ * format.
  */
-public class LongTransformer implements PropertyTransformer<Long>
-{
+public class LongTransformer implements PropertyTransformer<Long> {
 	/**
-	 * Shared instance of this transformer. It's thread-safe so no need of multiple instances
+	 * Shared instance of this transformer. It's thread-safe so no need of
+	 * multiple instances
 	 */
-	public static final LongTransformer	SHARED_INSTANCE	= new LongTransformer();
+	public static final LongTransformer SHARED_INSTANCE = new LongTransformer();
 
 	/**
 	 * Transforms value to long
@@ -28,14 +28,10 @@ public class LongTransformer implements PropertyTransformer<Long>
 	 *             if something went wrong
 	 */
 	@Override
-	public Long transform(String value, Field field) throws TransformationException
-	{
-		try
-		{
+	public Long transform(String value, Field field) throws TransformationException {
+		try {
 			return Long.decode(value);
-		}
-		catch(Exception e)
-		{
+		} catch (Exception e) {
 			throw new TransformationException(e);
 		}
 	}

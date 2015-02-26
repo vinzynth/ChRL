@@ -20,21 +20,20 @@ import static at.chrl.nutils.Constants.log;
  * @author -Nemesiss-
  * 
  */
-public abstract class Dispatcher extends Thread
-{
+public abstract class Dispatcher extends Thread {
 	/**
 	 * Selector thats selecting ready keys.
 	 */
-	Selector								selector;
+	Selector selector;
 
 	/**
 	 * ThreadPool on witch disconnection tasks will be executed.
 	 */
-	private final Executor	dcPool;
+	private final Executor dcPool;
 	/**
 	 * Object on witch register vs selector.select are synchronized
 	 */
-	private final Object					gate	= new Object();
+	private final Object gate = new Object();
 
 	/**
 	 * Constructor.
@@ -43,16 +42,15 @@ public abstract class Dispatcher extends Thread
 	 * @param dcPool
 	 * @throws IOException
 	 */
-	public Dispatcher(String name, Executor dcPool) throws IOException
-	{
+	public Dispatcher(String name, Executor dcPool) throws IOException {
 		super(name);
 		this.selector = SelectorProvider.provider().openSelector();
 		this.dcPool = dcPool;
 	}
 
 	/**
-	 * Add connection to pendingClose list, so this connection will be closed by this <code>Dispatcher</code> as soon as
-	 * possible.
+	 * Add connection to pendingClose list, so this connection will be closed by
+	 * this <code>Dispatcher</code> as soon as possible.
 	 * 
 	 * @param con
 	 * 
@@ -70,8 +68,7 @@ public abstract class Dispatcher extends Thread
 	/**
 	 * @return Selector of this Dispatcher
 	 */
-	public final Selector selector()
-	{
+	public final Selector selector() {
 		return this.selector;
 	}
 
@@ -81,45 +78,38 @@ public abstract class Dispatcher extends Thread
 	 * @see java.lang.Thread#run()
 	 */
 	@Override
-	public void run()
-	{
-		for(;;)
-		{
-			try
-			{
+	public void run() {
+		for (;;) {
+			try {
 				dispatch();
 
-				synchronized(gate)
-				{
+				synchronized (gate) {
 				}
-			}
-			catch(Exception e)
-			{
+			} catch (Exception e) {
 				log.error("Dispatcher error! " + e, e);
 			}
 		}
 	}
 
 	/**
-	 * Register new client connected to this Dispatcher and set SelectionKey (result of registration) as this key of
-	 * given AConnection.
+	 * Register new client connected to this Dispatcher and set SelectionKey
+	 * (result of registration) as this key of given AConnection.
 	 * 
 	 * @param ch
 	 * @param ops
 	 * @param att
 	 * @throws IOException
 	 */
-	public final void register(SelectableChannel ch, int ops, AConnection att) throws IOException
-	{
-		synchronized(gate)
-		{
+	public final void register(SelectableChannel ch, int ops, AConnection att) throws IOException {
+		synchronized (gate) {
 			selector.wakeup();
 			att.setKey(ch.register(selector, ops, att));
 		}
 	}
 
 	/**
-	 * Register new Acceptor this Dispatcher and return SelectionKey (result of registration).
+	 * Register new Acceptor this Dispatcher and return SelectionKey (result of
+	 * registration).
 	 * 
 	 * @param ch
 	 * @param ops
@@ -127,10 +117,8 @@ public abstract class Dispatcher extends Thread
 	 * @return SelectionKey representing this registration.
 	 * @throws IOException
 	 */
-	public final SelectionKey register(SelectableChannel ch, int ops, Acceptor att) throws IOException
-	{
-		synchronized(gate)
-		{
+	public final SelectionKey register(SelectableChannel ch, int ops, Acceptor att) throws IOException {
+		synchronized (gate) {
 			selector.wakeup();
 			return ch.register(selector, ops, att);
 		}
@@ -141,92 +129,79 @@ public abstract class Dispatcher extends Thread
 	 * 
 	 * @param key
 	 */
-	final void accept(SelectionKey key)
-	{
-		try
-		{
+	final void accept(SelectionKey key) {
+		try {
 			((Acceptor) key.attachment()).accept(key);
-		}
-		catch(Exception e)
-		{
+		} catch (Exception e) {
 			log.error("Error while accepting connection: +" + e, e);
 		}
 	}
 
 	/**
-	 * Read data from socketChannel represented by SelectionKey key. Parse and Process data. Prepare buffer for next
-	 * read.
+	 * Read data from socketChannel represented by SelectionKey key. Parse and
+	 * Process data. Prepare buffer for next read.
 	 * 
 	 * @param key
 	 */
-	final void read(SelectionKey key)
-	{
+	final void read(SelectionKey key) {
 		SocketChannel socketChannel = (SocketChannel) key.channel();
 		AConnection con = (AConnection) key.attachment();
 
 		ByteBuffer rb = con.readBuffer;
 
 		/**
-		 * Test if this build should use assertion. If NetworkAssertion == false javac will remove this code block
+		 * Test if this build should use assertion. If NetworkAssertion == false
+		 * javac will remove this code block
 		 */
-		if(Assertion.NetworkAssertion)
-		{
+		if (Assertion.NetworkAssertion) {
 			assert con.readBuffer.hasRemaining();
 		}
 
 		/** Attempt to read off the channel */
 		int numRead;
-		try
-		{
+		try {
 			numRead = socketChannel.read(rb);
-		}
-		catch(IOException e)
-		{
+		} catch (IOException e) {
 			closeConnectionImpl(con);
 			return;
 		}
 
-		if(numRead == -1)
-		{
+		if (numRead == -1) {
 			/**
-			 * Remote entity shut the socket down cleanly. Do the same from our end and cancel the channel.
+			 * Remote entity shut the socket down cleanly. Do the same from our
+			 * end and cancel the channel.
 			 */
 			closeConnectionImpl(con);
 			return;
-		}
-		else if(numRead == 0)
-		{
+		} else if (numRead == 0) {
 			return;
 		}
 
 		rb.flip();
-		while(rb.remaining() > 2 && rb.remaining() >= rb.getShort(rb.position()))
-		{
+		while (rb.remaining() > 2 && rb.remaining() >= rb.getShort(rb.position())) {
 			/** got full message */
-			if(!parse(con, rb))
-			{
+			if (!parse(con, rb)) {
 				closeConnectionImpl(con);
 				return;
 			}
 		}
-		if(rb.hasRemaining())
-		{
+		if (rb.hasRemaining()) {
 			con.readBuffer.compact();
 
 			/**
-			 * Test if this build should use assertion. If NetworkAssertion == false javac will remove this code block
+			 * Test if this build should use assertion. If NetworkAssertion ==
+			 * false javac will remove this code block
 			 */
-			if(Assertion.NetworkAssertion)
-			{
+			if (Assertion.NetworkAssertion) {
 				assert con.readBuffer.hasRemaining();
 			}
-		}
-		else
+		} else
 			rb.clear();
 	}
 
 	/**
-	 * Parse data from buffer and prepare buffer for reading just one packet - call processData(ByteBuffer b).
+	 * Parse data from buffer and prepare buffer for reading just one packet -
+	 * call processData(ByteBuffer b).
 	 * 
 	 * @param con
 	 *            Connection
@@ -234,13 +209,11 @@ public abstract class Dispatcher extends Thread
 	 *            Buffer with packet data
 	 * @return True if packet was parsed.
 	 */
-	private boolean parse(AConnection con, ByteBuffer buf)
-	{
+	private boolean parse(AConnection con, ByteBuffer buf) {
 		short sz = 0;
-		try
-		{
+		try {
 			sz = buf.getShort();
-			if(sz > 1)
+			if (sz > 1)
 				sz -= 2;
 			ByteBuffer b = (ByteBuffer) buf.slice().limit(sz);
 			b.order(ByteOrder.LITTLE_ENDIAN);
@@ -248,120 +221,108 @@ public abstract class Dispatcher extends Thread
 			buf.position(buf.position() + sz);
 
 			return con.processData(b);
-		}
-		catch(IllegalArgumentException e)
-		{
-			log.warn("Error on parsing input from client - account: " + con + " packet size: " + sz + " real size:"
-				+ buf.remaining(), e);
+		} catch (IllegalArgumentException e) {
+			log.warn("Error on parsing input from client - account: " + con + " packet size: " + sz + " real size:" + buf.remaining(), e);
 			return false;
 		}
 	}
 
 	/**
-	 * Write as much as possible data to socketChannel represented by SelectionKey key. If all data were written key
-	 * write interest will be disabled.
+	 * Write as much as possible data to socketChannel represented by
+	 * SelectionKey key. If all data were written key write interest will be
+	 * disabled.
 	 * 
 	 * @param key
 	 */
-	final void write(SelectionKey key)
-	{
+	final void write(SelectionKey key) {
 		SocketChannel socketChannel = (SocketChannel) key.channel();
 		AConnection con = (AConnection) key.attachment();
 
 		int numWrite;
 		ByteBuffer wb = con.writeBuffer;
 		/** We have not writted data */
-		if(wb.hasRemaining())
-		{
-			try
-			{
+		if (wb.hasRemaining()) {
+			try {
 				numWrite = socketChannel.write(wb);
-			}
-			catch(IOException e)
-			{
+			} catch (IOException e) {
 				closeConnectionImpl(con);
 				return;
 			}
 
-			if(numWrite == 0)
-			{
+			if (numWrite == 0) {
 				log.info("Write " + numWrite + " ip: " + con.getIP());
 				return;
 			}
 
 			/** Again not all data was send */
-			if(wb.hasRemaining())
+			if (wb.hasRemaining())
 				return;
 		}
 
-		while(true)
-		{
+		while (true) {
 			wb.clear();
 			boolean writeFailed = !con.writeData(wb);
 
-			if(writeFailed)
-			{
+			if (writeFailed) {
 				wb.limit(0);
 				break;
 			}
 
 			/** Attempt to write to the channel */
-			try
-			{
+			try {
 				numWrite = socketChannel.write(wb);
-			}
-			catch(IOException e)
-			{
+			} catch (IOException e) {
 				closeConnectionImpl(con);
 				return;
 			}
 
-			if(numWrite == 0)
-			{
+			if (numWrite == 0) {
 				// So troublesome to info it all the time - CFx01
-				//log.info("Write " + numWrite + " ip: " + con.getIP());
+				// log.info("Write " + numWrite + " ip: " + con.getIP());
 				return;
 			}
 
 			/** not all data was send */
-			if(wb.hasRemaining())
+			if (wb.hasRemaining())
 				return;
 		}
 
 		/**
-		 * Test if this build should use assertion. If NetworkAssertion == false javac will remove this code block
+		 * Test if this build should use assertion. If NetworkAssertion == false
+		 * javac will remove this code block
 		 */
-		if(Assertion.NetworkAssertion)
-		{
+		if (Assertion.NetworkAssertion) {
 			assert !wb.hasRemaining();
 		}
 
 		/**
-		 * We wrote away all data, so we're no longer interested in writing on this socket.
+		 * We wrote away all data, so we're no longer interested in writing on
+		 * this socket.
 		 */
 		key.interestOps(key.interestOps() & ~SelectionKey.OP_WRITE);
 
 		/** We wrote all data so we can close connection that is "PandingClose" */
-		if(con.isPendingClose())
+		if (con.isPendingClose())
 			closeConnectionImpl(con);
 	}
 
 	/**
-	 * Connection will be closed [onlyClose()] and onDisconnect() method will be executed on another thread
-	 * [DisconnectionThreadPool] after getDisconnectionDelay() time in ms. This method may only be called by current
-	 * Dispatcher Thread.
+	 * Connection will be closed [onlyClose()] and onDisconnect() method will be
+	 * executed on another thread [DisconnectionThreadPool] after
+	 * getDisconnectionDelay() time in ms. This method may only be called by
+	 * current Dispatcher Thread.
 	 * 
 	 * @param con
 	 */
-	protected final void closeConnectionImpl(AConnection con)
-	{
+	protected final void closeConnectionImpl(AConnection con) {
 		/**
-		 * Test if this build should use assertion. If NetworkAssertion == false javac will remove this code block
+		 * Test if this build should use assertion. If NetworkAssertion == false
+		 * javac will remove this code block
 		 */
-		if(Assertion.NetworkAssertion)
+		if (Assertion.NetworkAssertion)
 			assert Thread.currentThread() == this;
 
-		if(con.onlyClose())
+		if (con.onlyClose())
 			dcPool.execute(new DisconnectionTask(con));
 	}
 }

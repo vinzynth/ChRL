@@ -16,15 +16,16 @@ import java.util.jar.JarFile;
  * @author SoulKeeper
  */
 public class ClassUtils {
-	
+
 	/**
-	 * Return true if class a is either equivalent to class b, or if class a is a subclass of class b, i.e. if a either
-	 * "extends" or "implements" b. Note tht either or both "Class" objects may represent interfaces.
+	 * Return true if class a is either equivalent to class b, or if class a is
+	 * a subclass of class b, i.e. if a either "extends" or "implements" b. Note
+	 * tht either or both "Class" objects may represent interfaces.
 	 *
 	 * @param a
-	 *          class
+	 *            class
 	 * @param b
-	 *          class
+	 *            class
 	 * @return true if a == b or a extends b or a implements b
 	 */
 	public static boolean isSubclass(Class<?> a, Class<?> b) {
@@ -57,9 +58,9 @@ public class ClassUtils {
 	 * Checks if class in member of the package
 	 *
 	 * @param clazz
-	 *          class to check
+	 *            class to check
 	 * @param packageName
-	 *          package
+	 *            package
 	 * @return true if is member
 	 */
 	public static boolean isPackageMember(Class<?> clazz, String packageName) {
@@ -70,9 +71,9 @@ public class ClassUtils {
 	 * Checks if classNames belongs to package
 	 *
 	 * @param className
-	 *          class name
+	 *            class name
 	 * @param packageName
-	 *          package
+	 *            package
 	 * @return true if belongs
 	 */
 	public static boolean isPackageMember(String className, String packageName) {
@@ -86,10 +87,13 @@ public class ClassUtils {
 	/**
 	 * Returns class names from directory.
 	 *
-	 * @param directory folder with class files
+	 * @param directory
+	 *            folder with class files
 	 * @return Set of fully qualified class names
-	 * @throws IllegalArgumentException if specified file is not directory or does not exists
-	 * @throws NullPointerException	 if directory is null
+	 * @throws IllegalArgumentException
+	 *             if specified file is not directory or does not exists
+	 * @throws NullPointerException
+	 *             if directory is null
 	 */
 	public static Set<String> getClassNamesFromDirectory(File directory) throws IllegalArgumentException {
 
@@ -101,11 +105,15 @@ public class ClassUtils {
 	}
 
 	/**
-	 * Recursive method used to find all classes in a given directory and subdirs.
+	 * Recursive method used to find all classes in a given directory and
+	 * subdirs.
 	 *
-	 * @param directory   The base directory
-	 * @param packageName The package name for classes found inside the base directory
-	 * @param recursive include subpackages or not
+	 * @param directory
+	 *            The base directory
+	 * @param packageName
+	 *            The package name for classes found inside the base directory
+	 * @param recursive
+	 *            include subpackages or not
 	 * @return The classes
 	 */
 	public static Set<String> getClassNamesFromPackage(File directory, String packageName, boolean recursive) {
@@ -116,8 +124,8 @@ public class ClassUtils {
 		File[] files = directory.listFiles();
 		for (File file : files) {
 			if (file.isDirectory()) {
-				
-				if(!recursive){
+
+				if (!recursive) {
 					continue;
 				}
 
@@ -140,11 +148,15 @@ public class ClassUtils {
 	/**
 	 * Method that returns all class file names from given jar file
 	 *
-	 * @param file jar file
+	 * @param file
+	 *            jar file
 	 * @return class names from jar file
-	 * @throws IOException			  if something went wrong
-	 * @throws IllegalArgumentException if file doesn't exists or is not jar file
-	 * @throws NullPointerException	 if file is null
+	 * @throws IOException
+	 *             if something went wrong
+	 * @throws IllegalArgumentException
+	 *             if file doesn't exists or is not jar file
+	 * @throws NullPointerException
+	 *             if file is null
 	 */
 	public static Set<String> getClassNamesFromJarFile(File file) throws IOException {
 
@@ -181,32 +193,47 @@ public class ClassUtils {
 
 		return result;
 	}
-	
-    
-    public static Class<?> getPrimitiveClass(Class<?> clazz){
-    	if(clazz.equals(Integer.class)) 	return Integer.TYPE;		
-    	if(clazz.equals(Byte.class))		return Byte.TYPE;
-    	if(clazz.equals(Character.class))	return Character.TYPE;
-    	if(clazz.equals(Double.class))		return Double.TYPE;
-    	if(clazz.equals(Long.class))		return Long.TYPE;
-    	if(clazz.equals(Float.class))		return Float.TYPE;
-    	if(clazz.equals(Boolean.class))		return Boolean.TYPE;
-    	if(clazz.equals(Short.class))		return Short.TYPE;
-    	
-    	return clazz;
-    }
-    
-    public static Class<?> getNonPrimitiveClass(Class<?> clazz){
-    	if(clazz.equals(Integer.TYPE)) 	return Integer.class;		
-    	if(clazz.equals(Byte.TYPE))		return Byte.class;
-    	if(clazz.equals(Character.TYPE))	return Character.class;
-    	if(clazz.equals(Double.TYPE))		return Double.class;
-    	if(clazz.equals(Long.TYPE))		return Long.class;
-    	if(clazz.equals(Float.TYPE))		return Float.class;
-    	if(clazz.equals(Boolean.TYPE))		return Boolean.class;
-    	if(clazz.equals(Short.TYPE))		return Short.class;
-    	
-    	return clazz;
-    }
-    
+
+	public static Class<?> getPrimitiveClass(Class<?> clazz) {
+		if (clazz.equals(Integer.class))
+			return Integer.TYPE;
+		if (clazz.equals(Byte.class))
+			return Byte.TYPE;
+		if (clazz.equals(Character.class))
+			return Character.TYPE;
+		if (clazz.equals(Double.class))
+			return Double.TYPE;
+		if (clazz.equals(Long.class))
+			return Long.TYPE;
+		if (clazz.equals(Float.class))
+			return Float.TYPE;
+		if (clazz.equals(Boolean.class))
+			return Boolean.TYPE;
+		if (clazz.equals(Short.class))
+			return Short.TYPE;
+
+		return clazz;
+	}
+
+	public static Class<?> getNonPrimitiveClass(Class<?> clazz) {
+		if (clazz.equals(Integer.TYPE))
+			return Integer.class;
+		if (clazz.equals(Byte.TYPE))
+			return Byte.class;
+		if (clazz.equals(Character.TYPE))
+			return Character.class;
+		if (clazz.equals(Double.TYPE))
+			return Double.class;
+		if (clazz.equals(Long.TYPE))
+			return Long.class;
+		if (clazz.equals(Float.TYPE))
+			return Float.class;
+		if (clazz.equals(Boolean.TYPE))
+			return Boolean.class;
+		if (clazz.equals(Short.TYPE))
+			return Short.class;
+
+		return clazz;
+	}
+
 }

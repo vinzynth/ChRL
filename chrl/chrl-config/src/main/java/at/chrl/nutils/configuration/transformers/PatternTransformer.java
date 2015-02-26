@@ -6,18 +6,16 @@ import java.util.regex.Pattern;
 import at.chrl.nutils.configuration.PropertyTransformer;
 import at.chrl.nutils.configuration.TransformationException;
 
-
 /**
  * Authomatic pattern transformer for RegExp resolving
  * 
  * @author SoulKeeper
  */
-public class PatternTransformer implements PropertyTransformer<Pattern>
-{
+public class PatternTransformer implements PropertyTransformer<Pattern> {
 	/**
 	 * Shared instance of this transformer
 	 */
-	public static final PatternTransformer	SHARED_INSTANCE	= new PatternTransformer();
+	public static final PatternTransformer SHARED_INSTANCE = new PatternTransformer();
 
 	/**
 	 * Transforms String to Pattern object
@@ -31,14 +29,10 @@ public class PatternTransformer implements PropertyTransformer<Pattern>
 	 *             if pattern is not valid
 	 */
 	@Override
-	public Pattern transform(String value, Field field) throws TransformationException
-	{
-		try
-		{
+	public Pattern transform(String value, Field field) throws TransformationException {
+		try {
 			return Pattern.compile(value);
-		}
-		catch(Exception e)
-		{
+		} catch (Exception e) {
 			throw new TransformationException("Not valid RegExp: " + value, e);
 		}
 	}

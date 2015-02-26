@@ -24,34 +24,35 @@ import at.chrl.utils.TaskExecutor.TaskExecutor;
  *
  */
 public final class PropertyGenerator {
-	
-	
+
 	public static void main(String[] args) throws IOException {
 		new PropertyGenerator();
 	}
-	
-	
-	private PropertyGenerator() {
-//		System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "20");
-		long sysTime = System.nanoTime();
-		
-//		Double avg = FileUtils.listFiles(new File("input/"), new String[]{"xml"}, true)
-//		.parallelStream()
-//		.filter(Objects::nonNull)
-////		.map(f -> {Exodus.out.println("Read: " + f.getAbsolutePath()); return f;})
-////		.filter(f -> !new File(f.getName() + ".properties").exists())
-//		.map(PropertyMapTask::new)
-//		.map(TaskExecutor::runInStream)
-//		.map(TaskExecutor::joinTask)
-//		.map(PropertyMapTask::getPropertyGenerationTask)
-//		.map(TaskExecutor::runInStream)
-//		.collect(Collectors.averagingInt(PropertyGenerationTask::getPropertiesSize));
 
-//		Exodus.out.println("Processed Reading in " + (System.nanoTime() - sysTime)/1_000_000 + "ms" + " | Average Properties Size: " + avg);
-		
-		
+	private PropertyGenerator() {
+		// System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism",
+		// "20");
+		long sysTime = System.nanoTime();
+
+		// Double avg = FileUtils.listFiles(new File("input/"), new
+		// String[]{"xml"}, true)
+		// .parallelStream()
+		// .filter(Objects::nonNull)
+		// // .map(f -> {Exodus.out.println("Read: " + f.getAbsolutePath());
+		// return f;})
+		// // .filter(f -> !new File(f.getName() + ".properties").exists())
+		// .map(PropertyMapTask::new)
+		// .map(TaskExecutor::runInStream)
+		// .map(TaskExecutor::joinTask)
+		// .map(PropertyMapTask::getPropertyGenerationTask)
+		// .map(TaskExecutor::runInStream)
+		// .collect(Collectors.averagingInt(PropertyGenerationTask::getPropertiesSize));
+
+		// Exodus.out.println("Processed Reading in " + (System.nanoTime() -
+		// sysTime)/1_000_000 + "ms" + " | Average Properties Size: " + avg);
+
 		LinkedList<PropertyMapTask> pmt = new LinkedList<>();
-		for (File iterable_element : FileUtils.listFiles(new File("input/"), new String[]{"xml"}, true)) {
+		for (File iterable_element : FileUtils.listFiles(new File("input/"), new String[] { "xml" }, true)) {
 			pmt.add(new PropertyMapTask(iterable_element));
 		}
 		Collections.sort(pmt, new Comparator<PropertyMapTask>() {
@@ -66,14 +67,14 @@ public final class PropertyGenerator {
 			pgt.add(propertyMapTask.getPropertyGenerationTask());
 		}
 		TaskExecutor.runTaskGroup(true, pgt.toArray(new PropertyGenerationTask[pgt.size()]));
-		Exodus.out.println("Processed Reading in " + (System.nanoTime() - sysTime)/1_000_000 + "ms");
+		Exodus.out.println("Processed Reading in " + (System.nanoTime() - sysTime) / 1_000_000 + "ms");
 	}
-	
-	private static final class SingletonHolder{
+
+	private static final class SingletonHolder {
 		private static final PropertyGenerator instance = new PropertyGenerator();
 	}
-	
-	public final PropertyGenerator getInstance(){
+
+	public final PropertyGenerator getInstance() {
 		return SingletonHolder.instance;
 	}
 }

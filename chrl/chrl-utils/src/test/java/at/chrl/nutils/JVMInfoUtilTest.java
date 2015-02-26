@@ -1,6 +1,6 @@
 /**
- * (C) ChRL 2014 - chrl-utils - at.chrl.nutils - JVMInfoUtilTest.java
- * Created: 23.07.2014 - 23:08:48
+ * (C) ChRL 2014 - chrl-utils - at.chrl.nutils - JVMInfoUtilTest.java Created:
+ * 23.07.2014 - 23:08:48
  */
 package at.chrl.nutils;
 

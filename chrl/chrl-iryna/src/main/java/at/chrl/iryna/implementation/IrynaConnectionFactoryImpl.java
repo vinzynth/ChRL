@@ -1,6 +1,6 @@
 /**
- * (C) ChRL 2014 - chrl-utils - at.chrl.iryna.implementation - IrynaConnectionFactoryImpl.java
- * Created: 29.07.2014 - 22:18:52
+ * (C) ChRL 2014 - chrl-utils - at.chrl.iryna.implementation -
+ * IrynaConnectionFactoryImpl.java Created: 29.07.2014 - 22:18:52
  */
 package at.chrl.iryna.implementation;
 

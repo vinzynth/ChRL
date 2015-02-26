@@ -6,8 +6,7 @@ package at.chrl.nutils.network;
  * @author -Nemesiss-
  * 
  */
-public interface DisconnectionThreadPool
-{
+public interface DisconnectionThreadPool {
 	/**
 	 * Schedule Disconnection task.
 	 * 

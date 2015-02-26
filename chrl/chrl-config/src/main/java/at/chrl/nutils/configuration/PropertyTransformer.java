@@ -36,7 +36,7 @@ public interface PropertyTransformer<T> {
 	 *            additional types for Function Transformer
 	 * @return result of transformation
 	 * @throws TransformationException
-	 *            if something went wrong
+	 *             if something went wrong
 	 */
 	public default T transform(String value, Field field, Class<?>... types) throws TransformationException {
 		return transform(value, field);

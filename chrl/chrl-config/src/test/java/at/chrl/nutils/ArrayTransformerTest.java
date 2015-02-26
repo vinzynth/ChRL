@@ -42,13 +42,12 @@ public class ArrayTransformerTest {
 
 		test = "{2,4,5}, {5.5,3}";
 		assertTrue(ArrayTransformer.validBrackets(test));
-		
+
 		test = "   {2,4,5}, {5.5,3}   ";
 		assertTrue(ArrayTransformer.validBrackets(test));
-		
+
 		test = "{2,4,5}, {5.5,3} , {324,325261436,79673335436588956789456u2fc46e4t43646}";
 		assertTrue(ArrayTransformer.validBrackets(test));
-		
 
 		test = "2,4,5}, {5.5,3}";
 		try {
@@ -57,8 +56,7 @@ public class ArrayTransformerTest {
 		} catch (Exception e) {
 			assertTrue(e instanceof IllegalArgumentException);
 		}
-		
-		
+
 		test = "2,4,5 {5.5,3}";
 		try {
 			ArrayTransformer.validBrackets(test);
@@ -66,7 +64,7 @@ public class ArrayTransformerTest {
 		} catch (Exception e) {
 			assertTrue(e instanceof IllegalArgumentException);
 		}
-		
+
 		test = "{2,4,5 {5.5,3}";
 		try {
 			ArrayTransformer.validBrackets(test);
@@ -74,7 +72,7 @@ public class ArrayTransformerTest {
 		} catch (Exception e) {
 			assertTrue(e instanceof IllegalArgumentException);
 		}
-		
+
 		test = "{2,4,5{ {5.5,3}";
 		try {
 			ArrayTransformer.validBrackets(test);
@@ -82,7 +80,7 @@ public class ArrayTransformerTest {
 		} catch (Exception e) {
 			assertTrue(e instanceof IllegalArgumentException);
 		}
-		
+
 		test = "{2,4,5,{ },5.5,3}";
 		try {
 			ArrayTransformer.validBrackets(test);

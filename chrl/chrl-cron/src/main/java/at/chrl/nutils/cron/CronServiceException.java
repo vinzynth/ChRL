@@ -3,8 +3,7 @@ package at.chrl.nutils.cron;
 @SuppressWarnings("serial")
 public class CronServiceException extends RuntimeException {
 
-
-    public CronServiceException() {
+	public CronServiceException() {
 	}
 
 	public CronServiceException(String message) {

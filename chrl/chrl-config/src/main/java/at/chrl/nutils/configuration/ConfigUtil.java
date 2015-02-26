@@ -25,18 +25,18 @@ import at.chrl.nutils.configuration.printer.PropertyFileStreamPrinter;
  *
  */
 public final class ConfigUtil {
-	
+
 	private static Collection<File> propertiesFiles;
 	private static final LinkedList<Class<?>> classes = new LinkedList<Class<?>>();
 	private static Properties[] props = new Properties[0];
 	private static File configDirectory;
 	private static Map<Class<?>, File> exportedFiles = new HashMap<>();
-	
+
 	static {
 		propertiesFiles = FileUtils.listFiles(new File("."), new String[] { "properties" }, true);
 		props = loadPropertiesFiles();
 	}
-	
+
 	static final Properties[] loadPropertiesFiles() {
 		try {
 			return PropertiesUtils.load(propertiesFiles.toArray(new File[propertiesFiles.size()]));
@@ -47,44 +47,44 @@ public final class ConfigUtil {
 		return props;
 	}
 
-	public synchronized static final void loadAndExport(final Class<?> targetClass){
+	public synchronized static final void loadAndExport(final Class<?> targetClass) {
 		load(targetClass);
 		export(targetClass);
 	}
-	
-	public synchronized static final void loadAndExport(final Object obj){
+
+	public synchronized static final void loadAndExport(final Object obj) {
 		load(obj);
 		export(obj.getClass());
 	}
-	
-	public synchronized static final void export(final Class<?> classToExport){
-		File toExport = new File(configDirectory, classToExport.getSimpleName()+".properties");
+
+	public synchronized static final void export(final Class<?> classToExport) {
+		File toExport = new File(configDirectory, classToExport.getSimpleName() + ".properties");
 		export(classToExport, new PropertyFileStreamPrinter(toExport));
 		exportedFiles.put(classToExport, toExport);
 	}
-	
-	public synchronized static final void export(final Class<?> classToExport, final IConfigPrinter printer){
+
+	public synchronized static final void export(final Class<?> classToExport, final IConfigPrinter printer) {
 		ConfigurationExporter.process(classToExport, printer, getLoadedProperties(classToExport));
 	}
-	
-	public synchronized static final void load(final Class<?> classToLoad){
+
+	public synchronized static final void load(final Class<?> classToLoad) {
 		ConfigurableProcessor.process(classToLoad, getLoadedProperties(classToLoad));
-		if(!classes.contains(classToLoad))
+		if (!classes.contains(classToLoad))
 			classes.add(classToLoad);
 	}
-	
-	public synchronized static final void load(final Object obj){
+
+	public synchronized static final void load(final Object obj) {
 		Class<?> classToLoad = obj.getClass();
 		ConfigurableProcessor.process(obj, getLoadedProperties(classToLoad));
-		if(!classes.contains(classToLoad))
+		if (!classes.contains(classToLoad))
 			classes.add(classToLoad);
 	}
-	
-	private static Properties[] getLoadedProperties(final Class<?> classToLoad){
+
+	private static Properties[] getLoadedProperties(final Class<?> classToLoad) {
 		for (File file : propertiesFiles) {
-			if(file.getName().equals(classToLoad.getSimpleName() + ".properties")){
+			if (file.getName().equals(classToLoad.getSimpleName() + ".properties")) {
 				try {
-					return new Properties[]{ PropertiesUtils.load(file) };
+					return new Properties[] { PropertiesUtils.load(file) };
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -92,60 +92,61 @@ public final class ConfigUtil {
 		}
 		return props;
 	}
-	
-	public static final void reload(){
+
+	public static final void reload() {
 		props = loadPropertiesFiles();
 		for (Class<?> ie : classes) {
 			load(ie);
 		}
 	}
-	
-	public static final void reload(final Class<?> classToReload){
+
+	public static final void reload(final Class<?> classToReload) {
 		props = loadPropertiesFiles();
 		load(classToReload);
 	}
-	
+
 	/**
 	 * 
 	 */
-	private ConfigUtil() {}
+	private ConfigUtil() {
+	}
 
 	public synchronized static File getConfigDirectory() {
 		return configDirectory;
 	}
 
 	public synchronized static void setConfigDirectory(final File configDirectory) {
-		if(Objects.isNull(configDirectory))
+		if (Objects.isNull(configDirectory))
 			throw new IllegalArgumentException("Configuration folder passed as parameter is null");
-		if(!configDirectory.exists())
+		if (!configDirectory.exists())
 			throw new IllegalArgumentException("Configuration folder does not exist: " + configDirectory.getAbsolutePath());
-		if(!configDirectory.isDirectory())
+		if (!configDirectory.isDirectory())
 			throw new IllegalArgumentException("Configuration folder is not a directory: " + configDirectory.getAbsolutePath());
-		if(!configDirectory.canWrite())
+		if (!configDirectory.canWrite())
 			throw new IllegalArgumentException("Cannot write to configuration folder: " + configDirectory.getAbsolutePath());
-		if(!configDirectory.canRead())
+		if (!configDirectory.canRead())
 			throw new IllegalArgumentException("Cannot read from configuration folder: " + configDirectory.getAbsolutePath());
-		
+
 		ConfigUtil.configDirectory = configDirectory;
-		
+
 		propertiesFiles = FileUtils.listFiles(configDirectory, new String[] { "properties" }, true);
-		
+
 		reload();
 		for (Class<?> class1 : classes) {
 			export(class1);
 		}
 	}
-	
+
 	public static void setConfigDirectory(String configDirectory) {
-		if(Objects.isNull(configDirectory))
+		if (Objects.isNull(configDirectory))
 			throw new IllegalArgumentException("Configuration folder passed as parameter is null");
-		if(configDirectory.isEmpty())
+		if (configDirectory.isEmpty())
 			throw new IllegalArgumentException("Configuration folder passed as parameter is a empty String");
 		setConfigDirectory(new File(configDirectory));
 	}
-	
-	public synchronized static Properties getProperties(final Class<?> targetClass){
-		if(exportedFiles.containsKey(targetClass)){
+
+	public synchronized static Properties getProperties(final Class<?> targetClass) {
+		if (exportedFiles.containsKey(targetClass)) {
 			try {
 				return PropertiesUtils.load(exportedFiles.get(targetClass));
 			} catch (IOException e) {
@@ -153,7 +154,7 @@ public final class ConfigUtil {
 			}
 		}
 		loadAndExport(targetClass);
-		if(exportedFiles.containsKey(targetClass)){
+		if (exportedFiles.containsKey(targetClass)) {
 			try {
 				return PropertiesUtils.load(exportedFiles.get(targetClass));
 			} catch (IOException e) {

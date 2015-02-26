@@ -1,27 +1,27 @@
 package at.chrl.nutils.network;
 
 /**
- * Disconnection Task that will be execute on <code>DisconnectionThreadPool</code>
+ * Disconnection Task that will be execute on
+ * <code>DisconnectionThreadPool</code>
  * 
  * @author -Nemesiss-
  * @see at.chrl.nutils.network.DisconnectionThreadPool
  */
-public class DisconnectionTask implements Runnable
-{
+public class DisconnectionTask implements Runnable {
 	/**
-	 * Connection that onDisconnect() method will be executed by <code>DisconnectionThreadPool</code>
+	 * Connection that onDisconnect() method will be executed by
+	 * <code>DisconnectionThreadPool</code>
 	 * 
 	 * @see at.chrl.nutils.network.DisconnectionThreadPool
 	 */
-	private AConnection	connection;
+	private AConnection connection;
 
 	/**
 	 * Construct <code>DisconnectionTask</code>
 	 * 
 	 * @param connection
 	 */
-	public DisconnectionTask(AConnection connection)
-	{
+	public DisconnectionTask(AConnection connection) {
 		this.connection = connection;
 	}
 
@@ -29,8 +29,7 @@ public class DisconnectionTask implements Runnable
 	 * @see java.lang.Runnable#run()
 	 */
 	@Override
-	public void run()
-	{
+	public void run() {
 		connection.onDisconnect();
 	}
 }
