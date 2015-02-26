@@ -46,7 +46,6 @@
 		<module>chrl-algorithms</module>
 		<module>chrl-database</module>
 		<module>chrl-rebellion</module>
-		<module>chrl-datastructures</module>
 		<module>chrl-callbacks</module>
 		<module>chrl-callback-utils</module>
 		<module>chrl-spring</module>
