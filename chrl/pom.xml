@@ -40,7 +40,6 @@
 		<module>chrl-utils</module>
 		<module>chrl-cron</module>
 		<module>chrl-iryna</module>
-		<module>chrl-exodus</module>
 		<module>chrl-config</module>
 		<module>chrl-webapps</module>
 		<module>chrl-algorithms</module>
@@ -50,7 +49,6 @@
 		<module>chrl-callback-utils</module>
 		<module>chrl-spring</module>
 		<module>chrl-orm</module>
-		<module>chrl-orm-spring-integration</module>
 	</modules>
 	<dependencyManagement>
 		<dependencies>
