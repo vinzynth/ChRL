@@ -6,6 +6,7 @@
  */
 package at.chrl.nutils;
 
+import java.util.Comparator;
 import java.util.Map;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
@@ -39,6 +40,10 @@ public final class StreamUtils {
 	
 	public static <T, K> Collector<T, ?, Map<K, T>> toMapKeepLast(Function<T, K> keyMapper){
 		return Collectors.toMap(keyMapper, StreamUtils.identity(), StreamUtils.keepLast());
+	}
+	
+	public static final <T, R extends Comparable<R>> Comparator<T> getComparator(Function<T, R> getter){
+		return (e1, e2) -> getter.apply(e1).compareTo(getter.apply(e2));
 	}
 	
 }
