@@ -42,14 +42,27 @@ public final class StreamUtils {
 		return Collectors.toMap(keyMapper, StreamUtils.identity(), StreamUtils.keepLast());
 	}
 	
-	public static final <T, R extends Comparable<R>> Comparator<T> getComparator(Function<T, R> getter){
-		return getComparator(getter, false);
-	}
-	
 	public static final <T, R extends Comparable<R>> Comparator<T> getComparator(Function<T, R> getter, boolean reverse){
 		if(reverse)
 			return (e1, e2) -> getter.apply(e2).compareTo(getter.apply(e1));
 		return (e1, e2) -> getter.apply(e1).compareTo(getter.apply(e2));
 	}
 	
+	@SafeVarargs
+	public static final <T, R extends Comparable<R>> Comparator<T> getComparator(Function<T, R>... getters){
+		return getComparator(false, getters);
+	}
+	
+	@SafeVarargs
+	public static final <T, R extends Comparable<R>> Comparator<T> getComparator(boolean reverse, Function<T, R>... getters){
+		return (e1, e2) -> {
+			int v = 0;
+			for (Function<T, R> getter : getters) {
+				v = getter.apply(e1).compareTo(getter.apply(e2));
+				if(v != 0)
+					return reverse ? -v : v;
+			}
+			return v;
+		};
+	}
 }
