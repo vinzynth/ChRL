@@ -6,12 +6,15 @@
  */
 package at.chrl.nutils;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author Christian Richard Leopold - ChRL <br>
@@ -46,6 +49,17 @@ public final class StreamUtils {
 		if(reverse)
 			return (e1, e2) -> getter.apply(e2).compareTo(getter.apply(e1));
 		return (e1, e2) -> getter.apply(e1).compareTo(getter.apply(e2));
+	}
+	
+	public static final <T> Stream<T> rangeStream(T start, T end, Function<T, T> incrementFunction){
+		List<T> range = new ArrayList<T>();
+		range.add(start);
+		T i = start;
+		do {
+			i = incrementFunction.apply(i);
+			range.add(i);
+		} while (!end.equals(i));
+		return range.stream();
 	}
 	
 	@SafeVarargs
