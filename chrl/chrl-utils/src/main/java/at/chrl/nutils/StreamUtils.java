@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Collector;
@@ -78,5 +79,82 @@ public final class StreamUtils {
 			}
 			return v;
 		};
+	}
+	
+	
+	public static final <R, T> Function<R, T> parse(final Function<R, T> parseFunction, final T defaultValue){
+		return s -> {
+			try {
+				return parseFunction.apply(s);				
+			} catch (Exception e) {
+				return defaultValue;
+			}
+		};
+	}
+	
+	public static final <T> Function<String, T> parseStringToNumeric(final BiFunction<String, Integer, T> parseFunction, final int radix, final T defaultValue){
+		return s -> {
+			try {
+				return parseFunction.apply(s, radix);				
+			} catch (Exception e) {
+				return defaultValue;
+			}
+		};
+	}
+	
+	public static final Function<String, Long> parseToLong(){
+		return parseToLong(10);
+	}
+	
+	public static final Function<String, Long> parseToLong(final int radix){
+		return parseStringToNumeric(Long::parseLong, radix, 0L);
+	}
+	
+	public static final Function<String, Short> parseToShort(){
+		return parseToShort(10);
+	}
+	
+	public static final Function<String, Short> parseToShort(final int radix){
+		return parseStringToNumeric(Short::parseShort, radix, (short)0);
+	}
+	
+	public static final Function<String, Integer> parseToInt(){
+		return parseToInt(10);
+	}
+	
+	public static final Function<String, Integer> parseToInt(final int radix){
+		return parseStringToNumeric(Integer::parseInt, radix, 0);
+	}
+	
+	public static final Function<String, Long> parseToULong(){
+		return parseToULong(10);
+	}
+	
+	public static final Function<String, Long> parseToULong(final int radix){
+		return parseStringToNumeric(Long::parseUnsignedLong, radix, 0L);
+	}
+	
+	public static final Function<String, Byte> parseToByte(){
+		return parseToByte(10);
+	}
+	
+	public static final Function<String, Byte> parseToByte(final int radix){
+		return parseStringToNumeric(Byte::parseByte, radix, (byte)0);
+	}
+	
+	public static final Function<String, Double> parseToDouble(){
+		return parse(Double::parseDouble, 0d);
+	}
+	
+	public static final Function<String, Float> parseToFloat(){
+		return parse(Float::parseFloat, 0f);
+	}
+	
+	public static final Function<String, Boolean> parseStringToBoolean(){
+		return parse(Boolean::parseBoolean, false);
+	}
+	
+	public static final Function<? extends Number, Boolean> parseNumberToBoolean(){
+		return (i) -> i.intValue() > 0;
 	}
 }
