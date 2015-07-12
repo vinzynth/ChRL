@@ -17,6 +17,20 @@ public class Rnd {
 	{
 		return rnd.nextFloat();
 	}
+	
+	/**
+	 * Returns a array of length amount with random floats.
+	 * 
+	 * @param amount - size of returned array
+	 * @return array with random flaots
+	 */
+	public static float[] getFloats(int amount){
+		float[] array = new float[amount];
+		for (int i = 0; i < array.length; i++) {
+			array[i] = rnd.nextFloat();
+		}
+		return array;
+	}
 
 	/**
 	 * Gets a random number from 0(inclusive) to n(exclusive)
