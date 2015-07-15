@@ -121,6 +121,7 @@ public final class HibernateService implements AutoCloseable {
 		session.flush();
 		if (session.isOpen() && session.getTransaction().isActive())
 			session.getTransaction().commit();
+		session.clear();
 		return session;
 	}
 

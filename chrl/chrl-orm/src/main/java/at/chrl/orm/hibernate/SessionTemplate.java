@@ -5,19 +5,30 @@ import gnu.trove.set.hash.THashSet;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
+import org.hibernate.CacheMode;
+import org.hibernate.FlushMode;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
+import org.hibernate.ScrollMode;
+import org.hibernate.ScrollableResults;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.StatelessSession;
 import org.hibernate.criterion.Restrictions;
 
 import at.chrl.nutils.ArrayUtils;
+import at.chrl.orm.hibernate.configuration.HibernateConfig;
 import at.chrl.orm.hibernate.configuration.IHibernateConfig;
 
 public abstract class SessionTemplate implements AutoCloseable {
@@ -44,6 +55,7 @@ public abstract class SessionTemplate implements AutoCloseable {
 
 	protected final Session session;
 	private boolean loggingEnabled;
+	private int fetchSize = 0;
 
 	/**
 	 * Get the pojo object for the given Pojo Class and identifier
@@ -270,6 +282,115 @@ public abstract class SessionTemplate implements AutoCloseable {
 			e.printStackTrace();
 		}
 		return Collections.emptyList();
+	}
+	
+	public <T> Stream<T> streamStateless(String query){
+		StatelessSession ses = createStatelessSession();
+		Query q = ses.createQuery(query);
+		return StreamSupport.<T>stream(Spliterators.spliteratorUnknownSize(
+				new QueryIterator<T>(q, this, true),
+                Spliterator.ORDERED | Spliterator.DISTINCT), false);
+	}
+	
+	public <T> Stream<T> streamReadOnly(Query q){
+		return stream(q.setReadOnly(true));
+	}
+	
+	public <T> Stream<T> stream(Query q){
+		if(!session.getTransaction().isActive())
+			session.beginTransaction();
+		
+		return StreamSupport.<T>stream(Spliterators.spliteratorUnknownSize(
+				new QueryIterator<T>(q.setCacheMode(CacheMode.IGNORE)
+						.setFlushMode(FlushMode.MANUAL), this, false),
+                Spliterator.ORDERED | Spliterator.DISTINCT), false);
+	}
+	
+	private static class QueryIterator<T> implements Iterator<T>{
+		private ScrollableResults scroll;
+		private LinkedList<T> queue;
+		private boolean stateless;
+		private SessionTemplate session;
+
+		/**
+		 * @param stateless 
+		 * 
+		 */
+		@SuppressWarnings("unchecked")
+		public QueryIterator(Query q, SessionTemplate session, boolean stateless) {
+			this.session = session;
+			this.stateless = stateless;
+			this.queue = new LinkedList<>();
+
+			if(session.loggingEnabled)
+				logQuery(false);
+			
+			final int fs = session.getFetchSize();
+			scroll = q
+					.setFetchSize(fs)
+					.scroll(ScrollMode.FORWARD_ONLY);
+			for (int i = 0; i < fs; i++)
+				if(!scroll.next())
+					break;
+				else
+					queue.add((T) scroll.get(0));
+		}
+		
+		/**
+		 * {@inheritDoc}
+		 * @see java.util.Iterator#hasNext()
+		 */
+		@Override
+		public boolean hasNext() {
+			boolean empty = queue.isEmpty();
+			if(!stateless && empty)
+				session.getSession().flush();
+			return !empty;
+		}
+
+		/**
+		 * {@inheritDoc}
+		 * @see java.util.Iterator#next()
+		 */
+		@Override
+		public T next() {
+			T next = queue.poll();
+			T peek = queue.peek();
+			if(Objects.isNull(peek))
+				nextBuffer();
+			return next;
+		}
+		
+		/**
+		 * 
+		 */
+		@SuppressWarnings("unchecked")
+		private void nextBuffer(){
+			if(!stateless){
+				session.getSession().flush();
+				session.getSession().clear();
+			}
+			final int fs = session.getFetchSize();
+			for (int i = 0; i < fs; i++)
+				if(!scroll.next())
+					break;
+				else
+					queue.add((T) scroll.get(0));
+		}
+	}
+	
+	private int getFetchSize(){
+		if(fetchSize > 0)
+			return fetchSize;
+		
+		fetchSize = 1500;
+		if(getHibernateConfig() instanceof HibernateConfig)
+			try {
+				fetchSize = Integer.valueOf(((HibernateConfig)getHibernateConfig()).STATEMENT_BATCH_SIZE);				
+			} catch (Exception e) {
+				System.err.println(e.getMessage());
+			}
+		return fetchSize;
 	}
 	
 	public <T> Collection<T> getAll(Class<T> entityClass){

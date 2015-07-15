@@ -67,7 +67,18 @@
 			<artifactId>hibernate-search-orm</artifactId>
 			<version>5.0.1.Final</version>
 		</dependency>
-	</dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>9.1-901-1.jdbc4</version>
+			<scope>test</scope>
+		</dependency>
+  </dependencies>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
