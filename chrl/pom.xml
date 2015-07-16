@@ -49,6 +49,7 @@
 		<module>chrl-callback-utils</module>
 		<module>chrl-spring</module>
 		<module>chrl-orm</module>
+		<module>chrl-math</module>
 	</modules>
 	<dependencyManagement>
 		<dependencies>

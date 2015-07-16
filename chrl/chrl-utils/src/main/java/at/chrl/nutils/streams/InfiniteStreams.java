@@ -70,7 +70,7 @@ public final class InfiniteStreams {
 	}
 	
 	/**
-	 * Creates some threads which poll the given queue and work dwon the stack
+	 * Creates some threads which poll the given queue and work down the stack
 	 * 
 	 * @param queue
 	 * @param streamStack
