@@ -3,6 +3,7 @@ package at.chrl.nutils.configuration;
 import java.io.File;
 import java.io.PrintStream;
 import java.net.InetSocketAddress;
+import java.util.Date;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.regex.Pattern;
@@ -14,6 +15,7 @@ import at.chrl.nutils.configuration.transformers.BooleanTransformer;
 import at.chrl.nutils.configuration.transformers.ByteTransformer;
 import at.chrl.nutils.configuration.transformers.CharTransformer;
 import at.chrl.nutils.configuration.transformers.ClassTransformer;
+import at.chrl.nutils.configuration.transformers.DateTransformer;
 import at.chrl.nutils.configuration.transformers.DoubleTransformer;
 import at.chrl.nutils.configuration.transformers.EnumTransformer;
 import at.chrl.nutils.configuration.transformers.FileTransformer;
@@ -99,6 +101,8 @@ public class PropertyTransformerFactory {
 				return BiFunctionTransformer.SHARED_INSTANCE;
 			} else if (clazzToTransform == File.class) {
 				return FileTransformer.SHARED_INSTANCE;
+			} else if (clazzToTransform == Date.class) {
+				return DateTransformer.SHARED_INSTANCE;
 			} else if (ClassUtils.isSubclass(clazzToTransform, InetSocketAddress.class)) {
 				return InetSocketAddressTransformer.SHARED_INSTANCE;
 			} else if (clazzToTransform == Pattern.class) {
