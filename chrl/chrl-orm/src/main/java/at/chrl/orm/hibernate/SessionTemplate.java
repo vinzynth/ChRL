@@ -91,18 +91,14 @@ public abstract class SessionTemplate implements AutoCloseable {
 	 * 
 	 * @return Collection with given Objects (persistent)
 	 */
-	@SuppressWarnings("unchecked")
 	public <T, K> Collection<T> getObjectsForPK(Class<T> cls, Collection<K> ids) {
 		if (ids == null || ids.isEmpty())
 			return Collections.emptyList();
 
-		if (loggingEnabled)
-			logQuery(false);
-
 		String idFieldName = session.getSessionFactory().getClassMetadata(cls)
 				.getIdentifierPropertyName();
-		return session.createCriteria(cls)
-				.add(Restrictions.in(idFieldName, ids)).list();
+		return executeQuery(createCriteria(cls)
+				.add(Restrictions.in(idFieldName, ids)));
 	}
 
 	protected SessionTemplate() {
@@ -544,6 +540,9 @@ public abstract class SessionTemplate implements AutoCloseable {
 		if (!session.getTransaction().isActive())
 			session.beginTransaction();
 
+		if (loggingEnabled)
+			logQuery(false);
+		
 		return StreamSupport.<T> stream(Spliterators.spliteratorUnknownSize(
 				new QueryIterator<T>(q.setCacheMode(CacheMode.IGNORE)
 						.setFlushMode(FlushMode.MANUAL), this, false),
@@ -561,6 +560,10 @@ public abstract class SessionTemplate implements AutoCloseable {
 	public <T> Stream<T> streamStateless(String query) {
 		StatelessSession ses = createStatelessSession();
 		Query q = ses.createQuery(query);
+
+		if (loggingEnabled)
+			logQuery(false);
+		
 		return StreamSupport.<T> stream(Spliterators.spliteratorUnknownSize(
 				new QueryIterator<T>(q, this, true), Spliterator.ORDERED
 						| Spliterator.DISTINCT), false);
@@ -589,6 +592,9 @@ public abstract class SessionTemplate implements AutoCloseable {
 		if (!session.getTransaction().isActive())
 			session.beginTransaction();
 
+		if (loggingEnabled)
+			logQuery(false);
+		
 		return StreamSupport.<T> stream(Spliterators.spliteratorUnknownSize(
 				new QueryIterator<T>(crit.setCacheMode(CacheMode.IGNORE)
 						.setFlushMode(FlushMode.MANUAL), this, false),
@@ -614,6 +620,10 @@ public abstract class SessionTemplate implements AutoCloseable {
 		StatelessSession ses = createStatelessSession();
 		Criteria crit = criteriaFilter.apply(ses
 				.createCriteria(persistentClass));
+
+		if (loggingEnabled)
+			logQuery(false);
+		
 		return StreamSupport.<T> stream(Spliterators.spliteratorUnknownSize(
 				new QueryIterator<T>(crit, this, true), Spliterator.ORDERED
 						| Spliterator.DISTINCT), false);
