@@ -472,7 +472,7 @@ public abstract class SessionTemplate implements AutoCloseable {
 	 * 
 	 * @return {@link Iterator} instance
 	 */
-	public <T> Iterator<T> scroll(Query q) {
+	public <T> Iterable<T> scroll(Query q) {
 		return scroll(q, false);
 	}
 
@@ -484,12 +484,28 @@ public abstract class SessionTemplate implements AutoCloseable {
 	 * @param stateless
 	 *            - stateless flag
 	 * 
-	 * @return {@link Iterator} instance
+	 * @return {@link Iterable} instance
 	 */
-	public <T> Iterator<T> scroll(Query q, boolean stateless) {
+	public <T> Iterable<T> scroll(Query q, boolean stateless) {
+		return new QueryIterable<T>(new QueryIterator<T>(q, this, stateless));
+	}
+	
+	/**
+	 * Scroll over the query results with a iterator
+	 * 
+	 * @see {@link SessionTemplate#scroll(Query)}
+	 * 
+	 * @param q
+	 *            - given query
+	 * @param stateless
+	 *            - stateless flag
+	 * 
+	 * @return {@link Iterable} instance
+	 */
+	public <T> Iterator<T> iterator(Query q, boolean stateless) {
 		return new QueryIterator<T>(q, this, stateless);
 	}
-
+	
 	/**
 	 * Scroll over the query results
 	 * 
@@ -498,7 +514,7 @@ public abstract class SessionTemplate implements AutoCloseable {
 	 * 
 	 * @return {@link Iterator} instance
 	 */
-	public <T> Iterator<T> scroll(Criteria crit) {
+	public <T> Iterable<T> scroll(Criteria crit) {
 		return scroll(crit, false);
 	}
 
@@ -510,9 +526,25 @@ public abstract class SessionTemplate implements AutoCloseable {
 	 * @param stateless
 	 *            - stateless flag
 	 * 
+	 * @return {@link Iterable} instance
+	 */
+	public <T> Iterable<T> scroll(Criteria crit, boolean stateless) {
+		return new QueryIterable<T>(new QueryIterator<T>(crit, this, stateless));
+	}
+	
+	/**
+	 * Scroll over the query results with a iterator
+	 * 
+	 * @see {@link SessionTemplate#scroll(Criteria)}
+	 * 
+	 * @param crit
+	 *            - given criteria
+	 * @param stateless
+	 *            - stateless flag
+	 * 
 	 * @return {@link Iterator} instance
 	 */
-	public <T> Iterator<T> scroll(Criteria crit, boolean stateless) {
+	public <T> Iterator<T> iterator(Criteria crit, boolean stateless) {
 		return new QueryIterator<T>(crit, this, stateless);
 	}
 
@@ -748,6 +780,39 @@ public abstract class SessionTemplate implements AutoCloseable {
 					queue.add((T) scroll.get(0));
 		}
 	}
+	
+	/**
+	 * Intern Iterable implementation for {@link QueryIterator}
+	 * 
+	 * @author Christian Richard Leopold - ChRL <br>
+	 * Jul 24, 2015 - 6:41:26 PM
+	 *
+	 * @param <T>
+	 */
+	private static final class QueryIterable<T> implements Iterable<T>{
+
+		/**
+		 * {@link QueryIterator} reference
+		 */
+		private QueryIterator<T> iterator;
+
+		/**
+		 * Constructor
+		 */
+		public QueryIterable(QueryIterator<T> iterator) {
+			this.iterator = iterator;
+			
+		}
+		
+		/**
+		 * {@inheritDoc}
+		 * @see java.lang.Iterable#iterator()
+		 */
+		@Override
+		public Iterator<T> iterator() {
+			return iterator;
+		}
+	}
 
 	/**
 	 * Returns batch size
@@ -814,7 +879,7 @@ public abstract class SessionTemplate implements AutoCloseable {
 	 * @param entityClass - given entity class
 	 * @return {@link Iterator} of result set
 	 */
-	public <T> Iterator<T> scrollAll(Class<T> entityClass){
+	public <T> Iterable<T> scrollAll(Class<T> entityClass){
 		return this.scroll(session.createCriteria("select e from "
 						+ entityClass.getSimpleName() + " e"));
 	}
