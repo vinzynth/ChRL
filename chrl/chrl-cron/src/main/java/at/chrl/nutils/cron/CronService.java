@@ -225,4 +225,14 @@ public final class CronService {
 			throw new CronServiceException("Can't get triggers for JobKey " + jk, e);
 		}
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 * @see java.lang.Object#finalize()
+	 */
+	@Override
+	protected void finalize() throws Throwable {
+		shutdown();
+		super.finalize();
+	}
 }

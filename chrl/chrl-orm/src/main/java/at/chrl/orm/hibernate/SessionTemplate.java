@@ -789,6 +789,17 @@ public abstract class SessionTemplate implements AutoCloseable {
 	}
 	
 	/**
+	 * Returns count of datasets for given class
+	 * 
+	 * @param cls
+	 * @return count
+	 */
+	public <T> long count(Class<T> cls){
+		Query q = createQuery("select count(e) from " + cls.getSimpleName() + " e");
+		return (long) executeQueryUniqueResult(q);
+	}
+	
+	/**
 	 * Returns a iterator with all entityClass instances in database
 	 * 
 	 * @param entityClass - given entity class

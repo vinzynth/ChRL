@@ -9,7 +9,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.envers.AuditReader;
@@ -230,7 +229,7 @@ public class HibernateServiceTest {
 	@Test
 	public void testBatchFetch() throws Exception {
 		try (TestSession s = new TestSession()){
-			Query q = s.createQuery("SELECT c FROM TestClass c where c.value >= 0");
+//			Query q = s.createQuery("SELECT c FROM TestClass c where c.value >= 0");
 			
 //			long su = s.<TestClass>streamReadOnly(q)
 			long su = s.<TestClass>streamStateless("SELECT c FROM TestClass c where c.value >= 0")
