@@ -1,8 +1,7 @@
 package at.chrl.orm.hibernate;
 
-import gnu.trove.set.hash.THashSet;
-
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -893,7 +892,7 @@ public abstract class SessionTemplate implements AutoCloseable {
 		if (Objects.isNull(input))
 			return Collections.emptyList();
 		return input.stream().filter(Objects::nonNull)
-				.collect(Collectors.toCollection(THashSet::new));
+				.collect(Collectors.toCollection(ArrayList::new));
 	}
 
 	private static void logQuery(boolean uniqueResult) {
