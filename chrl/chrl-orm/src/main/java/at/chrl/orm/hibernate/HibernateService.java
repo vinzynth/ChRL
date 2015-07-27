@@ -19,6 +19,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
 
+import org.flywaydb.core.Flyway;
+import org.flywaydb.core.api.FlywayException;
 import org.hibernate.FlushMode;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -40,6 +42,7 @@ import at.chrl.nutils.configuration.PropertiesUtils;
 import at.chrl.orm.hibernate.configuration.HibernateConfig;
 import at.chrl.orm.hibernate.configuration.IHibernateConfig;
 import at.chrl.orm.hibernate.configuration.JPAConfig;
+import at.chrl.orm.hibernate.flyway.HibernateCallback;
 
 /**
  * @author bravestone
@@ -70,6 +73,8 @@ public final class HibernateService implements AutoCloseable {
 		}
 
 		out.println("[Hibernate Service] Created Entity Manager Factory for Persistence Unit: " + config.PERSISTENCE_UNIT_NAME + " | " + config.toString());
+		
+		initFlyway(config);
 		return true;
 	}
 
@@ -91,8 +96,39 @@ public final class HibernateService implements AutoCloseable {
 		databaseConnections.put(config, sf);
 
 		out.println("[Hibernate Service] Created Hibernate Session Factory for: " + config.toString());
+		
+		initFlyway(config);
 		return true;
 	}
+	
+	private boolean initFlyway(final JPAConfig config){
+		return initFlyway(config.JDBC_URL, config.JDBC_USER, config.JDBC_PASSWORD);
+	}
+	
+	private boolean initFlyway(final HibernateConfig config){
+		return initFlyway(config.URL, config.USER, config.PASS);
+	}
+	
+	private boolean initFlyway(final String url, final String user, final String password){
+		out.println("[Hibernate Service] Run Flyway");
+		final Flyway flyway = new Flyway();
+		flyway.setDataSource(url, user, password);
+		flyway.setCallbacks(new HibernateCallback(out, err));
+		
+		try {
+			flyway.baseline();
+		} catch (FlywayException e) {
+			flyway.repair();
+		}
+
+		flyway.migrate();
+
+		out.println("[Hibernate Service] Finished Flyway");
+
+		return true;
+	}
+	
+
 
 	private static Session persistSubList(final List<?> sublist, final HibernateConfig conf, Session session) {
 		if (session.isOpen() && !session.getTransaction().isActive())

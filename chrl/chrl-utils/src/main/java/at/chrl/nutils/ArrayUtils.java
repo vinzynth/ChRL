@@ -405,9 +405,10 @@ public class ArrayUtils {
 	 *         <code>null</code> or empty input
 	 * @since 2.5
 	 */
-	public static Object[] nullToEmpty(Object[] array) {
+	@SuppressWarnings("unchecked")
+	public static <T> T[] nullToEmpty(T[] array) {
 		if (array == null || array.length == 0) {
-			return EMPTY_OBJECT_ARRAY;
+			return (T[]) EMPTY_OBJECT_ARRAY;
 		}
 		return array;
 	}

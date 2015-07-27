@@ -88,7 +88,7 @@ public class HibernateServiceTest {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
-	public void testCreateTestEntitesHibernate() throws Exception {
+	public void rtestCreateTestEntitesHibernate() throws Exception {
 		HibernateConfig conf = new HibernateTestConfig();
 		HibernateService.getInstance().connect(conf);
 		
