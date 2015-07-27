@@ -16,7 +16,6 @@ import org.hibernate.cfg.Configuration;
 
 import at.chrl.nutils.configuration.ConfigUtil;
 import at.chrl.nutils.configuration.PropertiesUtils;
-
 import at.chrl.orm.hibernate.HibernateService;
 
 /**
@@ -67,6 +66,15 @@ public interface IHibernateConfig {
 	 */
 	public default boolean isLoggingEnabled(){
 		return false;
+	}
+	
+	/**
+	 * Returns if flyway is active
+	 * 
+	 * @return if flyway is active
+	 */
+	public default boolean isFlywayActive(){
+		return true;
 	}
 	
 	/**

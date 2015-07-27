@@ -54,6 +54,16 @@ public abstract class HibernateConfig implements IHibernateConfig{
 		return this.getClass().hashCode();
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 * @see at.chrl.orm.hibernate.configuration.IHibernateConfig#isFlywayActive()
+	 */
+	@Override
+	public boolean isFlywayActive() {
+		return FLYWAY_ACTIVE;
+	}
+	
+	
 	@Property(key = AvailableSettings.SESSION_FACTORY_NAME, defaultValue = "", description = " Defines a name for the {@link org.hibernate.SessionFactory}. Useful both to<ul> <li>allow serialization and deserialization to work across different jvms</li> <li>optionally allow the SessionFactory to be bound into JNDI</li> </ul> @see #SESSION_FACTORY_NAME_IS_JNDI / ")
 	public String SESSION_FACTORY_NAME;
 	@Property(key = AvailableSettings.SESSION_FACTORY_NAME_IS_JNDI, defaultValue = "", description = "Does the value defined by {@link #SESSION_FACTORY_NAME} represent a {@literal JNDI} namespace into which the {@link org.hibernate.SessionFactory} should be bound? / ")
@@ -305,4 +315,13 @@ public abstract class HibernateConfig implements IHibernateConfig{
 //    configProperties.put("hibernate.search.default.directory_provider", MISProperties.getProperty(MISConstants.LUCENE_PROVIDER));
 	// hibernate.search.default.exclusive_index_user=false
 //    configProperties.put("hibernate.search.default.indexBase", MISProperties.getProperty(MISConstants.LUCENE_INDEXBASE));
+	
+	
+
+	/**
+	 * Flyway
+	 */
+	@Property(key = "chrl.orm.flyway.active", defaultValue = "true", description = "Defines if Flyway is active or not")
+	public boolean FLYWAY_ACTIVE;
+	
 }
