@@ -12,11 +12,10 @@ public class WebAppInitializer extends AbstractWebAppInitializer {
 
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @see at.chrl.spring.config.AbstractWebAppInitializer#getConfigClasses()
+	 * @see org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer#getRootConfigClasses()
 	 */
 	@Override
-	protected Class<?>[] getConfigClasses() {
+	protected Class<?>[] getRootConfigClasses() {
 		return new Class<?>[] {};
 	}
 

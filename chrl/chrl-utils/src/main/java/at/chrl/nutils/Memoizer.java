@@ -18,6 +18,7 @@ package at.chrl.nutils;
 
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * @author Vinzynth 08.11.2014 - 16:39:32
@@ -41,8 +42,29 @@ public class Memoizer {
 			}
 		};
 	}
+	
+	/**
+	 * No lambda expressions here, since Javaagent does not support that yet
+	 * 
+	 * @param function
+	 * @return
+	 */
+	private static <T> Predicate<T> doMemoize(final Predicate<T> predicate) {
+		Map<T, Boolean> cache = CollectionUtils.newMap();
+		return new Predicate<T>() {
+
+			@Override
+			public boolean test(T t) {
+				return cache.computeIfAbsent(t, predicate::test);
+			}
+		};
+	}
 
 	public static <T, U> Function<T, U> memoize(final Function<T, U> function) {
 		return doMemoize(function);
+	}
+
+	public static <T> Predicate<T> memoizePredicate(final Predicate<T> predicate) {
+		return doMemoize(predicate);
 	}
 }

@@ -13,7 +13,6 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-import at.chrl.nutils.ArrayUtils;
 import at.chrl.vaadin.SpringUIProvider;
 import at.chrl.vaadin.ui.BasicUI;
 
@@ -32,13 +31,6 @@ public abstract class AbstractWebAppInitializer extends AbstractAnnotationConfig
 	protected String[] getServletMappings() {
 		return new String[] { "/" };
 	}
-
-	protected abstract Class<?>[] getConfigClasses();
-
-	@Override
-	protected Class<?>[] getRootConfigClasses() {
-		return (Class<?>[]) ArrayUtils.add(getConfigClasses(), ApplicationConfig.class);
-	};
 
 	@Override
 	protected Class<?>[] getServletConfigClasses() {
