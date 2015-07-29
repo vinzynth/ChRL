@@ -49,7 +49,7 @@ public class ConfigView extends BasicUIView {
 		try {
 			for (Properties properties : getActiveProperties()) {
 				properties.entrySet().forEach(e -> {
-					System.out.println(e.getKey() + " | " + e.getValue());
+//					System.out.println(e.getKey() + " | " + e.getValue());
 					tbl.addItem(new Object[] { e.getKey(), e.getValue() }, e.getKey());
 				});
 			}
