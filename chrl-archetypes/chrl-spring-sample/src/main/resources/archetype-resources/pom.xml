@@ -39,6 +39,12 @@
             <artifactId>javax.servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
+        <!-- H2 Database - Remove on Demand -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.181</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

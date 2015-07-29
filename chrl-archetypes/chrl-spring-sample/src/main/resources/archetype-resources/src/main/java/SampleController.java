@@ -3,10 +3,6 @@ package ${package};
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * ChRL Spring Archtype
- * 
- */
 @RestController
 public class SampleController {
 
