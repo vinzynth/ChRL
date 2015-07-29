@@ -75,7 +75,7 @@ public final class HibernateService implements AutoCloseable {
 		out.println("[Hibernate Service] Created Entity Manager Factory for Persistence Unit: " + config.PERSISTENCE_UNIT_NAME + " | " + config.toString());
 		
 		if(config.isFlywayActive())
-			initFlyway(config);
+			return initFlyway(config);
 		return true;
 	}
 
@@ -99,7 +99,7 @@ public final class HibernateService implements AutoCloseable {
 		out.println("[Hibernate Service] Created Hibernate Session Factory for: " + config.toString());
 		
 		if(config.isFlywayActive())
-			initFlyway(config);
+			return initFlyway(config);
 		return true;
 	}
 	

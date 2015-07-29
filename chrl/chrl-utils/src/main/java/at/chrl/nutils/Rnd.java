@@ -70,7 +70,7 @@ public class Rnd {
 	 * @param list
 	 * @return
 	 */
-	public static Object get(Object list[]) {
+	public static <T> T get(T list[]) {
 		return list[get(list.length)];
 	}
 
@@ -96,6 +96,36 @@ public class Rnd {
 	public static int nextInt() {
 		return rnd.nextInt();
 	}
+	
+	/**
+	 * @return short
+	 */
+	public static short nextShort() {
+		return (short) rnd.nextInt();
+	}
+	
+	/**
+	 * @return long
+	 */
+	public static long nextLong() {
+		return rnd.nextLong();
+	}
+	
+	/**
+	 * @return float
+	 */
+	public static float nextFloat() {
+		return rnd.nextFloat();
+	}
+	
+	/**
+	 * @return byte
+	 */
+	public static byte nextByte() {
+		byte[] b = new byte[1];
+		rnd.nextBytes(b);
+		return b[0];
+	}
 
 	/**
 	 * @return double
@@ -105,16 +135,30 @@ public class Rnd {
 	}
 
 	/**
-	 * @return double
+	 * @return gaussian
 	 */
 	public static double nextGaussian() {
 		return rnd.nextGaussian();
 	}
 
 	/**
-	 * @return double
+	 * @return boolean
 	 */
 	public static boolean nextBoolean() {
 		return rnd.nextBoolean();
+	}
+	
+	/**
+	 * @return char
+	 */
+	public static char nextChar() {
+		return (char) nextInt(2 << 16);
+	}
+	
+	/**
+	 * @return string
+	 */
+	public static String nextString() {
+		return LoremIpsum.getRand();
 	}
 }

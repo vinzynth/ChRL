@@ -32,6 +32,7 @@ public class TestClass {
 	private String text;
 	private Date date;
 	private Integer value;
+	private int primtiveValue;
 	
 	@Embedded
 	@AttributeOverrides({
@@ -60,7 +61,7 @@ public class TestClass {
 	private Set<Test2Class> additional3;
 
 	@ElementCollection
-	private List<String> additional4;
+	private List<Character> additional4;
 	
 	@ElementCollection
 	private Map<String, String> stringMap;
@@ -70,9 +71,6 @@ public class TestClass {
 	
 	@ElementCollection
 	private Map<TestEnum, String> enumMap;
-
-//	@ElementCollection
-//	private Map<TestEnum, List<String>> listMap;
 	
 	/**
 	 * 
@@ -125,7 +123,7 @@ public class TestClass {
 	 */
 	@Override
 	public String toString() {
-		return this.getId() + " | " + this.text + " | " + this.date.getTime() + " | " + this.getValue();
+		return this.getId() + " | " + this.text + " | " + this.date.getTime() + " | " + this.getValue() + " | " + this.getRating();
 	}
 
 	public Test2Class getEmbedMe1() {
@@ -176,11 +174,11 @@ public class TestClass {
 		this.additional3 = additional3;
 	}
 
-	public List<String> getAdditional4() {
+	public List<Character> getAdditional4() {
 		return additional4;
 	}
 
-	public void setAdditional4(List<String> additional4) {
+	public void setAdditional4(List<Character> additional4) {
 		this.additional4 = additional4;
 	}
 
@@ -206,5 +204,13 @@ public class TestClass {
 
 	public void setIntMap(Map<String, Integer> intMap) {
 		this.intMap = intMap;
+	}
+
+	public int getPrimtiveValue() {
+		return primtiveValue;
+	}
+
+	public void setPrimtiveValue(int primtiveValue) {
+		this.primtiveValue = primtiveValue;
 	}
 }

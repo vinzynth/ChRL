@@ -8,8 +8,11 @@ import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 
 import java.util.ArrayList;
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
@@ -48,7 +51,15 @@ public class CollectionUtils {
 	public static <T> Supplier<List<T>> getListSupplier() {
 		return ArrayList<T>::new;
 	}
+	
+	public static <T> Supplier<Queue<T>> getQueueSupplier() {
+		return LinkedList<T>::new;
+	}
 
+	public static <T> Supplier<Deque<T>> getDequeSupplier() {
+		return LinkedList<T>::new;
+	}
+	
 	public static <K, V> Supplier<Map<K, V>> getWeakMapSupplier() {
 		return WeakHashMap<K, V>::new;
 	}

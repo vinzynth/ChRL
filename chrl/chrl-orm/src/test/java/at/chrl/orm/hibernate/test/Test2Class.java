@@ -38,4 +38,13 @@ public class Test2Class {
 	public void setEmbed2(String embed2) {
 		this.embed2 = embed2;
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return super.toString() + " | " + embed1 + " | " + embed2;
+	}
 }
