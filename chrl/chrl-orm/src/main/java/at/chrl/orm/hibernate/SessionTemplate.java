@@ -92,11 +92,51 @@ public abstract class SessionTemplate implements AutoCloseable {
 	 */
 	public <T, K> Collection<T> getObjectsForPK(Class<T> cls, Collection<K> ids) {
 		if (ids == null || ids.isEmpty())
-			return Collections.emptyList();
+			return Collections.<T>emptyList();
 
 		String idFieldName = session.getSessionFactory().getClassMetadata(cls)
 				.getIdentifierPropertyName();
 		return executeQuery(createCriteria(cls)
+				.add(Restrictions.in(idFieldName, ids)));
+	}
+	
+	/**
+	 * get Objects for primary key
+	 * 
+	 * @param cls
+	 *            - given persistence class
+	 * @param ids
+	 *            - identifier
+	 * 
+	 * @return Stream with given Objects (persistent)
+	 */
+	public <T, K> Stream<T> streamObjectsForPK(Class<T> cls, Collection<K> ids) {
+		if (ids == null || ids.isEmpty())
+			return Stream.<T>empty();
+
+		String idFieldName = session.getSessionFactory().getClassMetadata(cls)
+				.getIdentifierPropertyName();
+		return stream(createCriteria(cls)
+				.add(Restrictions.in(idFieldName, ids)));
+	}
+	
+	/**
+	 * get Objects for primary key
+	 * 
+	 * @param cls
+	 *            - given persistence class
+	 * @param ids
+	 *            - identifier
+	 * 
+	 * @return Stream with given Objects (persistent)
+	 */
+	public <T, K> Iterable<T> scrollObjectsForPK(Class<T> cls, Collection<K> ids) {
+		if (ids == null || ids.isEmpty())
+			return Collections.<T>emptyList();
+
+		String idFieldName = session.getSessionFactory().getClassMetadata(cls)
+				.getIdentifierPropertyName();
+		return scroll(createCriteria(cls)
 				.add(Restrictions.in(idFieldName, ids)));
 	}
 

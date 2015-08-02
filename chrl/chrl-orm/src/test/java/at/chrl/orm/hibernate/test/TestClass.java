@@ -20,14 +20,18 @@ import javax.persistence.Id;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.envers.Audited;
 
+import at.chrl.orm.hibernate.datatypes.MultiMap;
+import at.chrl.orm.hibernate.datatypes.ObjectMapable;
+import at.chrl.orm.hibernate.datatypes.ObjectMap;
+
 @Entity
 @Audited
 @GenericGenerator(name = "incrementgen", strategy = "increment")
-public class TestClass {
+public class TestClass implements ObjectMapable<Long> {
 
 	@Id
 	@GeneratedValue
-	private Long id ;
+	private Long id;
 	
 	private String text;
 	private Date date;
@@ -36,6 +40,7 @@ public class TestClass {
 	
 	@Embedded
 	@AttributeOverrides({
+		@AttributeOverride(name = "id", column = @Column(name = "embedMe1_id")),
 		@AttributeOverride(name = "embed1", column = @Column(name = "embedMe1_embed1")),
 		@AttributeOverride(name = "embed2", column = @Column(name = "embedMe1_embed2"))
 	})
@@ -43,6 +48,7 @@ public class TestClass {
 	
 	@Embedded
 	@AttributeOverrides({
+		@AttributeOverride(name = "id", column = @Column(name = "embedMe2_id")),
 		@AttributeOverride(name = "embed1", column = @Column(name = "embedMe2_embed1")),
 		@AttributeOverride(name = "embed2", column = @Column(name = "embedMe2_embed2"))
 	})
@@ -71,6 +77,10 @@ public class TestClass {
 	
 	@ElementCollection
 	private Map<TestEnum, String> enumMap;
+	
+	private ObjectMap<Long> typesss;
+	
+	private MultiMap<Long> maap;
 	
 	/**
 	 * 
@@ -212,5 +222,33 @@ public class TestClass {
 
 	public void setPrimtiveValue(int primtiveValue) {
 		this.primtiveValue = primtiveValue;
+	}
+
+	/**
+	 * @return the typesss
+	 */
+	public ObjectMap<Long> getTypesss() {
+		return typesss;
+	}
+
+	/**
+	 * @param typesss the typesss to set
+	 */
+	public void setTypesss(ObjectMap<Long> typesss) {
+		this.typesss = typesss;
+	}
+
+	/**
+	 * @return the maap
+	 */
+	public MultiMap<Long> getMaap() {
+		return maap;
+	}
+
+	/**
+	 * @param maap the maap to set
+	 */
+	public void setMaap(MultiMap<Long> maap) {
+		this.maap = maap;
 	}
 }

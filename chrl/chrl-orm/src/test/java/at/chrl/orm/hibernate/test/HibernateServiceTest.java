@@ -21,6 +21,7 @@ import at.chrl.orm.hibernate.SessionTemplate;
 import at.chrl.orm.hibernate.configuration.HibernateConfig;
 import at.chrl.orm.hibernate.configuration.IHibernateConfig;
 import at.chrl.orm.hibernate.configuration.JPAConfig;
+import at.chrl.orm.hibernate.datatypes.MultiMapEntry;
 
 public class HibernateServiceTest {
 	
@@ -31,7 +32,7 @@ public class HibernateServiceTest {
 		clazzes.add(TestClass.class);
 		clazzes.add(Test2Class.class);
 		clazzes.add(TestEnum.class);
-		
+		clazzes.add(MultiMapEntry.class);
 	}
 	
 	private static class HibernateTestConfig extends HibernateConfig{
@@ -201,6 +202,66 @@ public class HibernateServiceTest {
 		session.persist(new TestClass("random text2", new Date(), 12743734, TestEnum.GOOD));
 		session.persist(new TestClass("random text3", new Date(), 235, TestEnum.OKAY));
 		session.persist(new TestClass("random text4", new Date(), 2458, TestEnum.VERY_GOOD));
+		
+		session.flush();
+
+		session.getTransaction().commit();
+		session.close();
+		
+		
+		/**
+		 * Test object map
+		 */
+		session = HibernateService.getInstance().getSession(conf);
+		session.getTransaction().begin();
+		
+		TestClass tc = (TestClass) session.get(TestClass.class, 1L);
+		tc.getTypesss().put(TestTypes.TEST_2_CLASS_1, (TestClass) session.get(TestClass.class, 2L));
+		tc.getTypesss().put(TestTypes.TEST_2_CLASS_2, (TestClass) session.get(TestClass.class, 3L));
+		
+		session.getTransaction().commit();
+		
+		session.close();
+		
+		/**
+		 * test read from object map
+		 */
+		session = HibernateService.getInstance().getSession(conf);
+		session.getTransaction().begin();
+
+		tc = (TestClass) session.get(TestClass.class, 1L);
+		
+		tc.getTypesss().values().forEach(System.out::println);
+		TestClass testClass2 = (TestClass) tc.getTypesss().get(session, TestTypes.TEST_2_CLASS_1);
+		System.out.println(testClass2);
+		
+		session.getTransaction().commit();
+		
+		session.close();
+		
+		/**
+		 * Test multi map
+		 */
+		session = HibernateService.getInstance().getSession(conf);
+		session.getTransaction().begin();
+		
+		tc = (TestClass) session.get(TestClass.class, 1L);
+		tc.getMaap().add(TestTypes.TEST_2_CLASS_1, (TestClass) session.get(TestClass.class, 3L));
+		tc.getMaap().add(TestTypes.TEST_2_CLASS_1, (TestClass) session.get(TestClass.class, 4L));
+		
+		session.getTransaction().commit();
+		
+		session.close();
+		
+		/**
+		 * test read from object map
+		 */
+		session = HibernateService.getInstance().getSession(conf);
+		session.getTransaction().begin();
+
+		tc = (TestClass) session.get(TestClass.class, 1L);
+		
+		tc.getMaap().get(session, TestTypes.TEST_2_CLASS_1).forEach(System.out::println);
 		
 		session.getTransaction().commit();
 		

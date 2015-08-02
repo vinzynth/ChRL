@@ -1,2 +1,1 @@
 SELECT 1;
-INSERT INTO TestClass (id, date, embedMe1_embed1, embedMe1_embed2, embedMe2_embed1, embedMe2_embed2, rating, text, value) VALUES (null, '2001-01-01', 'test', 'test2', 'test3', 'test5', 'GOOD', 'strrring', 5);
