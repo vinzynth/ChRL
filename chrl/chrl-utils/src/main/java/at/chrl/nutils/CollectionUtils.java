@@ -4,12 +4,12 @@
  */
 package at.chrl.nutils;
 
-import gnu.trove.map.hash.THashMap;
-import gnu.trove.set.hash.THashSet;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
-import java.util.ArrayList;
+import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -24,12 +24,12 @@ import com.google.common.collect.MapMaker;
  * @author Vinzynth
  *
  */
-public class CollectionUtils {
+public final class CollectionUtils {
 
 	private CollectionUtils() {
 	}
 
-	private static final MapMaker mapMaker = new MapMaker();
+	private static final MapMaker MAP_MAKER = new MapMaker();
 
 	/**
 	 * Returns a capacity that is sufficient to keep the map from being resized
@@ -41,23 +41,23 @@ public class CollectionUtils {
 	}
 
 	public static <K, V> Supplier<Map<K, V>> getMapSupplier() {
-		return THashMap<K, V>::new;
+		return Object2ObjectArrayMap<K, V>::new;
 	}
 
 	public static <T> Supplier<Set<T>> getSetSupplier() {
-		return THashSet<T>::new;
+		return ObjectOpenHashSet<T>::new;
 	}
 
 	public static <T> Supplier<List<T>> getListSupplier() {
-		return ArrayList<T>::new;
+		return ObjectArrayList<T>::new;
 	}
 	
 	public static <T> Supplier<Queue<T>> getQueueSupplier() {
-		return LinkedList<T>::new;
+		return ArrayDeque<T>::new;
 	}
 
 	public static <T> Supplier<Deque<T>> getDequeSupplier() {
-		return LinkedList<T>::new;
+		return ArrayDeque<T>::new;
 	}
 	
 	public static <K, V> Supplier<Map<K, V>> getWeakMapSupplier() {
@@ -67,9 +67,21 @@ public class CollectionUtils {
 	public static <K, V> Supplier<Map<K, V>> getConcurrentMapSupplier() {
 		return ConcurrentHashMap<K, V>::new;
 	}
+	
+	public static <K, V> Supplier<Map<K, V>> getMapSupplier(final int size) {
+		return () -> new Object2ObjectArrayMap<>(size);
+	}
+	
+	public static <T> Supplier<Set<T>> getSetSupplier(final int size) {
+		return () -> new ObjectOpenHashSet<>(size);
+	}
+
+	public static <T> Supplier<List<T>> getListSupplier(final int size) {
+		return () -> new ObjectArrayList<>(size);
+	}
 
 	public static <K, V> Supplier<Map<K, V>> getConcurrentWeakMapSupplier() {
-		return () -> mapMaker.concurrencyLevel(16).weakKeys().<K, V> makeMap();
+		return () -> MAP_MAKER.concurrencyLevel(16).weakKeys().<K, V> makeMap();
 	}
 
 	private static <T> T get(Supplier<T> sup) {
@@ -87,16 +99,29 @@ public class CollectionUtils {
 	public static <K> List<K> newList() {
 		return get(getListSupplier());
 	}
+	
+	public static <K, V> Map<K, V> newMap(final int size) {
+		return get(getMapSupplier(size));
+	}
+
+	public static <K> Set<K> newSet(final int size) {
+		return get(getSetSupplier(size));
+	}
+
+	public static <K> List<K> newList(final int size) {
+		return get(getListSupplier(size));
+	}
 
 	public static <K, V> Map<K, V> newConcurrentMap() {
 		return get(getConcurrentMapSupplier());
 	}
+	
 
 	public static <T> List<List<T>> chopped(List<T> list, final int length) {
-		List<List<T>> parts = new ArrayList<List<T>>();
+		List<List<T>> parts = CollectionUtils.<List<T>>newList();
 		final int n = list.size();
 		for (int i = 0; i < n; i += length) {
-			parts.add(new ArrayList<T>(list.subList(i, Math.min(n, i + length))));
+			parts.add(new ObjectArrayList<T>(list.subList(i, Math.min(n, i + length))));
 		}
 		return parts;
 	}
