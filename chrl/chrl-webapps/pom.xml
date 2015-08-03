@@ -9,7 +9,7 @@
   <artifactId>chrl-webapps</artifactId>
   <packaging>pom</packaging>
   <modules>
-    <module>webapp01</module>
+<!--    <module>webapp01</module>-->
   </modules>
   <groupId>at.chrl</groupId>
 </project>
