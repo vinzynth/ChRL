@@ -325,7 +325,7 @@ public abstract class SessionTemplate implements AutoCloseable {
 	 * @param stmt
 	 *            the statement
 	 */
-	public org.hibernate.Query createQuery(String stmt) {
+	public Query createQuery(String stmt) {
 		return session.createQuery(stmt).setCacheable(true);
 	}
 

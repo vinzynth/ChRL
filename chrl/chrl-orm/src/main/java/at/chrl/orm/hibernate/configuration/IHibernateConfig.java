@@ -36,11 +36,6 @@ import at.chrl.orm.hibernate.HibernateService;
 public interface IHibernateConfig {
 	
 	/**
-	 * Empty collection (Set)
-	 */
-	static List<Class<?>> NO_ANNOTATED_CLASSES = Collections.emptyList();
-	
-	/**
 	 * Returns classes for {@link Configuration} object to build a 
 	 * {@link SessionFactory}.
 	 * 
@@ -56,7 +51,7 @@ public interface IHibernateConfig {
 	 * 		collection with classes to add to the configuration or
 	 */
 	public default List<Class<?>> getAnnotatedClasses(){
-		return NO_ANNOTATED_CLASSES; 
+		return Collections.emptyList(); 
 	}
 	
 	/**

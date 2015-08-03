@@ -50,7 +50,7 @@
 		<module>chrl-spring</module>
 		<module>chrl-orm</module>
 		<module>chrl-math</module>
-		<module>chrl-orm-spring-integration</module>
+<!--		<module>chrl-orm-spring-integration</module>-->
 	</modules>
 	<dependencyManagement>
 		<dependencies>
