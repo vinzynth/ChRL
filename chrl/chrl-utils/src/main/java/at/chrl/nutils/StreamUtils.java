@@ -9,7 +9,6 @@ package at.chrl.nutils;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -129,7 +128,11 @@ public final class StreamUtils {
 	 */
 	public static <T, K> Collector<T, ? , Map<K, Collection<T>>> toMultimap(
 			Function<T, K> keyMapper){
-		return Collectors.toMap(keyMapper, Collections::singletonList, new BinaryOperator<Collection<T>>() {
+		return Collectors.toMap(keyMapper, v -> {
+			List<T> list = CollectionUtils.<T>newList();
+			list.add(v);
+			return list;
+		}, new BinaryOperator<Collection<T>>() {
 
 			@Override
 			public Collection<T> apply(Collection<T> t, Collection<T> u) {
