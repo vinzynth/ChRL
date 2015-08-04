@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.servlet.view.feed.AbstractRssFeedView;
 
-import com.sun.syndication.feed.rss.Channel;
-import com.sun.syndication.feed.rss.Item;
+import com.rometools.rome.feed.rss.Channel;
+import com.rometools.rome.feed.rss.Item;
 
 /**
  * 
@@ -23,14 +23,6 @@ import com.sun.syndication.feed.rss.Item;
  *
  */
 public class EmptyRSSView extends AbstractRssFeedView {
-
-	@Override
-	protected void buildFeedMetadata(Map<String, Object> model, Channel feed, HttpServletRequest request) {
-		feed.setTitle("Empty Feed");
-		feed.setDescription("Nothing to find here.");
-		feed.setLink("");
-		super.buildFeedMetadata(model, feed, request);
-	}
 
 	/**
 	 * {@inheritDoc}
@@ -44,4 +36,12 @@ public class EmptyRSSView extends AbstractRssFeedView {
 		return Collections.emptyList();
 	}
 
+
+	@Override
+	protected void buildFeedMetadata(Map<String, Object> model, Channel feed, HttpServletRequest request) {
+		feed.setTitle("Empty Feed");
+		feed.setDescription("Nothing to find here.");
+		feed.setLink("");
+		super.buildFeedMetadata(model, feed, request);
+	}
 }

@@ -30,5 +30,10 @@
 			<artifactId>chrl-spring</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>com.rometools</groupId>
+			<artifactId>rome</artifactId>
+			<version>1.5.1</version>
+		</dependency>
 	</dependencies>
 </project>
