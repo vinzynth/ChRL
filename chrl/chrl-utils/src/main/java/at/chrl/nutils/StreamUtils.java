@@ -8,6 +8,8 @@ package at.chrl.nutils;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -117,6 +119,24 @@ public final class StreamUtils {
 			Function<T, K> keyMapper) {
 		return Collectors.toMap(keyMapper, StreamUtils.identity(),
 				StreamUtils.keepLast());
+	}
+	
+	/**
+	 * Collector to collect values into multimaps 
+	 * 
+	 * @param keyMapper
+	 * @return collector
+	 */
+	public static <T, K> Collector<T, ? , Map<K, Collection<T>>> toMultimap(
+			Function<T, K> keyMapper){
+		return Collectors.toMap(keyMapper, Collections::singletonList, new BinaryOperator<Collection<T>>() {
+
+			@Override
+			public Collection<T> apply(Collection<T> t, Collection<T> u) {
+				u.addAll(t);
+				return u;
+			}
+		});
 	}
 
 	/**
