@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -15,8 +16,49 @@ import java.util.jar.JarFile;
  * 
  * @author SoulKeeper
  */
-public class ClassUtils {
+public final class ClassUtils {
 
+	/**
+	 * Helper function to calculate a hashcode from selected getter functions
+	 * 
+	 * @param obj
+	 * @param getters
+	 * @return hash
+	 */
+	@SafeVarargs
+	public static final <T> int hashCode(T obj, Function<T, ?>... getters) {
+		int hash = 14;
+		for (Function<T, ?> function : getters)
+			hash = 31 * hash + function.apply(obj).hashCode();
+		
+		return hash;
+	}
+	
+	/**
+	 * Helper function to implement equals by given getter functions
+	 * 
+	 * @param obj1
+	 * @param obj2
+	 * @param getters
+	 * @return equals or not
+	 */
+	@SafeVarargs
+	public static final <T> boolean equals(T obj1, Object obj2, Function<T, ?>... getters) {
+		if(obj2 == null)
+			return false;
+		if(!obj1.getClass().equals(obj2.getClass()))
+			return false;
+		
+		@SuppressWarnings("unchecked")
+		T obj2Casted = (T) obj2;
+		
+		for (Function<T, ?> function : getters)
+			if(!function.apply(obj1).equals(function.apply(obj2Casted)))
+				return false;
+		
+		return true;
+	}
+	
 	/**
 	 * Return true if class a is either equivalent to class b, or if class a is
 	 * a subclass of class b, i.e. if a either "extends" or "implements" b. Note

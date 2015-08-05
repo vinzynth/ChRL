@@ -7,18 +7,22 @@
 package at.chrl.nutils;
 
 import java.io.PrintStream;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * @author Christian Richard Leopold - ChRL <br>
@@ -32,11 +36,12 @@ public final class StreamUtils {
 
 	/**
 	 * identity function
+	 * @see {@link UnaryOperator#identity()}
 	 * 
 	 * @return identity function
 	 */
 	public static <T> Function<T, T> identity() {
-		return t -> t;
+		return UnaryOperator.identity();
 	}
 
 	/**
@@ -159,16 +164,23 @@ public final class StreamUtils {
 	 *            - increment function
 	 * @return stream
 	 */
-	public static final <T> Stream<T> rangeStream(T start, T end,
-			Function<T, T> incrementFunction) {
-		List<T> range = new ArrayList<T>();
-		range.add(start);
-		T i = start;
-		do {
-			i = incrementFunction.apply(i);
-			range.add(i);
-		} while (!end.equals(i));
-		return range.stream();
+	public static final <T> Stream<T> rangeStream(final T start, final T end,
+			final UnaryOperator<T> incrementFunction) {
+		
+		final Iterator<T> iterator = new Iterator<T>() {
+			T t = (T) start;
+
+			@Override
+			public boolean hasNext() {
+				return !t.equals(end);
+			}
+
+			@Override
+			public T next() {
+				return (t = incrementFunction.apply(t));
+			}
+		};
+		return StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED | Spliterator.IMMUTABLE), false);
 	}
 
 	/**
