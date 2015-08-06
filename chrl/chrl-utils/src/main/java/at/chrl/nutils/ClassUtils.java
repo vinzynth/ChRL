@@ -19,6 +19,22 @@ import java.util.jar.JarFile;
 public final class ClassUtils {
 
 	/**
+	 * Helper function for toString function
+	 * 
+	 * @param obj
+	 * @param getters
+	 * @return string representation with given getters
+	 */
+	@SafeVarargs
+	public static final <T> String getString(T obj, Function<T ,?>...getters){
+		StringBuilder sb = new StringBuilder();
+		sb.append(obj.getClass().getSimpleName()).append(" |");
+		for (Function<T, ?> function : getters)
+			sb.append(' ').append(function.apply(obj).toString()).append(" |");
+		return sb.toString();
+	}
+	
+	/**
 	 * Helper function to calculate a hashcode from selected getter functions
 	 * 
 	 * @param obj
