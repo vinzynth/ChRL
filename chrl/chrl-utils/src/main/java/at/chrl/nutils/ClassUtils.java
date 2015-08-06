@@ -27,7 +27,7 @@ public final class ClassUtils {
 	 */
 	@SafeVarargs
 	public static final <T> int hashCode(T obj, Function<T, ?>... getters) {
-		int hash = 14;
+		int hash = obj.getClass().hashCode();
 		for (Function<T, ?> function : getters)
 			hash = 31 * hash + function.apply(obj).hashCode();
 		
