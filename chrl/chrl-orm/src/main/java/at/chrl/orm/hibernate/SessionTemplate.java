@@ -920,8 +920,7 @@ public abstract class SessionTemplate implements AutoCloseable {
 	 * @return {@link Iterator} of result set
 	 */
 	public <T> Iterable<T> scrollAll(Class<T> entityClass){
-		return this.scroll(session.createCriteria("select e from "
-						+ entityClass.getSimpleName() + " e"));
+		return this.scroll(session.createCriteria(entityClass));
 	}
 
 	public <T> Collection<T> executeHQLQuery(final String query,

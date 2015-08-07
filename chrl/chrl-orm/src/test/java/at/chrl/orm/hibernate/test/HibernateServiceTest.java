@@ -193,6 +193,16 @@ public class HibernateServiceTest {
 	}
 	
 	@Test
+	public void testScrollAll() throws Exception {
+		try (TestSession ts = new TestSession()){
+			ts.getAll(TestClass.class).forEach(System.out::println);
+			ts.scrollAll(TestClass.class).forEach(System.out::println);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
 	public void testGetSession() throws Exception {
 		HibernateJPATestConfig conf = new HibernateJPATestConfig();
 		Session session = HibernateService.getInstance().getSession(conf);
