@@ -8,7 +8,7 @@ package at.chrl.orm.hibernate.test;
 
 import org.junit.Test;
 
-import at.chrl.nutils.DatasetGenerator;
+import at.chrl.orm.test.ORMDatasetGenerator;
 
 /**
  * @author Christian Richard Leopold - ChRL <br>
@@ -19,7 +19,7 @@ public class DatasetGeneratorTest {
 
 	@Test
 	public void test() {
-		DatasetGenerator.generate(TestClass.class, 5).forEach(t -> {
+		new ORMDatasetGenerator().generate(TestClass.class, 5).forEach(t -> {
 			System.out.println("----");
 			System.out.println(t);
 			

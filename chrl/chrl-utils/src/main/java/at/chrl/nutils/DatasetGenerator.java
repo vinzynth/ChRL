@@ -26,7 +26,7 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.Spliterator;
 import java.util.Spliterators;
-import java.util.Vector;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Predicate;
@@ -50,13 +50,14 @@ import at.chrl.nutils.interfaces.INestedMap;
  * Jul 29, 2015 - 12:37:41 PM
  *
  */
-public final class DatasetGenerator {
+public class DatasetGenerator {
 
-	private static final Objenesis objenesis = new ObjenesisStd();
-	private static final int COLLECTION_POPULATION = 5;
-	private static final Collection<Class<?>> EXCLUDED_ANNOTATIONS = new Vector<>();
-	private static final Collection<Class<?>> CURRENTLY_GENERATING = new Vector<>();
-	private static final Map<Class<?>, ObjectInstantiator<?>> INSTANTIATORS = CollectionUtils.newConcurrentMap();
+	private final Objenesis objenesis = new ObjenesisStd();
+	private final int COLLECTION_POPULATION = 5;
+	private final Collection<Class<?>> EXCLUDED_CLASSES = new CopyOnWriteArraySet<>();
+	private final Collection<Class<?>> CURRENTLY_GENERATING = new CopyOnWriteArraySet<>();
+	private final Map<Class<?>, ObjectInstantiator<?>> INSTANTIATORS = CollectionUtils.newConcurrentMap();
+	
 	private static final Map<Class<?>, Supplier<?>> SUPPORTED_TYPES;
 	
 	static{
@@ -94,11 +95,11 @@ public final class DatasetGenerator {
 	}
 	
 	
-	public static <T> Stream<T> generate(final Class<T> cls, final int count){
+	public <T> Stream<T> generate(final Class<T> cls, final int count){
 		return StreamSupport.stream(Spliterators.spliteratorUnknownSize(generateIterable(cls, count), Spliterator.ORDERED), false).filter(Objects::nonNull);
 	}
 	
-	public static <T> Iterator<T> generateIterable(final Class<T> cls, final int count){
+	public <T> Iterator<T> generateIterable(final Class<T> cls, final int count){
 		return new Iterator<T>() {
 
 			int i = 0;
@@ -110,12 +111,15 @@ public final class DatasetGenerator {
 
 			@Override
 			public T next() {
-				return DatasetGenerator.generate(cls);
+				return DatasetGenerator.this.generate(cls);
 			}
 		};
 	}
 	
-	public static <T> T generate(final Class<T> cls){
+	public <T> T generate(final Class<T> cls){
+		if(EXCLUDED_CLASSES.contains(cls))
+			return null;
+		
 		final T instance = newInstance(cls);
 		
 		if(SUPPORTED_TYPES.containsKey(cls) || cls.isEnum())
@@ -133,7 +137,7 @@ public final class DatasetGenerator {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private static <T> T newInstance(Class<T> cls){
+	private <T> T newInstance(Class<T> cls){
 		if(SUPPORTED_TYPES.containsKey(cls))
 			return (T) SUPPORTED_TYPES.get(cls).get();
 		
@@ -153,9 +157,9 @@ public final class DatasetGenerator {
 	/**
 	 * Chached in Memoizer
 	 */
-	private static final Predicate<Field> FILTER_FUNCTION = Memoizer.memoizePredicate(DatasetGenerator::filterField);
+	private final Predicate<Field> FILTER_FUNCTION = Memoizer.memoizePredicate(this::filterField);
 	
-	private static boolean filterField(final Field f){
+	private boolean filterField(final Field f){
 		if(f.isSynthetic())
 			return false;
 		
@@ -164,7 +168,7 @@ public final class DatasetGenerator {
 			return false;
 		
 		Collection<Class<?>> annotations = Arrays.stream(f.getAnnotations()).map(Annotation::annotationType).collect(Collectors.toSet());
-		annotations.retainAll(EXCLUDED_ANNOTATIONS);
+		annotations.retainAll(EXCLUDED_CLASSES);
 		if(!annotations.isEmpty())
 			return false;
 		
@@ -172,7 +176,7 @@ public final class DatasetGenerator {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private static <T, C, K, V> void fillField(final T object, final Field field){
+	private <T, C, K, V> void fillField(final T object, final Field field){
 		try {
 			if(!field.isAccessible())
 				field.setAccessible(true);
@@ -195,19 +199,19 @@ public final class DatasetGenerator {
 			
 			field.set(object, generate(c));
 			
-			if(c.isArray() && !k.isPrimitive()){
+			if(c.isArray() && !k.isPrimitive() && !EXCLUDED_CLASSES.contains(k)){
 				K[] ks = (K[]) field.get(object);
 				for (int i = 0; i < COLLECTION_POPULATION; i++)
 					ks[i] = generate(k);
 			}
-			else if(Objects.nonNull(k)){
-				if(Objects.nonNull(v) && Map.class.isAssignableFrom(c)){
+			else if(Objects.nonNull(k) && !EXCLUDED_CLASSES.contains(k)){
+				if(Objects.nonNull(v) && !EXCLUDED_CLASSES.contains(v) && Map.class.isAssignableFrom(c)){
 					Map<K,V> map = (Map<K,V>)field.get(object);
 					for (int i = 0; i < COLLECTION_POPULATION; i++) {
-						map.put(generate(k),generate(v));						
+						map.put(generate(k),generate(v));
 					}
 				}
-				else if(Objects.isNull(v) && Collection.class.isAssignableFrom(c)){
+				else if(Objects.isNull(v) && !EXCLUDED_CLASSES.contains(v) && Collection.class.isAssignableFrom(c)){
 					Collection<K> col = (Collection<K>)field.get(object);
 					generate(k,COLLECTION_POPULATION).forEach(col::add);
 				}
@@ -218,11 +222,11 @@ public final class DatasetGenerator {
 		}
 	}
 	
-	public static boolean addAnnotationExclusion(final Class<?> cls){
-		return EXCLUDED_ANNOTATIONS.add(cls);
+	public boolean addExclusion(final Class<?> cls){
+		return EXCLUDED_CLASSES.add(cls);
 	}
 	
-	public static void clearAnnotationExclusions(){
-		EXCLUDED_ANNOTATIONS.clear();
+	public void clearExclusions(){
+		EXCLUDED_CLASSES.clear();
 	}
 }
