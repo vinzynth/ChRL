@@ -120,6 +120,10 @@ public class DatasetGenerator {
 		if(EXCLUDED_CLASSES.contains(cls))
 			return null;
 		
+		for (Annotation an : cls.getAnnotations())
+			if(EXCLUDED_CLASSES.contains(an.annotationType()))
+				return null;
+		
 		final T instance = newInstance(cls);
 		
 		if(SUPPORTED_TYPES.containsKey(cls) || cls.isEnum())
