@@ -15,15 +15,25 @@
  * along with ChRL Util Collection.
  * If not, see <http://www.gnu.org/licenses/>.
  */
-package at.chrl.orm.test.configs;
+package at.chrl.orm.test.validator;
 
-import at.chrl.orm.hibernate.configuration.JPAConfig;
+import org.hibernate.Session;
+
+import at.chrl.orm.hibernate.SessionTemplate;
 
 /**
  * @author Vinzynth
- * 09.08.2015 - 17:57:55
+ * 09.08.2015 - 19:02:15
  *
  */
-public class MariaDBConfig extends JPAConfig {
+public abstract class ValidatorSession extends SessionTemplate {
 
+	/**
+	 * {@inheritDoc}
+	 * @see at.chrl.orm.hibernate.SessionTemplate#getSession()
+	 */
+	@Override
+	public Session getSession() {
+		return super.getSession();
+	}
 }

@@ -15,36 +15,48 @@
  * along with ChRL Util Collection.
  * If not, see <http://www.gnu.org/licenses/>.
  */
-package at.chrl.orm.test;
+package at.chrl.orm.hibernate.test;
 
-import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
-import javax.persistence.GeneratedValue;
+import java.util.List;
 
-import at.chrl.nutils.DatasetGenerator;
-import at.chrl.orm.hibernate.datatypes.MultiMap;
+import org.junit.Before;
+import org.junit.Test;
+
+import at.chrl.nutils.CollectionUtils;
 import at.chrl.orm.hibernate.datatypes.MultiMapEntry;
-import at.chrl.orm.hibernate.datatypes.ObjectMap;
-import at.chrl.orm.hibernate.datatypes.ObjectMapKey;
+import at.chrl.orm.test.validator.DatamodelValidator;
 
 /**
  * @author Vinzynth
- * 09.08.2015 - 17:47:22
+ * 09.08.2015 - 19:30:10
  *
  */
-public final class ORMDatasetGenerator extends DatasetGenerator {
+public class DatasetValidatorTest {
 
 	
-	/**
-	 * 
-	 */
-	public ORMDatasetGenerator() {
-		addExclusion(GeneratedValue.class);
-		addExclusion(Embedded.class);
-		addExclusion(Embeddable.class);
-		addExclusion(MultiMapEntry.class);
-		addExclusion(MultiMap.class);
-		addExclusion(ObjectMap.class);
-		addExclusion(ObjectMapKey.class);
+	private DatamodelValidator validator;
+	
+	@Before
+	public void initValidator(){
+		List<Class<?>> testClasses = CollectionUtils.newList();
+		
+		testClasses.add(TestClass.class);
+		testClasses.add(Test2Class.class);
+		testClasses.add(TestEnum.class);
+		testClasses.add(MultiMapEntry.class);
+		
+		this.validator = new DatamodelValidator(testClasses);
 	}
+	
+	@Test
+	public void testConnection() throws Exception {
+		validator.testConnection();
+	}
+	
+	@Test
+	public void testPersist() throws Exception {
+		validator.testPersist();
+	}
+	
+	
 }

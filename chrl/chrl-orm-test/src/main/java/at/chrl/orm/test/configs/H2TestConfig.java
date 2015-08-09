@@ -17,13 +17,40 @@
  */
 package at.chrl.orm.test.configs;
 
-import at.chrl.orm.hibernate.configuration.JPAConfig;
+import java.util.List;
+
+import at.chrl.orm.hibernate.configuration.IHibernateConfig;
+import at.chrl.orm.hibernate.configuration.templates.H2Config;
 
 /**
  * @author Vinzynth
- * 09.08.2015 - 17:58:42
+ * 09.08.2015 - 19:37:04
  *
  */
-public class PostgreSQLConfig extends JPAConfig {
+public class H2TestConfig extends H2Config {
+	
+	@Override
+	public void overrideConfig(){
+		super.overrideConfig();
+		this.PERSISTENCE_UNIT_NAME = "h2";
+	}
+	
+	private List<Class<?>> annotatedClasses;
+	
+	/**
+	 * {@inheritDoc}
+	 * @see at.chrl.orm.hibernate.configuration.IHibernateConfig#getAnnotatedClasses()
+	 */
+	@Override
+	public List<Class<?>> getAnnotatedClasses() {
+		return annotatedClasses;
+	}
 
+	/**
+	 * @param annotatedClasses the annotatedClasses to set
+	 */
+	public IHibernateConfig setAnnotatedClasses(List<Class<?>> annotatedClasses) {
+		this.annotatedClasses = annotatedClasses;
+		return this;
+	}
 }

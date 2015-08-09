@@ -19,6 +19,7 @@ package at.chrl.orm.test.configs;
 
 import at.chrl.orm.hibernate.configuration.JPAConfig;
 
+
 /**
  * @author Vinzynth
  * 09.08.2015 - 17:58:08

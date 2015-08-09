@@ -17,13 +17,41 @@
  */
 package at.chrl.orm.test.configs;
 
-import at.chrl.orm.hibernate.configuration.JPAConfig;
+import java.util.List;
+
+import at.chrl.orm.hibernate.configuration.templates.Neo4jConfig;
 
 /**
  * @author Vinzynth
- * 09.08.2015 - 17:58:28
+ * 09.08.2015 - 22:26:37
  *
  */
-public class MySQLConfig extends JPAConfig {
+@Deprecated
+public class Neo4jTestConfig extends Neo4jConfig {
+	
+	@Override
+	public void overrideConfig(){
+		super.overrideConfig();
+		this.PERSISTENCE_UNIT_NAME = "neo4j";
+		this.DATABASE_PATH = "H:\\DB\\Neo4j-Db";
+	}
+	
+	private List<Class<?>> annotatedClasses;
+	
+	/**
+	 * {@inheritDoc}
+	 * @see at.chrl.orm.hibernate.configuration.IHibernateConfig#getAnnotatedClasses()
+	 */
+	@Override
+	public List<Class<?>> getAnnotatedClasses() {
+		return annotatedClasses;
+	}
 
+	/**
+	 * @param annotatedClasses the annotatedClasses to set
+	 */
+	public Neo4jTestConfig setAnnotatedClasses(List<Class<?>> annotatedClasses) {
+		this.annotatedClasses = annotatedClasses;
+		return this;
+	}
 }

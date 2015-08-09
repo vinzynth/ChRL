@@ -17,13 +17,14 @@
  */
 package at.chrl.orm.test.configs;
 
-import at.chrl.orm.hibernate.configuration.JPAConfig;
+import at.chrl.orm.hibernate.configuration.OGMConfig;
+
 
 /**
  * @author Vinzynth
  * 09.08.2015 - 18:14:20
  *
  */
-public class MongoDBConfig extends JPAConfig {
+public class MongoDBConfig extends OGMConfig {
 
 }
