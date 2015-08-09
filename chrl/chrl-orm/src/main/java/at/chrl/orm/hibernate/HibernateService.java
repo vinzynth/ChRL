@@ -33,6 +33,7 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.jpa.AvailableSettings;
 import org.hibernate.jpa.HibernateEntityManager;
 import org.hibernate.jpa.HibernateEntityManagerFactory;
+import org.hibernate.ogm.cfg.OgmConfiguration;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 
 import at.chrl.nutils.ArrayUtils;
@@ -42,6 +43,7 @@ import at.chrl.nutils.configuration.PropertiesUtils;
 import at.chrl.orm.hibernate.configuration.HibernateConfig;
 import at.chrl.orm.hibernate.configuration.IHibernateConfig;
 import at.chrl.orm.hibernate.configuration.JPAConfig;
+import at.chrl.orm.hibernate.configuration.OGMConfig;
 import at.chrl.orm.hibernate.flyway.HibernateCallback;
 
 /**
@@ -84,8 +86,8 @@ public final class HibernateService implements AutoCloseable {
 			return false;
 
 		Properties props = PropertiesUtils.filterEmtpyValues(ConfigUtil.getProperties(config.getClass()));
-
-		Configuration hibernateCfg = new Configuration();
+		
+		Configuration hibernateCfg = (config instanceof OGMConfig) ? new OgmConfiguration() : new Configuration();
 		hibernateCfg.setProperties(props);
 
 		for (Class<?> ie : config.getAnnotatedClasses())
@@ -206,6 +208,10 @@ public final class HibernateService implements AutoCloseable {
 
 		ConfigUtil.loadAndExport(hibernateConfig);
 
+		hibernateConfig.overrideConfig();
+		
+		ConfigUtil.export(hibernateConfig);
+		
 		if (hibernateConfig instanceof JPAConfig)
 			return initJPA((JPAConfig) hibernateConfig);
 

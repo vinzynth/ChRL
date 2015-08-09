@@ -88,11 +88,22 @@ public interface IHibernateConfig {
 			hibernateCfg.addAnnotatedClass(ie);
 		
 		StandardServiceRegistryBuilder ssrb = new StandardServiceRegistryBuilder().applySettings(hibernateCfg.getProperties());
-        SessionFactory sf = hibernateCfg.buildSessionFactory(ssrb.build());
-        return sf;
+		SessionFactory sf = hibernateCfg.buildSessionFactory(ssrb.build());
+		return sf;
 	}
 	
+	/**
+	 * Returns connection name
+	 * 
+	 * @return name
+	 */
 	public default String getConnectionName(){
 		return this.getClass().getSimpleName();
+	}
+	
+	/**
+	 * Function which gets called after loading the config file, but before init the connection
+	 */
+	public default void overrideConfig(){
 	}
 }
