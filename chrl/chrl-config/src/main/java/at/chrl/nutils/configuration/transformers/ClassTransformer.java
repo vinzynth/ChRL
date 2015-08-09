@@ -24,7 +24,9 @@ public class ClassTransformer implements PropertyTransformer<Class<?>> {
 		try {
 			return Class.forName(value, false, getClass().getClassLoader());
 		} catch (ClassNotFoundException e) {
-			throw new TransformationException("Cannot find class with name '" + value + "'");
+			e.printStackTrace();
+			return null;
+//			throw new TransformationException("Cannot find class with name '" + value + "'");
 		}
 	}
 }
