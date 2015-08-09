@@ -52,17 +52,6 @@ public class ConfigurationExporter {
 	@SuppressWarnings("rawtypes")
 	static void processFields(Class clazz, Object obj, IConfigPrinter os, Properties... props) {
 		for (Field f : clazz.getDeclaredFields()) {
-			// // Static fields should not be modified when processing object
-			// if(Modifier.isStatic(f.getModifiers()) && obj != null)
-			// {
-			// continue;
-			// }
-			//
-			// // Not static field should not be processed when parsing class
-			// if(!Modifier.isStatic(f.getModifiers()) && obj == null)
-			// {
-			// continue;
-			// }
 
 			if (f.isAnnotationPresent(Property.class)) {
 				// Final fields should not be processed
@@ -82,10 +71,16 @@ public class ConfigurationExporter {
 		f.setAccessible(true);
 		try {
 			Property property = f.getAnnotation(Property.class);
-			if (ConfigurableProcessor.isKeyPresent(property.key(), props))
-				os.printConfigField(property, ConfigurableProcessor.findPropertyByKey(property.key(), props), f.getType());
-			else
-				os.printConfigField(property, property.defaultValue(), f.getType());
+			
+			if(obj != null){
+				os.printConfigField(property, f.get(obj).toString(), f.getType());
+			}
+			else{
+				if (ConfigurableProcessor.isKeyPresent(property.key(), props))
+					os.printConfigField(property, ConfigurableProcessor.findPropertyByKey(property.key(), props), f.getType());
+				else
+					os.printConfigField(property, property.defaultValue(), f.getType());
+			}
 		} catch (Exception e) {
 			RuntimeException re = new RuntimeException("Can't print field " + f.getName() + " of class " + f.getDeclaringClass(), e);
 			log.error(re.toString());

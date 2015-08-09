@@ -67,6 +67,12 @@ public final class ConfigUtil {
 		ConfigurationExporter.process(classToExport, printer, getLoadedProperties(classToExport));
 	}
 
+	public synchronized static final void export(final Object obj) {
+		File toExport = new File(configDirectory, obj.getClass().getSimpleName() + ".properties");
+		ConfigurationExporter.process(obj, new PropertyFileStreamPrinter(toExport));
+		exportedFiles.put(obj.getClass(), toExport);
+	}
+
 	public synchronized static final void load(final Class<?> classToLoad) {
 		ConfigurableProcessor.process(classToLoad, getLoadedProperties(classToLoad));
 		if (!classes.contains(classToLoad))
