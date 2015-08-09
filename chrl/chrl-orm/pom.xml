@@ -6,6 +6,21 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>chrl-orm</artifactId>
+  <repositories>
+		<repository>
+			<id>local-libs</id>
+			<name>Embedded libs</name>
+			<url>file://${basedir}/repo/</url>
+		</repository>
+		<repository>
+			<id>neo4j-public</id>
+			<url>http://m2.neo4j.org/content/groups/public</url>
+			<releases>
+				<enabled>true</enabled>
+				<checksumPolicy>warn</checksumPolicy>
+			</releases>
+		</repository>
+	</repositories>
   <dependencies>
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -151,7 +166,7 @@
 			<artifactId>h2</artifactId>
 			<version>1.4.181</version>
 		</dependency>
-  </dependencies>
+	</dependencies>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
