@@ -18,19 +18,22 @@
 	<build>
 		<plugins>
 			<plugin>
-			  <groupId>org.apache.maven.plugins</groupId>
-			  <artifactId>maven-source-plugin</artifactId>
-			  <executions>
-			    <execution>
-			      <id>attach-sources</id>
-			      <goals>
-			        <goal>jar</goal>
-			      </goals>
-			    </execution>
-			  </executions>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.4</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.3</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
@@ -39,7 +42,7 @@
 			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat7-maven-plugin</artifactId>
-				<version>2.1</version>
+				<version>2.2</version>
 				<configuration>
 					<server>tomcat</server>
 					<url>http://192.168.1.101:8080/manager/text</url>
@@ -49,21 +52,22 @@
 	</build>
 
 	<modules>
-		<module>chrl-utils</module>
-		<module>chrl-cron</module>
-		<module>chrl-iryna</module>
-		<module>chrl-config</module>
-		<module>chrl-webapps</module>
 		<module>chrl-algorithms</module>
-		<module>chrl-database</module>
-		<module>chrl-rebellion</module>
-		<module>chrl-callbacks</module>
 		<module>chrl-callback-utils</module>
-		<module>chrl-spring</module>
-		<module>chrl-orm</module>
+		<module>chrl-callbacks</module>
+		<module>chrl-config</module>
+		<module>chrl-cron</module>
+		<module>chrl-database</module>
+		<module>chrl-iryna</module>
 		<module>chrl-math</module>
+		<module>chrl-orm-search</module>
 		<module>chrl-orm-spring-integration</module>
 		<module>chrl-orm-test</module>
+		<module>chrl-orm</module>
+		<module>chrl-rebellion</module>
+		<module>chrl-spring</module>
+		<module>chrl-utils</module>
+		<module>chrl-webapps</module>
 	</modules>
 	<dependencyManagement>
 		<dependencies>
