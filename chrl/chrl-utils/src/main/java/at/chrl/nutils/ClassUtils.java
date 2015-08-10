@@ -74,6 +74,33 @@ public final class ClassUtils {
 		
 		return true;
 	}
+
+	/**
+	 * Helper function to implement compare interfaces
+	 * 
+	 * @param obj1
+	 * @param obj2
+	 * @param getters
+	 * @return compared objects
+	 * 
+	 * @see {@link Comparable#compareTo(Object)}
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SafeVarargs
+	public static final <T> int compareTo(T obj1, T obj2, Function<T, ? extends Comparable<?>>... getters){
+		if(obj2 == null)
+			return -1;
+		if(obj1 == null)
+			return 1;
+		
+		int i = 0;
+		for (Function<T, ? extends Comparable> function : getters) {
+			i = function.apply(obj1).compareTo(function.apply(obj2));
+			if(i != 0)
+				return i;
+		}
+		return 0;
+	}
 	
 	/**
 	 * Return true if class a is either equivalent to class b, or if class a is
