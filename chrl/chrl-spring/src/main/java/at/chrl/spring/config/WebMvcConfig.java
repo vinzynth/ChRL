@@ -18,7 +18,7 @@ import at.chrl.Application;
 
 @Configuration
 @ComponentScan(basePackageClasses = Application.class)
-class WebMvcConfig extends WebMvcConfigurationSupport {
+public class WebMvcConfig extends WebMvcConfigurationSupport {
 
 	private static final String MESSAGE_SOURCE = "/WEB-INF/i18n/messages";
 	@SuppressWarnings("unused")
