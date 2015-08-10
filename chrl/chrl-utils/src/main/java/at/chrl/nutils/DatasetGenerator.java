@@ -13,6 +13,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
@@ -90,6 +91,14 @@ public class DatasetGenerator {
 		SUPPORTED_TYPES.put(INestedMap.class, CollectionUtils.getMapSupplier());
 		SUPPORTED_TYPES.put(INestedCollection.class, CollectionUtils.getSetSupplier());
 		SUPPORTED_TYPES.put(Date.class, Date::new);
+		SUPPORTED_TYPES.put(URL.class, () -> {
+			try {
+				return new URL("http", Rnd.nextString(), Rnd.nextInt(60000), Rnd.nextString());
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+		});
 		SUPPORTED_TYPES.put(Calendar.class, Calendar::getInstance);
 		SUPPORTED_TYPES.put(AtomicInteger.class, () -> new AtomicInteger(Rnd.nextInt()));
 		SUPPORTED_TYPES.put(AtomicLong.class, () -> new AtomicLong(Rnd.nextLong()));
@@ -112,6 +121,8 @@ public class DatasetGenerator {
 			
 			@Override
 			public boolean hasNext() {
+				if(count < 0)
+					return true;
 				return ++i <= count;
 			}
 
