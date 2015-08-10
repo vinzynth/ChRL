@@ -54,6 +54,11 @@ public class DatasetValidatorTest {
 	}
 	
 	@Test
+	public void testSessionPersist() throws Exception {
+		validator.testSessionPersist();
+	}
+	
+	@Test
 	public void testPersist() throws Exception {
 		validator.testPersist();
 	}

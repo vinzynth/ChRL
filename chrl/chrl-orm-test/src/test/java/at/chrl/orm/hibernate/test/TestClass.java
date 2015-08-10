@@ -1,5 +1,6 @@
 package at.chrl.orm.hibernate.test;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +9,7 @@ import java.util.TreeSet;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
@@ -16,6 +18,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -81,6 +84,9 @@ public class TestClass implements ObjectMapable<Long> {
 	
 	private MultiMap<Long> maap;
 	
+	@ManyToMany(cascade = {CascadeType.ALL})
+	private List<TestClass> related;
+	
 	/**
 	 * 
 	 */
@@ -95,6 +101,7 @@ public class TestClass implements ObjectMapable<Long> {
 		this.setValue(value);
 		this.setRating(rating);
 		this.setAdditional(new TreeSet<>());
+		this.setRelated(new ArrayList<>());
 	}
 
 	public Date getDate() {
@@ -249,5 +256,19 @@ public class TestClass implements ObjectMapable<Long> {
 	 */
 	public void setMaap(MultiMap<Long> maap) {
 		this.maap = maap;
+	}
+
+	/**
+	 * @return the related
+	 */
+	public List<TestClass> getRelated() {
+		return related;
+	}
+
+	/**
+	 * @param related the related to set
+	 */
+	public void setRelated(List<TestClass> related) {
+		this.related = related;
 	}
 }
