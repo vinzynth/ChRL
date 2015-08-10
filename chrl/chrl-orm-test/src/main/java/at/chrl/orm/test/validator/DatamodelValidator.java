@@ -23,10 +23,13 @@ import java.util.List;
 import at.chrl.nutils.CollectionUtils;
 import at.chrl.orm.hibernate.HibernateService;
 import at.chrl.orm.hibernate.configuration.IHibernateConfig;
-import at.chrl.orm.hibernate.configuration.OGMConfig;
 import at.chrl.orm.test.ORMDatasetGenerator;
 import at.chrl.orm.test.configs.H2TestConfig;
+import at.chrl.orm.test.configs.MSSQLTestConfig;
+import at.chrl.orm.test.configs.MariaDBTestConfig;
+import at.chrl.orm.test.configs.MySQLTestConfig;
 import at.chrl.orm.test.configs.Neo4jTestConfig;
+import at.chrl.orm.test.configs.PostgreSQLTestConfig;
 
 /**
  * @author Vinzynth
@@ -59,10 +62,10 @@ public final class DatamodelValidator {
 		Collection<IHibernateConfig> configs = CollectionUtils.newList();
 		
 		configs.add(new H2TestConfig().setAnnotatedClasses(annotatedClasses));
-//		configs.add(new MySQLTestConfig().setAnnotatedClasses(annotatedClasses));
-//		configs.add(new MariaDBTestConfig().setAnnotatedClasses(annotatedClasses));
-//		configs.add(new PostgreSQLTestConfig().setAnnotatedClasses(annotatedClasses));
-//		configs.add(new MSSQLTestConfig().setAnnotatedClasses(annotatedClasses));
+		configs.add(new MySQLTestConfig().setAnnotatedClasses(annotatedClasses));
+		configs.add(new MariaDBTestConfig().setAnnotatedClasses(annotatedClasses));
+		configs.add(new PostgreSQLTestConfig().setAnnotatedClasses(annotatedClasses));
+		configs.add(new MSSQLTestConfig().setAnnotatedClasses(annotatedClasses));
 //		configs.add(new FirebirdConfig().setAnnotatedClasses(annotatedClasses));
 		configs.add(new Neo4jTestConfig().setAnnotatedClasses(annotatedClasses));
 //		configs.add(new MongoDBConfig().setAnnotatedClasses(annotatedClasses));
@@ -107,7 +110,7 @@ public final class DatamodelValidator {
 			for (Object object : testDataset) {
 				session.saveOrUpdate(object);
 			}
-			
+			session.flush();
 			session.getSession().clear();
 		} catch (Exception e) {
 			e.printStackTrace();
