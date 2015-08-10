@@ -18,18 +18,11 @@
 package at.chrl.orm.test.validator;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 import at.chrl.nutils.CollectionUtils;
 import at.chrl.orm.hibernate.HibernateService;
 import at.chrl.orm.hibernate.configuration.IHibernateConfig;
-import at.chrl.orm.hibernate.configuration.JPAConfig;
-import at.chrl.orm.hibernate.test.TestClass;
-import at.chrl.orm.hibernate.test.TestEnum;
 import at.chrl.orm.test.ORMDatasetGenerator;
 import at.chrl.orm.test.configs.H2TestConfig;
 import at.chrl.orm.test.configs.MSSQLTestConfig;
@@ -110,26 +103,7 @@ public final class DatamodelValidator {
 	}
 	
 	private void testPersist(final IHibernateConfig config){
-		if(!(config instanceof JPAConfig))
-			return;
-		HibernateService.getInstance().connect(config);
-		
-		EntityManagerFactory emf = HibernateService.getInstance().getEntityManagerFactory((JPAConfig) config);
-		
-		EntityManager em = emf.createEntityManager();
-		
-		em.getTransaction().begin();
-		
-		em.persist(new TestClass("random text", new Date(), 124235, TestEnum.FAIR));
-		em.persist(new TestClass("random text2", new Date(), 12743734, TestEnum.GOOD));
-		em.persist(new TestClass("random text3", new Date(), 235, TestEnum.OKAY));
-		em.persist(new TestClass("random text4", new Date(), 2458, TestEnum.VERY_GOOD));
-		
-		em.getTransaction().commit();
-		
-		em.close();
-		
-		HibernateService.getInstance().disconnect(config);
+		testSessionPersist(config);
 	}
 	
 	private void testSessionPersist(final IHibernateConfig config){
