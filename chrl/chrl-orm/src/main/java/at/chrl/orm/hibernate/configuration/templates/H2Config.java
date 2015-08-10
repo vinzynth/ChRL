@@ -28,6 +28,7 @@ public class H2Config extends JPAConfig {
 	
 	@Override
 	public void overrideConfig(){
+		super.overrideConfig();
 		this.JDBC_URL = "jdbc:h2:mem:db1;DB_CLOSE_DELAY=-1;MVCC=TRUE";
 		this.JDBC_DRIVER = "org.h2.Driver";
 		this.JDBC_USER = "sa";

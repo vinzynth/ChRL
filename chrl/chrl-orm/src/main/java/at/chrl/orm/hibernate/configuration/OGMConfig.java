@@ -43,9 +43,31 @@ public class OGMConfig extends JPAConfig {
 	 */
 	@Override
 	public void overrideConfig() {
+		super.overrideConfig();
 		this.PROVIDER = "org.hibernate.ogm.jpa.HibernateOgmPersistence";
 		this.TRANSACTION_STRATEGY = "org.hibernate.transaction.JTATransactionFactory";
 		this.JTA_PLATFORM = "org.hibernate.service.jta.platform.internal.JBossStandAloneJtaPlatform";
+		this.HBM2DDL_AUTO = "";
+		this.DRIVER = "";
+		this.URL = "";
+		this.USER = "";
+		this.PASS = "";
+		this.JDBC_DRIVER= "";
+		this.JDBC_URL = "";
+		this.JDBC_USER = "";
+		this.JDBC_PASSWORD = "";
+		this.FLYWAY_ACTIVE = false;
+	}
+	
+	/**
+	 * Flyway is disabled by default on OGM Datastores
+	 * 
+	 * {@inheritDoc}
+	 * @see at.chrl.orm.hibernate.configuration.HibernateConfig#isFlywayActive()
+	 */
+	@Override
+	public boolean isFlywayActive() {
+		return false;
 	}
 
 	@Property(key = OgmProperties.CREATE_DATABASE, defaultValue = "")
@@ -66,8 +88,9 @@ public class OGMConfig extends JPAConfig {
 			})
 	public String DATASTORE_PROVIDER;
 	
-	@Property(key = OgmProperties.ERROR_HANDLER, defaultValue = "")
-	public String ERROR_HANDLER;
+//	at version 4.2.0
+//	@Property(key = OgmProperties.ERROR_HANDLER, defaultValue = "")
+//	public String ERROR_HANDLER;
 	
 	@Property(key = OgmProperties.GRID_DIALECT, defaultValue = "")
 	public String GRID_DIALECT;
@@ -81,7 +104,6 @@ public class OGMConfig extends JPAConfig {
 	@Property(key = OgmProperties.PASSWORD, defaultValue = "")
 	public String PASSWORD;
 	
-	@SuppressWarnings("deprecation")
 	@Property(key = OgmProperties.PORT, defaultValue = "")
 	public String PORT;
 	

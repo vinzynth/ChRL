@@ -18,14 +18,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.envers.Audited;
 
 import at.chrl.orm.hibernate.datatypes.MultiMap;
-import at.chrl.orm.hibernate.datatypes.ObjectMapable;
 import at.chrl.orm.hibernate.datatypes.ObjectMap;
+import at.chrl.orm.hibernate.datatypes.ObjectMapable;
 
 @Entity
-@Audited
+//@Audited
 @GenericGenerator(name = "incrementgen", strategy = "increment")
 public class TestClass implements ObjectMapable<Long> {
 

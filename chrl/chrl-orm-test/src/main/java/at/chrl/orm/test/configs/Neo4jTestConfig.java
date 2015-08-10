@@ -26,7 +26,6 @@ import at.chrl.orm.hibernate.configuration.templates.Neo4jConfig;
  * 09.08.2015 - 22:26:37
  *
  */
-@Deprecated
 public class Neo4jTestConfig extends Neo4jConfig {
 	
 	@Override

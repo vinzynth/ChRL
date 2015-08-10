@@ -29,17 +29,21 @@ import javax.persistence.Id;
 import javax.persistence.Version;
 
 import org.hibernate.envers.Audited;
+import org.hibernate.type.CustomType;
 
 import at.chrl.nutils.CollectionUtils;
 import at.chrl.nutils.interfaces.INestedCollection;
 
 /**
+ * {@link Audited} is not supported, since some datastores may have troubles 
+ * mapping custom hibernate types({@link CustomType}).
+ * 
+ * 
  * @author Vinzynth
  * 02.08.2015 - 01:51:44
  *
  */
 @Entity
-@Audited
 public class MultiMapEntry implements INestedCollection<Collection<Long>, Long>, ObjectMapable<Long>{
 
 	@Id

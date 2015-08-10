@@ -17,7 +17,6 @@ import org.hibernate.jpa.AvailableSettings;
 import at.chrl.nutils.configuration.ConfigUtil;
 import at.chrl.nutils.configuration.PropertiesUtils;
 import at.chrl.nutils.configuration.Property;
-
 import at.chrl.orm.hibernate.HibernateService;
 
 /**
@@ -30,6 +29,17 @@ import at.chrl.orm.hibernate.HibernateService;
  * @see {@link org.hibernate.jpa.AvailableSettings}
  */
 public abstract class JPAConfig extends HibernateConfig {
+	
+	/**
+	 * {@inheritDoc}
+	 * @see at.chrl.orm.hibernate.configuration.IHibernateConfig#overrideConfig()
+	 */
+	@Override
+	public void overrideConfig() {
+		this.PROVIDER = "org.hibernate.ejb.HibernatePersistence";
+		this.TRANSACTION_STRATEGY = "";
+		this.JTA_PLATFORM = "";
+	}
 	
 	/**
 	 * {@inheritDoc}
@@ -55,18 +65,6 @@ public abstract class JPAConfig extends HibernateConfig {
 			throw new PersistenceException("Error initializing JPA-Database Connection", pex);
 		}
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 * @see com.bravestone.hibernate.configuration.IHibernateConfig#isLoggingEnabled()
-	 */
-	@Override
-	public boolean isLoggingEnabled() {
-		return LOGG_QUERRIES;
-	}
-	
-	@Property(key = "com.bravestone.hibernate.logQuerries", defaultValue = "false")
-	public boolean LOGG_QUERRIES;
 	
 	@Property(key = AvailableSettings.PROVIDER, defaultValue = "org.hibernate.ejb.HibernatePersistence")
 	public String PROVIDER;

@@ -293,6 +293,23 @@ public abstract class SessionTemplate implements AutoCloseable {
 			throw e;
 		}
 	}
+	
+	/**
+	 * Calls {@link Session#delete(Object)}
+	 * 
+	 * @param obj
+	 * @throws Exception
+	 */
+	public void persist(Object obj) throws Exception {
+		try {
+			if (!session.getTransaction().isActive())
+				session.getTransaction().begin();
+			session.delete(obj);
+		} catch (Exception e) {
+			rollback();
+			throw e;
+		}
+	}
 
 	/**
 	 * Returns active Session Factory

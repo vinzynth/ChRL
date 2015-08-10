@@ -18,7 +18,6 @@
 package at.chrl.orm.test;
 
 import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
 import javax.persistence.GeneratedValue;
 
 import at.chrl.nutils.DatasetGenerator;
@@ -40,7 +39,6 @@ public final class ORMDatasetGenerator extends DatasetGenerator {
 	 */
 	public ORMDatasetGenerator() {
 		addExclusion(GeneratedValue.class);
-		addExclusion(Embedded.class);
 		addExclusion(Embeddable.class);
 		addExclusion(MultiMapEntry.class);
 		addExclusion(MultiMap.class);

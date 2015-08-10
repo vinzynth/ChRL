@@ -62,7 +62,18 @@ public abstract class HibernateConfig implements IHibernateConfig{
 	public boolean isFlywayActive() {
 		return FLYWAY_ACTIVE;
 	}
+
+	/**
+	 * {@inheritDoc}
+	 * @see com.bravestone.hibernate.configuration.IHibernateConfig#isLoggingEnabled()
+	 */
+	@Override
+	public boolean isLoggingEnabled() {
+		return LOGG_QUERRIES;
+	}
 	
+	@Property(key = "com.bravestone.hibernate.logQuerries", defaultValue = "false")
+	public boolean LOGG_QUERRIES;
 	
 	@Property(key = AvailableSettings.SESSION_FACTORY_NAME, defaultValue = "", description = " Defines a name for the {@link org.hibernate.SessionFactory}. Useful both to<ul> <li>allow serialization and deserialization to work across different jvms</li> <li>optionally allow the SessionFactory to be bound into JNDI</li> </ul> @see #SESSION_FACTORY_NAME_IS_JNDI / ")
 	public String SESSION_FACTORY_NAME;
@@ -312,6 +323,8 @@ public abstract class HibernateConfig implements IHibernateConfig{
 	public String HIBERNATE_SEARCH_INDEX_BASE;
 	@Property(key = "hibernate.search.default.exclusive_index_use", defaultValue = "false", examples = {"true", "false"})
 	public String HIBERNATE_SEARCH_EXCLUSIVE_INDEX_USER;
+	@Property(key = "hibernate.search.autoregister_listeners", defaultValue = "true", examples = {"true", "false"}, description = "disable hibernate search")
+	public String HIBERNATE_SEARCH_AUTOREGISTER_LISTENERS;
 //    configProperties.put("hibernate.search.default.directory_provider", MISProperties.getProperty(MISConstants.LUCENE_PROVIDER));
 	// hibernate.search.default.exclusive_index_user=false
 //    configProperties.put("hibernate.search.default.indexBase", MISProperties.getProperty(MISConstants.LUCENE_INDEXBASE));

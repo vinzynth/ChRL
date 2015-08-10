@@ -16,6 +16,7 @@ import java.lang.reflect.ParameterizedType;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Deque;
 import java.util.Iterator;
@@ -96,10 +97,15 @@ public class DatasetGenerator {
 	
 	
 	public <T> Stream<T> generate(final Class<T> cls, final int count){
+		if(EXCLUDED_CLASSES.contains(cls))
+			return Stream.empty();
 		return StreamSupport.stream(Spliterators.spliteratorUnknownSize(generateIterable(cls, count), Spliterator.ORDERED), false).filter(Objects::nonNull);
 	}
 	
 	public <T> Iterator<T> generateIterable(final Class<T> cls, final int count){
+		if(EXCLUDED_CLASSES.contains(cls))
+			return Collections.emptyIterator();
+		
 		return new Iterator<T>() {
 
 			int i = 0;
@@ -117,9 +123,6 @@ public class DatasetGenerator {
 	}
 	
 	public <T> T generate(final Class<T> cls){
-		if(EXCLUDED_CLASSES.contains(cls))
-			return null;
-		
 		for (Annotation an : cls.getAnnotations())
 			if(EXCLUDED_CLASSES.contains(an.annotationType()))
 				return null;

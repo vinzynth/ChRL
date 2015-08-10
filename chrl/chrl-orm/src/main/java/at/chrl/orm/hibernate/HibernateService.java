@@ -33,7 +33,9 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.jpa.AvailableSettings;
 import org.hibernate.jpa.HibernateEntityManager;
 import org.hibernate.jpa.HibernateEntityManagerFactory;
+import org.hibernate.ogm.OgmSession;
 import org.hibernate.ogm.cfg.OgmConfiguration;
+import org.hibernate.ogm.exception.NotSupportedException;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 
 import at.chrl.nutils.ArrayUtils;
@@ -71,7 +73,7 @@ public final class HibernateService implements AutoCloseable {
 			EntityManagerFactory emf = Persistence.createEntityManagerFactory(config.PERSISTENCE_UNIT_NAME, props);
 			jpaDatabaseConnections.put(config, emf);
 		} catch (PersistenceException pex) {
-			throw new PersistenceException("Error initializing JPA-Database Connection", pex);
+			throw new PersistenceException("Error initializing Database Connection to " + config.toString(), pex);
 		}
 
 		out.println("[Hibernate Service] Created Entity Manager Factory for Persistence Unit: " + config.PERSISTENCE_UNIT_NAME + " | " + config.toString());
@@ -367,6 +369,11 @@ public final class HibernateService implements AutoCloseable {
 				connect(config);
 				emf = getEntityManagerFactory((JPAConfig) config);
 			}
+
+			if(config instanceof OGMConfig){
+				return emf.createEntityManager().unwrap(OgmSession.class);
+			}
+			
 			HibernateEntityManager hem = emf.createEntityManager().unwrap(HibernateEntityManager.class);
 			return hem.getSession();
 		}
@@ -406,6 +413,9 @@ public final class HibernateService implements AutoCloseable {
 	 * @throws NullPointerException
 	 *             if config is no instance of {@link HibernateConfig} or
 	 *             {@link JPAConfig}
+	 * @throws NotSupportedException
+	 * 			   if config is a isntance of {@link OGMConfig} since Stateless
+	 * 			   sessions are not supported in ogm databases 
 	 * 
 	 * @see {@link HibernateService#connect(IHibernateConfig)}
 	 * @see {@link HibernateService#disconnect(IHibernateConfig)}
@@ -420,6 +430,11 @@ public final class HibernateService implements AutoCloseable {
 				connect(config);
 				emf = getEntityManagerFactory((JPAConfig) config);
 			}
+
+			if(config instanceof OGMConfig){
+				return emf.createEntityManager().unwrap(OgmSession.class).getSessionFactory().openStatelessSession();
+			}
+			
 			HibernateEntityManager hem = emf.createEntityManager().unwrap(HibernateEntityManager.class);
 			return hem.getSession().getSessionFactory().openStatelessSession();
 
