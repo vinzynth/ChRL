@@ -148,5 +148,10 @@
 			<artifactId>vaadin-push</artifactId>
 			<version>${version.vaadin}</version>
 		</dependency>
+		<dependency>
+			<groupId>at.chrl</groupId>
+			<artifactId>chrl-orm-search</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 </project>
