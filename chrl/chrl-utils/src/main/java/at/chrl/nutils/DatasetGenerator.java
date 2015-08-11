@@ -93,7 +93,7 @@ public class DatasetGenerator {
 		SUPPORTED_TYPES.put(Date.class, Date::new);
 		SUPPORTED_TYPES.put(URL.class, () -> {
 			try {
-				return new URL("http", Rnd.nextString(), Rnd.nextInt(60000), Rnd.nextString());
+				return new URL("http", Rnd.nextString(), Rnd.nextInt(60000), "/"+Rnd.nextString());
 			} catch (Exception e) {
 				e.printStackTrace();
 				return null;
