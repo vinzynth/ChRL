@@ -41,6 +41,8 @@ public final class CronService {
 	private Class<? extends RunnableRunner> runnableRunner;
 
 	public static CronService getInstance() {
+		if(instance == null)
+			initSingleton(RunnableRunnerImpl.class);
 		return instance;
 	}
 
