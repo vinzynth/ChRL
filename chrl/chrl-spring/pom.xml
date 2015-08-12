@@ -13,7 +13,7 @@
 		<!-- AssertJ is not a part of Spring IO platform, so the version must be 
 			provided explicitly -->
 		<assertj-core-version>1.5.0</assertj-core-version>
-		<version.vaadin>7.4.0</version.vaadin>
+		<version.vaadin>7.5.3</version.vaadin>
 	</properties>
 	
 	<dependencyManagement>
