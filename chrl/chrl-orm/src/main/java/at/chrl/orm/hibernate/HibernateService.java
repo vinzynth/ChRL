@@ -632,7 +632,12 @@ public final class HibernateService implements AutoCloseable {
 	 */
 	@Override
 	public void close() throws Exception {
+		databaseConnections.keySet().stream().forEach(this::disconnect);
+		jpaDatabaseConnections.keySet().stream().forEach(this::disconnect);
+		
 		for (final SessionFactory ie : databaseConnections.values()) {
+			if(ie.isClosed())
+				continue;
 			try {
 				ie.close();
 			} catch (Exception e) {
@@ -641,6 +646,8 @@ public final class HibernateService implements AutoCloseable {
 			}
 		}
 		for (final EntityManagerFactory ie : jpaDatabaseConnections.values()) {
+			if(!ie.isOpen())
+				continue;
 			try {
 				ie.close();
 			} catch (Exception e) {

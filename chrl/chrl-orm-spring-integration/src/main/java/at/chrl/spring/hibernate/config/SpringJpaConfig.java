@@ -28,17 +28,20 @@ public class SpringJpaConfig implements TransactionManagementConfigurer {
 
 	@Autowired(required = true)
 	JPAConfig jpaConfig;
-
-	@Bean
+	
+	@Autowired(required = true)
+	public HibernateService hibernateService;
+	
+	@Bean(destroyMethod = "")
 	public EntityManagerFactory getEntityManagerFactory() {
 		HibernateService.getInstance().connect(jpaConfig);
-		return HibernateService.getInstance().getEntityManagerFactory(jpaConfig);
+		return getHibernateService().getEntityManagerFactory(jpaConfig);
 	}
 	
-	@Bean
+	@Bean(destroyMethod = "")
 	public SessionFactory getSessionFactory() {
 		HibernateService.getInstance().connect(jpaConfig);
-		return HibernateService.getInstance().getSessionFactory(jpaConfig);
+		return getHibernateService().getSessionFactory(jpaConfig);
 	}
 	
 	@Bean
@@ -50,6 +53,11 @@ public class SpringJpaConfig implements TransactionManagementConfigurer {
 				return new SessionTemplateImplementation();
 			}
 		};
+	}
+	
+	@Bean(destroyMethod = "close")
+	public HibernateService getHibernateService() {
+		return HibernateService.getInstance();
 	}
 
 	@Bean
