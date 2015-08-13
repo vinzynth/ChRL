@@ -131,6 +131,11 @@
 		</dependency>
 		<!-- Vaadin -->
 		<dependency>
+			<groupId>org.vaadin</groupId>
+			<artifactId>viritin</artifactId>
+			<version>1.35</version>
+		</dependency>
+		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-server</artifactId>
 			<version>${version.vaadin}</version>
