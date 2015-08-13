@@ -61,3 +61,8 @@ $RECYCLE.BIN/
 # Eclipse
 *.project
 *.prefs
+*.classpath
+*.class
+*.properties
+*\target
+*/target
