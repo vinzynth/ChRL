@@ -1,48 +1,32 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	
+	<!--  -->
 	<parent>
 		<groupId>at.chrl</groupId>
 		<artifactId>chrl</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
+	<!--  -->
+	
+	<!--  -->
 	<artifactId>chrl-spring</artifactId>
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<java-version>1.8</java-version>
-		<io.spring.platform-version>1.1.3.RELEASE</io.spring.platform-version>
-		<!-- AssertJ is not a part of Spring IO platform, so the version must be 
-			provided explicitly -->
-		<assertj-core-version>1.5.0</assertj-core-version>
-		<version.vaadin>7.5.3</version.vaadin>
-	</properties>
-
-	<repositories>
-		<repository>
-			<id>vaadin-addons</id>
-			<url>http://maven.vaadin.com/vaadin-addons</url>
-		</repository>
-	</repositories>
-
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>io.spring.platform</groupId>
-				<artifactId>platform-bom</artifactId>
-				<version>${io.spring.platform-version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+	<packaging>jar</packaging>
+	<!--  -->
+	
+	<!--  -->
+	<name>ChRL - Spring Integration</name>
+	<description>Spring integration</description>
+	<!--  -->
+	
+	<!--  -->
 	<dependencies>
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 		</dependency>
-		<!-- Security -->
-		<!-- View -->
 		<!-- Persistence -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -104,7 +88,6 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<scope>test</scope>
 		</dependency>
 		<!-- More Spring -->
 		<dependency>
@@ -125,46 +108,36 @@
 		</dependency>
 		<!-- ChRL Utils -->
 		<dependency>
-			<groupId>at.chrl.config</groupId>
+			<groupId>at.chrl</groupId>
 			<artifactId>chrl-config</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${chrlVersion}</version>
 		</dependency>
 		<!-- Vaadin -->
 		<dependency>
 			<groupId>org.vaadin</groupId>
 			<artifactId>viritin</artifactId>
-			<version>1.35</version>
 		</dependency>
 		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-server</artifactId>
-			<version>${version.vaadin}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-client-compiled</artifactId>
-			<version>${version.vaadin}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-client</artifactId>
-			<version>${version.vaadin}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-themes</artifactId>
-			<version>${version.vaadin}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-push</artifactId>
-			<version>${version.vaadin}</version>
-		</dependency>
-		<dependency>
-			<groupId>at.chrl</groupId>
-			<artifactId>chrl-orm-search</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
+	<!--  -->
 </project>

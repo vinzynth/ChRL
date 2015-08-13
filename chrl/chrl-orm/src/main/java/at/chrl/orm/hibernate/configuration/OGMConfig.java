@@ -88,9 +88,8 @@ public class OGMConfig extends JPAConfig {
 			})
 	public String DATASTORE_PROVIDER;
 	
-//	at version 4.2.0
-//	@Property(key = OgmProperties.ERROR_HANDLER, defaultValue = "")
-//	public String ERROR_HANDLER;
+	@Property(key = OgmProperties.ERROR_HANDLER, defaultValue = "")
+	public String ERROR_HANDLER;
 	
 	@Property(key = OgmProperties.GRID_DIALECT, defaultValue = "")
 	public String GRID_DIALECT;
@@ -104,6 +103,7 @@ public class OGMConfig extends JPAConfig {
 	@Property(key = OgmProperties.PASSWORD, defaultValue = "")
 	public String PASSWORD;
 	
+	@SuppressWarnings("deprecation")
 	@Property(key = OgmProperties.PORT, defaultValue = "")
 	public String PORT;
 	

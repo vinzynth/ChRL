@@ -1,39 +1,51 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	
+	<!--  -->
 	<parent>
 		<groupId>at.chrl</groupId>
 		<artifactId>chrl</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
+	<!--  -->
+	
+	<!--  -->
 	<artifactId>chrl-orm-spring-integration</artifactId>
+	<packaging>jar</packaging>
+	<!--  -->
+	
+	<!--  -->
+	<name>ChRL - ORM Framework Spring Integration</name>
+	<description>Spring integration of the ORM Framework</description>
+	<!--  -->
+	
+	<!--  -->
 	<dependencies>
 		<dependency>
 			<groupId>net.java.dev.rome</groupId>
 			<artifactId>rome</artifactId>
-			<version>1.0.0</version>
 		</dependency>
 		<!-- Servlet -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<scope>provided</scope>
-			<version>3.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>at.chrl</groupId>
 			<artifactId>chrl-orm</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${chrlVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>at.chrl</groupId>
 			<artifactId>chrl-spring</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${chrlVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.rometools</groupId>
 			<artifactId>rome</artifactId>
-			<version>1.5.1</version>
 		</dependency>
 	</dependencies>
+	<!--  -->
 </project>

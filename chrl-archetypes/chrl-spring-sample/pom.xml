@@ -31,4 +31,9 @@
 	</pluginManagement>
 	</build>
 
+	<parent>
+		<groupId>at.chrl</groupId>
+		<artifactId>chrl</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
 </project>

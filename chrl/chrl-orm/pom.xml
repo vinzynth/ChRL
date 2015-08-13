@@ -1,27 +1,37 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>at.chrl</groupId>
-    <artifactId>chrl</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-  </parent>
-  <artifactId>chrl-orm</artifactId>
-  <repositories>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<!--  -->
+	<parent>
+		<groupId>at.chrl</groupId>
+		<artifactId>chrl</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<!--  -->
+	
+	<!--  -->
+	<artifactId>chrl-orm</artifactId>
+	<packaging>jar</packaging>
+	<!--  -->
+
+	<!--  -->
+	<name>ChRL - ORM Framework</name>
+	<description>Custom ORM Framework with Hibernate</description>
+	<!--  -->
+
+	<!--  -->
+	<repositories>
 		<repository>
 			<id>local-libs</id>
 			<name>Embedded libs</name>
 			<url>file://${basedir}/repo/</url>
 		</repository>
-		<repository>
-			<id>neo4j-public</id>
-			<url>http://m2.neo4j.org/content/groups/public</url>
-			<releases>
-				<enabled>true</enabled>
-				<checksumPolicy>warn</checksumPolicy>
-			</releases>
-		</repository>
 	</repositories>
-  <dependencies>
+	<!--  -->
+
+	<!--  -->
+	<dependencies>
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
@@ -43,12 +53,25 @@
 			<artifactId>hibernate-ehcache</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>at.chrl.config</groupId>
-			<artifactId>chrl-config</artifactId>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-envers</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-envers</artifactId>
+			<artifactId>hibernate-validator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator-annotation-processor</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-search-orm</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>at.chrl</groupId>
+			<artifactId>chrl-config</artifactId>
+			<version>${chrlVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate.ogm</groupId>
@@ -73,7 +96,6 @@
 		<dependency>
 			<groupId>org.hibernate.ogm</groupId>
 			<artifactId>hibernate-ogm-cassandra</artifactId>
-			<version>4.2.0.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
@@ -86,19 +108,14 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
-			<version>5.1.2.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
-			<artifactId>
-				hibernate-validator-annotation-processor
-			</artifactId>
-			<version>5.1.2.Final</version>
+			<artifactId>hibernate-validator-annotation-processor</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-search-orm</artifactId>
-			<version>5.1.0.Final</version>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -106,104 +123,50 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.flywaydb</groupId>
-			<artifactId>flyway-core</artifactId>
-			<version>3.2.1</version>
-		</dependency>
-		<dependency>
-			<groupId>at.chrl</groupId>
-			<artifactId>chrl-orm</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-			</dependency>
-		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.36</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
-			<version>2.3.3</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.mariadb.jdbc</groupId>
 			<artifactId>mariadb-java-client</artifactId>
-			<version>1.2.0</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.mongodb</groupId>
 			<artifactId>mongo-java-driver</artifactId>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.microsoft.sqlserver</groupId>
 			<artifactId>sqljdbc41</artifactId>
-			<version>4.1</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.firebirdsql.jdbc</groupId>
 			<artifactId>jaybird-jdk18</artifactId>
-			<version>2.2.8</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.neo4j</groupId>
 			<artifactId>neo4j-jdbc</artifactId>
-			<version>2.0.2</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>9.4-1201-jdbc41</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<version>1.4.181</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.hibernate</groupId>
-				<artifactId>hibernate-core</artifactId>
-				<version>4.3.7.Final</version>
-			</dependency>
-			<dependency>
-				<groupId>org.hibernate</groupId>
-				<artifactId>hibernate-c3p0</artifactId>
-				<version>4.3.7.Final</version>
-			</dependency>
-			<dependency>
-				<groupId>org.hibernate</groupId>
-				<artifactId>hibernate-proxool</artifactId>
-				<version>4.3.7.Final</version>
-			</dependency>
-			<dependency>
-				<groupId>org.hibernate</groupId>
-				<artifactId>hibernate-entitymanager</artifactId>
-				<version>4.3.7.Final</version>
-			</dependency>
-			<dependency>
-				<groupId>org.hibernate</groupId>
-				<artifactId>hibernate-ehcache</artifactId>
-				<version>4.3.7.Final</version>
-			</dependency>
-			<dependency>
-				<groupId>at.chrl.config</groupId>
-				<artifactId>chrl-config</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.hibernate</groupId>
-				<artifactId>hibernate-envers</artifactId>
-				<version>4.3.7.Final</version>
-			</dependency>
-			<dependency>
-				<groupId>org.hibernate.ogm</groupId>
-				<artifactId>hibernate-ogm-bom</artifactId>
-				<version>4.1.3.Final</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+	<!--  -->
 </project>

@@ -3,18 +3,26 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
+	
+	<!--  -->
 	<parent>
 		<groupId>at.chrl</groupId>
 		<artifactId>chrl</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<groupId>at.chrl</groupId>
+	<!--  -->
+	
+	<!--  -->
 	<artifactId>chrl-utils</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>chrl-utils</name>
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
+	<packaging>jar</packaging>
+	<!--  -->
+	
+	<!--  -->
+	<name>ChRL - Utils</name>
+	<description>Collected Utils Project</description>
+	<!--  -->
+	
+	<!--  -->
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -24,22 +32,19 @@
 		<dependency>
 			<groupId>net.sf.trove4j</groupId>
 			<artifactId>trove4j</artifactId>
-			<version>3.0.3</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-			<version>18.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.objenesis</groupId>
 			<artifactId>objenesis</artifactId>
-			<version>2.1</version>
 		</dependency>
 		<dependency>
 			<groupId>it.unimi.dsi</groupId>
 			<artifactId>fastutil</artifactId>
-			<version>7.0.6</version>
 		</dependency>
 	</dependencies>
+	<!--  -->
 </project>

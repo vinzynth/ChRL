@@ -2,12 +2,26 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
+	
+	<!--  -->
+	<parent>
+		<groupId>at.chrl</groupId>
+		<artifactId>chrl-bom</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<!--  -->
+	
+	<!--  -->
 	<artifactId>chrl</artifactId>
 	<packaging>pom</packaging>
-
-	<name>chrl</name>
-
+	<!--  -->
+	
+	<!--  -->
+	<name>ChRL - Parent</name>
+	<description>ChRL Maven Parent</description>
+	<!--  -->
+	
+	<!--  -->
 	<build>
 		<plugins>
 			<plugin>
@@ -16,7 +30,9 @@
 			</plugin>
 		</plugins>
 	</build>
+	<!--  -->
 
+	<!--  -->
 	<modules>
 		<module>chrl-callback-utils</module>
 		<module>chrl-callbacks</module>
@@ -24,7 +40,6 @@
 		<module>chrl-cron</module>
 		<module>chrl-database</module>
 		<module>chrl-iryna</module>
-		<module>chrl-orm-search</module>
 		<module>chrl-orm-spring-integration</module>
 		<module>chrl-orm-test</module>
 		<module>chrl-orm</module>
@@ -32,20 +47,5 @@
 		<module>chrl-spring</module>
 		<module>chrl-utils</module>
 	</modules>
-	
-	<dependencies>
-		<dependency>
-			<groupId>at.chrl</groupId>
-			<artifactId>chrl-bom</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-			<type>pom</type>
-		</dependency>
-	</dependencies>
-	
-	<description>ChRL Maven Parent</description>
-	<parent>
-		<groupId>at.chrl</groupId>
-		<artifactId>chrl-bom</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-	</parent>
+	<!--  -->
 </project>

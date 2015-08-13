@@ -1,41 +1,58 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>at.chrl</groupId>
-    <artifactId>chrl</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-  </parent>
-  <artifactId>chrl-database</artifactId>
-  <dependencies>
-  	<dependency>
-  		<groupId>at.chrl.config</groupId>
-  		<artifactId>chrl-config</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.slf4j</groupId>
-  		<artifactId>slf4j-api</artifactId>
-  		<version>1.7.7</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>com.jolbox</groupId>
-  		<artifactId>bonecp</artifactId>
-  		<version>0.7.1.RELEASE</version>
-  		<classifier>jdk5</classifier>
-  	</dependency>
-  	<dependency>
-  		<groupId>at.chrl</groupId>
-  		<artifactId>chrl-rebellion</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-  	</dependency>
-  </dependencies>
-  <dependencyManagement>
-  	<dependencies>
-  		<dependency>
-  			<groupId>com.google.guava</groupId>
-  			<artifactId>guava</artifactId>
-  			<version>14.0-rc1</version>
-  		</dependency>
-  	</dependencies>
-  </dependencyManagement>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<!--  -->
+	<parent>
+		<groupId>at.chrl</groupId>
+		<artifactId>chrl</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<!--  -->
+	
+	<!--  -->
+	<artifactId>chrl-database</artifactId>
+	<packaging>jar</packaging>
+	<!--  -->
+	
+	<!--  -->
+	<name>ChRL - Database Templates</name>
+	<description>Oldschool Database Templates</description>
+	<!--  -->
+	
+	<!--  -->
+	<dependencies>
+		<dependency>
+			<groupId>at.chrl</groupId>
+			<artifactId>chrl-config</artifactId>
+			<version>${chrlVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.jolbox</groupId>
+			<artifactId>bonecp</artifactId>
+			<classifier>jdk5</classifier>
+		</dependency>
+		<dependency>
+			<groupId>at.chrl</groupId>
+			<artifactId>chrl-rebellion</artifactId>
+			<version>${chrlVersion}</version>
+		</dependency>
+	</dependencies>
+	<!--  -->
+	
+	<!--  -->
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>14.0-rc1</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	<!--  -->
 </project>

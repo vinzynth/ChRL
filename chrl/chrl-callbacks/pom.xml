@@ -1,27 +1,39 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	
+	<!--  -->
 	<parent>
 		<groupId>at.chrl</groupId>
 		<artifactId>chrl</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
+	<!--  -->
+	
+	<!--  -->
 	<artifactId>chrl-callbacks</artifactId>
+	<packaging>jar</packaging>
+	<!--  -->
+	
+	<!--  -->
+	<name>ChRL - Callback Framework</name>
+	<description> Callback Framework to hook up on method calls with annotations</description>
+	<!--  -->
+	
+	<!--  -->
 	<dependencies>
 		<dependency>
 			<groupId>at.utils</groupId>
 			<artifactId>chrl-utils</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${chrlVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.7.7</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.trove4j</groupId>
 			<artifactId>trove4j</artifactId>
-			<version>3.0.3</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -30,22 +42,23 @@
 		<dependency>
 			<groupId>org.javassist</groupId>
 			<artifactId>javassist</artifactId>
-			<version>3.18.2-GA</version>
 		</dependency>
 	</dependencies>
+	<!--  -->
+	
+	<!--  -->
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.4</version>
 				<configuration>
 					<archive>
-						
 						<manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
 					</archive>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
+	<!--  -->
 </project>

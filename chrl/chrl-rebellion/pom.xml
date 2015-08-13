@@ -1,36 +1,49 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>at.chrl</groupId>
-    <artifactId>chrl</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-  </parent>
-  <artifactId>chrl-rebellion</artifactId>
-  <dependencies>
-  	<dependency>
-  		<groupId>at.utils</groupId>
-  		<artifactId>chrl-utils</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.slf4j</groupId>
-  		<artifactId>slf4j-api</artifactId>
-  		<version>1.7.7</version>
-  	</dependency>
-  	  	<dependency>
-  		<groupId>commons-io</groupId>
-  		<artifactId>commons-io</artifactId>
-  		<version>2.4</version>
-  	</dependency>
-  	  	<dependency>
-  	  		<groupId>com.google.guava</groupId>
-  	  		<artifactId>guava</artifactId>
-  	  		<version>14.0-rc1</version>
-  	  	</dependency>
-  	  	<dependency>
-  	  		<groupId>at.chrl.cron</groupId>
-  	  		<artifactId>chrl-cron</artifactId>
-  	  		<version>0.0.1-SNAPSHOT</version>
-  	  	</dependency>
-  </dependencies>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<!--  -->
+	<parent>
+		<groupId>at.chrl</groupId>
+		<artifactId>chrl</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<!--  -->
+	
+	<!--  -->
+	<artifactId>chrl-rebellion</artifactId>
+	<packaging>jar</packaging>
+	<!--  -->
+	
+	<!--  -->
+	<name>ChRL - Rebellion Scripting</name>
+	<description>Framework for dynamic reloading of java classes</description>
+	<!--  -->
+	
+	<!--  -->
+	<dependencies>
+		<dependency>
+			<groupId>at.chrl</groupId>
+			<artifactId>chrl-utils</artifactId>
+			<version>${chrlVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>at.chrl</groupId>
+			<artifactId>chrl-cron</artifactId>
+			<version>${chrlVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+		</dependency>
+	</dependencies>
+	<!--  -->
 </project>
