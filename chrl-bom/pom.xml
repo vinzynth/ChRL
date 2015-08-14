@@ -194,6 +194,11 @@
 				<version>${chrlVersion}</version>
 			</dependency>
 			<dependency>
+				<groupId>at.chrl</groupId>
+				<artifactId>chrl-vaadin-webglobe</artifactId>
+				<version>${chrlVersion}</version>
+			</dependency>
+			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
 				<version>4.11</version>
@@ -440,6 +445,7 @@
 	<!--  -->
 	<modules>
 		<module>../chrl</module>
+		<module>?</module>
 	</modules>
 	<!--  -->
 </project>

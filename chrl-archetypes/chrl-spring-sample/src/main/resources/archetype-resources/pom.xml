@@ -41,7 +41,6 @@
 		<dependency>
 			<groupId>at.chrl</groupId>
 			<artifactId>chrl-orm-spring-integration</artifactId>
-			<version>${chrlVersion}</version>
 		</dependency>
 		<!-- Servlet -->
 		<dependency>
