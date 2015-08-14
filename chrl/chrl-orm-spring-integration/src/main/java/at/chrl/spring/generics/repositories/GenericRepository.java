@@ -8,8 +8,12 @@ import java.lang.reflect.ParameterizedType;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
@@ -19,11 +23,14 @@ import javax.persistence.Query;
 
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.envers.AuditReader;
+import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.jpa.HibernateEntityManager;
 import org.springframework.context.annotation.Scope;
 import org.springframework.transaction.annotation.Transactional;
 
 import at.chrl.nutils.ClassUtils;
+import at.chrl.nutils.CollectionUtils;
 
 /**
  * 
@@ -127,6 +134,19 @@ public abstract class GenericRepository<T> {
 	public T persistWithSession(T entity) {
 		getSession().persist(entity);
 		return entity;
+	}
+
+	@Transactional
+	public Map<Date, T> getOlderVersions(Object id){
+		AuditReader reader = AuditReaderFactory.get(entityManager);
+		Set<Number> revisions = reader.getRevisions(this.getType(), id).stream().collect(Collectors.toSet());
+		
+		Map<Number, T> findRevisions = reader.findRevisions(this.getType(), revisions);
+		
+		Map<Date, T> returnMe = CollectionUtils.newMap();
+		findRevisions.entrySet().forEach(e -> returnMe.put(reader.getRevisionDate(e.getKey()), e.getValue()));
+		
+		return returnMe;
 	}
 
 	public Collection<T> getAll(int maxResults) {
