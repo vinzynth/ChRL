@@ -17,45 +17,19 @@
  */
 package at.chrl.vaadin.webglobe;
 
-import com.vaadin.annotations.JavaScript;
 import com.vaadin.shared.ui.JavaScriptComponentState;
-import com.vaadin.ui.AbstractJavaScriptComponent;
 
 /**
  * @author Vinzynth
- * 14.08.2015 - 21:41:47
+ * 14.08.2015 - 23:22:32
  *
  */
-@JavaScript({
-	"chrl_globe.js", 
-	"globe/globe.js",
-	"globe/third-party/Detector.js",
-	"globe/third-party/three.min.js",
-	"globe/third-party/Tween.js"
-})
-public class Webglobe extends AbstractJavaScriptComponent {
+public class WebglobeState extends JavaScriptComponentState{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	
-	/**
-	 * 
-	 */
-	public Webglobe(String background) {
-		super();
-		getState().background = background;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * @see com.vaadin.ui.AbstractJavaScriptComponent#getState()
-	 */
-	@Override
-	protected WebglobeState getState() {
-		return (WebglobeState) super.getState();
-	}
-	
+	public String background;
 }
