@@ -13,6 +13,8 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+import ru.xpoft.vaadin.SpringVaadinServlet;
+
 import at.chrl.vaadin.SpringUIProvider;
 import at.chrl.vaadin.ui.BasicUI;
 
@@ -36,6 +38,8 @@ public abstract class AbstractWebAppInitializer extends AbstractAnnotationConfig
 	protected Class<?>[] getServletConfigClasses() {
 		return new Class<?>[] { WebMvcConfig.class };
 	}
+	
+	protected abstract void registerOtherVaadinServlet(ServletContext servletContext);
 
 	@Override
 	protected Filter[] getServletFilters() {
@@ -71,7 +75,7 @@ public abstract class AbstractWebAppInitializer extends AbstractAnnotationConfig
 
 	private void registerVaadinServlet(ServletContext servletContext) {
 
-		VaadinServlet vaadinServlet = new VaadinServlet();
+		VaadinServlet vaadinServlet = new SpringVaadinServlet();
 		ServletRegistration.Dynamic vaadinServletRegistration = servletContext.addServlet("vaadinServlet", vaadinServlet);
 		vaadinServletRegistration.setInitParameter("ui", BasicUI.class.getName());
 		vaadinServletRegistration.setInitParameter("UIProvider", SpringUIProvider.class.getName());
@@ -79,6 +83,7 @@ public abstract class AbstractWebAppInitializer extends AbstractAnnotationConfig
 		vaadinServletRegistration.addMapping("/ui/*");
 		vaadinServletRegistration.addMapping("/VAADIN/*");
 
+		registerOtherVaadinServlet(servletContext);
 	}
 
 	private void registerSpringContextLoaderListener(ServletContext servletContext, WebApplicationContext rootContext) {

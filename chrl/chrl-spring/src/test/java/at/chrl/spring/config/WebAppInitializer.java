@@ -3,6 +3,8 @@
  */
 package at.chrl.spring.config;
 
+import javax.servlet.ServletContext;
+
 /**
  * @author Leopold Christian
  * 
@@ -17,6 +19,16 @@ public class WebAppInitializer extends AbstractWebAppInitializer {
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
 		return new Class<?>[] {ApplicationConfig.class};
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @see at.chrl.spring.config.AbstractWebAppInitializer#registerOtherVaadinServlet(javax.servlet.ServletContext)
+	 */
+	@Override
+	protected void registerOtherVaadinServlet(ServletContext servletContext) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

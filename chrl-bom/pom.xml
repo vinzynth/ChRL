@@ -372,6 +372,11 @@
 				<artifactId>vaadin-push</artifactId>
 				<version>${version.vaadin}</version>
 			</dependency>
+			<dependency>
+			   <groupId>ru.xpoft.vaadin</groupId>
+			   <artifactId>spring-vaadin-integration</artifactId>
+			   <version>3.1</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<!--  -->

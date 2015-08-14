@@ -110,7 +110,6 @@
 		<dependency>
 			<groupId>at.chrl</groupId>
 			<artifactId>chrl-config</artifactId>
-			<version>${chrlVersion}</version>
 		</dependency>
 		<!-- Vaadin -->
 		<dependency>
@@ -137,6 +136,10 @@
 		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-push</artifactId>
+		</dependency>
+		<dependency>
+		   <groupId>ru.xpoft.vaadin</groupId>
+		   <artifactId>spring-vaadin-integration</artifactId>
 		</dependency>
 	</dependencies>
 	<!--  -->

@@ -35,12 +35,10 @@
 		<dependency>
 			<groupId>at.chrl</groupId>
 			<artifactId>chrl-orm</artifactId>
-			<version>${chrlVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>at.chrl</groupId>
 			<artifactId>chrl-spring</artifactId>
-			<version>${chrlVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.rometools</groupId>
