@@ -25,7 +25,6 @@
 		<dependency>
 			<groupId>at.chrl</groupId>
 			<artifactId>chrl-utils</artifactId>
-			<version>${chrlVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>

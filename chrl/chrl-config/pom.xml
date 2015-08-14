@@ -24,7 +24,6 @@
 		<dependency>
 			<groupId>at.chrl</groupId>
 			<artifactId>chrl-utils</artifactId>
-			<version>${chrlVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>

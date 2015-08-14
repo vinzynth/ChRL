@@ -71,7 +71,6 @@
 		<dependency>
 			<groupId>at.chrl</groupId>
 			<artifactId>chrl-config</artifactId>
-			<version>${chrlVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate.ogm</groupId>

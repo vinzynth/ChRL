@@ -24,7 +24,6 @@
 		<dependency>
 			<groupId>at.chrl</groupId>
 			<artifactId>chrl-orm</artifactId>
-			<version>${chrlVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

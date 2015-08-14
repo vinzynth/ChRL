@@ -29,7 +29,6 @@
 		<dependency>
 			<groupId>at.chrl</groupId>
 			<artifactId>chrl-callbacks</artifactId>
-			<version>${chrlVersion}</version>
 		</dependency>
 	</dependencies>
 	<!--  -->
