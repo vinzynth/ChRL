@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
+import java.util.function.Function;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
@@ -21,6 +22,8 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.jpa.HibernateEntityManager;
 import org.springframework.context.annotation.Scope;
 import org.springframework.transaction.annotation.Transactional;
+
+import at.chrl.nutils.ClassUtils;
 
 /**
  * 
@@ -170,5 +173,20 @@ public abstract class GenericRepository<T> {
 
 	public Collection<T> executeNamedQuery(final String query) {
 		return executeNamedQuery(query, 0);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return ClassUtils.getString(this, new Function<GenericRepository<T>, String>() {
+
+			@Override
+			public String apply(GenericRepository<T> t) {
+				return t.getType().getSimpleName();
+			}
+		});
 	}
 }
