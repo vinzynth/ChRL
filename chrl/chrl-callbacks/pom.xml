@@ -23,7 +23,7 @@
 	<!--  -->
 	<dependencies>
 		<dependency>
-			<groupId>at.utils</groupId>
+			<groupId>at.chrl</groupId>
 			<artifactId>chrl-utils</artifactId>
 			<version>${chrlVersion}</version>
 		</dependency>
