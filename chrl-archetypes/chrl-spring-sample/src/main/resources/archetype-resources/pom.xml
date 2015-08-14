@@ -17,6 +17,7 @@
 	<!--  -->
 	<properties>
 		<server.deployment.tomcat>http://localhost:8080</server.deployment.tomcat>
+		<chrlVersion>0.0.1-SNAPSHOT</chrlVersion>
 	</properties>
 	<!--  -->
 	
@@ -26,7 +27,7 @@
 			<dependency>
 				<groupId>at.chrl</groupId>
 				<artifactId>chrl-bom</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
+				<version>${chrlVersion}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
