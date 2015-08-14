@@ -9,9 +9,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -139,12 +139,17 @@ public abstract class GenericRepository<T> {
 	@Transactional
 	public Map<Date, T> getOlderVersions(Object id){
 		AuditReader reader = AuditReaderFactory.get(entityManager);
-		Set<Number> revisions = reader.getRevisions(this.getType(), id).stream().collect(Collectors.toSet());
-		
-		Map<Number, T> findRevisions = reader.findRevisions(this.getType(), revisions);
+		List<Number> revisions = reader.getRevisions(this.getType(), id).stream().collect(Collectors.toList());
+		List<T> collect = revisions.stream().map(n -> reader.find(this.getType(), id, n)).collect(Collectors.toList());
+		List<Date> dates = revisions.stream().map(reader::getRevisionDate).collect(Collectors.toList());
 		
 		Map<Date, T> returnMe = CollectionUtils.newMap();
-		findRevisions.entrySet().forEach(e -> returnMe.put(reader.getRevisionDate(e.getKey()), e.getValue()));
+		
+		final int to = Math.min(collect.size(), dates.size());
+		
+		for (int i = 0; i < to; i++) {
+			returnMe.put(dates.get(i), collect.get(i));
+		}
 		
 		return returnMe;
 	}
