@@ -131,6 +131,61 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
+				<groupId>at.chrl</groupId>
+				<artifactId>chrl-config</artifactId>
+				<version>${chrlVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>at.chrl</groupId>
+				<artifactId>chrl-callbacks</artifactId>
+				<version>${chrlVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>at.chrl</groupId>
+				<artifactId>chrl-callback-utils</artifactId>
+				<version>${chrlVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>at.chrl</groupId>
+				<artifactId>chrl-cron</artifactId>
+				<version>${chrlVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>at.chrl</groupId>
+				<artifactId>chrl-database</artifactId>
+				<version>${chrlVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>at.chrl</groupId>
+				<artifactId>chrl-orm</artifactId>
+				<version>${chrlVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>at.chrl</groupId>
+				<artifactId>chrl-orm-spring-integration</artifactId>
+				<version>${chrlVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>at.chrl</groupId>
+				<artifactId>chrl-orm-test</artifactId>
+				<version>${chrlVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>at.chrl</groupId>
+				<artifactId>chrl-rebellion</artifactId>
+				<version>${chrlVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>at.chrl</groupId>
+				<artifactId>chrl-spring</artifactId>
+				<version>${chrlVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>at.chrl</groupId>
+				<artifactId>chrl-utils</artifactId>
+				<version>${chrlVersion}</version>
+			</dependency>
+			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
 				<version>4.11</version>
