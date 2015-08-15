@@ -18,7 +18,6 @@
 package at.chrl.vaadin.webglobe;
 
 import com.vaadin.annotations.JavaScript;
-import com.vaadin.shared.ui.JavaScriptComponentState;
 import com.vaadin.ui.AbstractJavaScriptComponent;
 
 /**
