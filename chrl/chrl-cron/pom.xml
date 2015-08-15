@@ -23,10 +23,6 @@
 	<!--  -->
 	<dependencies>
 		<dependency>
-			<groupId>at.chrl</groupId>
-			<artifactId>chrl-utils</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.quartz-scheduler</groupId>
 			<artifactId>quartz</artifactId>
 		</dependency>

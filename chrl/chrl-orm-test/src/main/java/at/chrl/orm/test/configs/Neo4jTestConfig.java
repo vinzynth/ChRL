@@ -19,20 +19,19 @@ package at.chrl.orm.test.configs;
 
 import java.util.List;
 
-import at.chrl.orm.hibernate.configuration.templates.Neo4jConfig;
-
+import at.chrl.orm.hibernate.configuration.JPAConfig;
 /**
  * @author Vinzynth
  * 09.08.2015 - 22:26:37
  *
  */
-public class Neo4jTestConfig extends Neo4jConfig {
+public class Neo4jTestConfig extends JPAConfig {
 	
 	@Override
 	public void overrideConfig(){
 		super.overrideConfig();
 		this.PERSISTENCE_UNIT_NAME = "neo4j";
-		this.DATABASE_PATH = "H:\\DB\\Neo4j-Db";
+//		this.DATABASE_PATH = "H:\\DB\\Neo4j-Db";
 	}
 	
 	private List<Class<?>> annotatedClasses;

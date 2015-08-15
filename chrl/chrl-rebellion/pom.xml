@@ -24,23 +24,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>at.chrl</groupId>
-			<artifactId>chrl-utils</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>at.chrl</groupId>
 			<artifactId>chrl-cron</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
 		</dependency>
 	</dependencies>
 	<!--  -->

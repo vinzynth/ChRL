@@ -18,6 +18,7 @@ package at.chrl.rebellion.scriptmanager;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -36,8 +37,6 @@ import at.chrl.rebellion.ScriptContext;
 import at.chrl.rebellion.ScriptContextFactory;
 import at.chrl.rebellion.classlistener.ClassListener;
 import at.chrl.rebellion.impl.javacompiler.ScriptCompilerImpl;
-
-import com.google.common.collect.Lists;
 
 /**
  * Class that represents managers of script contexts. It loads, reloads and
@@ -128,7 +127,7 @@ public class ScriptManager {
 	 */
 	public synchronized void loadDirectory(File directory) throws RuntimeException {
 		Collection<File> libraries = FileUtils.listFiles(directory, new String[] { "jar" }, true);
-		List<File> list = Lists.newArrayList(libraries);
+		List<File> list = new ArrayList<>(libraries);
 		try {
 			loadDirectory(directory, list, DEFAULT_COMPILER_CLASS.getName());
 		} catch (Exception e) {

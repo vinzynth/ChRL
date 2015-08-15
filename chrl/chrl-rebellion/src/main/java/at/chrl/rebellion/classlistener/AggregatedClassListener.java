@@ -16,9 +16,11 @@
  */
 package at.chrl.rebellion.classlistener;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
-import com.google.common.collect.Lists;
+import at.chrl.nutils.CollectionUtils;
 
 /**
  * ClassListener that aggregates a collection of ClassListeners.<br>
@@ -31,7 +33,7 @@ public class AggregatedClassListener implements ClassListener {
 	private final List<ClassListener> classListeners;
 
 	public AggregatedClassListener() {
-		classListeners = Lists.newArrayList();
+		classListeners = CollectionUtils.newList();
 	}
 
 	public AggregatedClassListener(List<ClassListener> classListeners) {
@@ -55,8 +57,8 @@ public class AggregatedClassListener implements ClassListener {
 
 	@Override
 	public void preUnload(Class<?>[] classes) {
-		for (ClassListener cl : Lists.reverse(getClassListeners())) {
-			cl.preUnload(classes);
+		for (int i = getClassListeners().size() -1; i >= 0; i--) {
+			getClassListeners().get(i).preUnload(classes);
 		}
 	}
 }
