@@ -445,7 +445,6 @@
 	<!--  -->
 	<modules>
 		<module>../chrl</module>
-		<module>?</module>
 	</modules>
 	<!--  -->
 </project>
