@@ -1,26 +1,26 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
-	<!--  -->
+
+	<!-- -->
 	<parent>
 		<groupId>at.chrl</groupId>
 		<artifactId>chrl</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<!--  -->
-	
-	<!--  -->
+	<!-- -->
+
+	<!-- -->
 	<artifactId>chrl-spring</artifactId>
 	<packaging>jar</packaging>
-	<!--  -->
-	
-	<!--  -->
+	<!-- -->
+
+	<!-- -->
 	<name>ChRL - Spring Integration</name>
 	<description>Spring integration</description>
-	<!--  -->
-	
-	<!--  -->
+	<!-- -->
+
+	<!-- -->
 	<dependencies>
 		<!-- Spring -->
 		<dependency>
@@ -30,6 +30,10 @@
 		<!-- Persistence -->
 		<!-- Spring Data -->
 		<!-- Validation -->
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+		</dependency>
 		<!-- Logging -->
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
@@ -86,9 +90,9 @@
 			<artifactId>vaadin-push</artifactId>
 		</dependency>
 		<dependency>
-		   <groupId>ru.xpoft.vaadin</groupId>
-		   <artifactId>spring-vaadin-integration</artifactId>
+			<groupId>ru.xpoft.vaadin</groupId>
+			<artifactId>spring-vaadin-integration</artifactId>
 		</dependency>
 	</dependencies>
-	<!--  -->
+	<!-- -->
 </project>

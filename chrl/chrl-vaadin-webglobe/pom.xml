@@ -22,11 +22,11 @@
 	
 	<!--  -->
 	<dependencies>
-
-	<dependency>
-		<groupId>at.chrl</groupId>
-		<artifactId>chrl-spring</artifactId>
-	</dependency>
+		<!-- Vaadin -->
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-server</artifactId>
+		</dependency>
 	</dependencies>
 	<!--  -->
 </project>
