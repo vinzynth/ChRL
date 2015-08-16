@@ -28,7 +28,6 @@ import at.chrl.orm.test.configs.H2TestConfig;
 import at.chrl.orm.test.configs.MSSQLTestConfig;
 import at.chrl.orm.test.configs.MariaDBTestConfig;
 import at.chrl.orm.test.configs.MySQLTestConfig;
-import at.chrl.orm.test.configs.Neo4jTestConfig;
 import at.chrl.orm.test.configs.PostgreSQLTestConfig;
 
 /**
@@ -71,7 +70,7 @@ public final class DatamodelValidator {
 		configs.add(new PostgreSQLTestConfig().setAnnotatedClasses(annotatedClasses));
 		configs.add(new MSSQLTestConfig().setAnnotatedClasses(annotatedClasses));
 //		configs.add(new FirebirdConfig().setAnnotatedClasses(annotatedClasses));
-		configs.add(new Neo4jTestConfig().setAnnotatedClasses(annotatedClasses));
+//		configs.add(new Neo4jTestConfig().setAnnotatedClasses(annotatedClasses));
 //		configs.add(new MongoDBConfig().setAnnotatedClasses(annotatedClasses));
 		
 		return configs;
@@ -96,7 +95,7 @@ public final class DatamodelValidator {
 			System.out.println("Connected: " + config);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException("failed: " + e.getMessage());
+			throw new RuntimeException("Failed: " + e.getMessage(), e);
 		}
 		
 		HibernateService.getInstance().disconnect(config);
@@ -122,7 +121,7 @@ public final class DatamodelValidator {
 			session.getSession().clear();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException("faaaled");
+			throw new RuntimeException("Failed: " + e.getMessage(), e);
 		}
 		
 		HibernateService.getInstance().disconnect(config);

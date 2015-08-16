@@ -79,7 +79,7 @@ public abstract class HibernateConfig implements IHibernateConfig{
 	public String SESSION_FACTORY_NAME;
 	@Property(key = AvailableSettings.SESSION_FACTORY_NAME_IS_JNDI, defaultValue = "", description = "Does the value defined by {@link #SESSION_FACTORY_NAME} represent a {@literal JNDI} namespace into which the {@link org.hibernate.SessionFactory} should be bound? / ")
 	public String SESSION_FACTORY_NAME_IS_JNDI;
-	@Property(key = AvailableSettings.CONNECTION_PROVIDER, defaultValue = "", description = "Names the {@link org.hibernate.engine.jdbc.connections.spi.ConnectionProvider} to use for obtaining JDBC connections. Can either reference an instance of {@link org.hibernate.engine.jdbc.connections.spi.ConnectionProvider} or a {@link Class} or {@link String} reference to the {@link org.hibernate.engine.jdbc.connections.spi.ConnectionProvider} implementation class. / ")
+	@Property(key = AvailableSettings.CONNECTION_PROVIDER, defaultValue = "com.zaxxer.hikari.hibernate.HikariConnectionProvider", description = "Names the {@link org.hibernate.engine.jdbc.connections.spi.ConnectionProvider} to use for obtaining JDBC connections. Can either reference an instance of {@link org.hibernate.engine.jdbc.connections.spi.ConnectionProvider} or a {@link Class} or {@link String} reference to the {@link org.hibernate.engine.jdbc.connections.spi.ConnectionProvider} implementation class. / ")
 	public String CONNECTION_PROVIDER;
 	@Property(key = AvailableSettings.DRIVER, defaultValue = "", description = "Names the {@literal JDBC} driver class / ")
 	public String DRIVER;
@@ -137,8 +137,8 @@ public abstract class HibernateConfig implements IHibernateConfig{
 	public String BATCH_STRATEGY;
 	@Property(key = AvailableSettings.BATCH_VERSIONED_DATA, defaultValue = "", description = "Should versioned data be included in batching? / ")
 	public String BATCH_VERSIONED_DATA;
-	@Property(key = AvailableSettings.OUTPUT_STYLESHEET, defaultValue = "", description = "An XSLT resource used to generate \"custom\" XML / ")
-	public String OUTPUT_STYLESHEET;
+//	@Property(key = AvailableSettings.OUTPUT_STYLESHEET, defaultValue = "", description = "An XSLT resource used to generate \"custom\" XML / ")
+//	public String OUTPUT_STYLESHEET;
 	@Property(key = AvailableSettings.C3P0_MAX_SIZE, defaultValue = "5", description = "Maximum size of C3P0 connection pool / ")
 	public String C3P0_MAX_SIZE;
 	@Property(key = AvailableSettings.C3P0_MIN_SIZE, defaultValue = "2", description = "Minimum size of C3P0 connection pool / ")
@@ -167,18 +167,18 @@ public abstract class HibernateConfig implements IHibernateConfig{
 	public String RELEASE_CONNECTIONS;
 	@Property(key = AvailableSettings.CURRENT_SESSION_CONTEXT_CLASS, defaultValue = "", description = "Context scoping impl for {@link org.hibernate.SessionFactory#getCurrentSession()} processing. / ")
 	public String CURRENT_SESSION_CONTEXT_CLASS;
-	@Property(key = AvailableSettings.TRANSACTION_STRATEGY, defaultValue = "", description = "Names the implementation of {@link org.hibernate.engine.transaction.spi.TransactionFactory} to use for creating {@link org.hibernate.Transaction} instances / ")
-	public String TRANSACTION_STRATEGY;
+//	@Property(key = AvailableSettings.TRANSACTION_STRATEGY, defaultValue = "", description = "Names the implementation of {@link org.hibernate.engine.transaction.spi.TransactionFactory} to use for creating {@link org.hibernate.Transaction} instances / ")
+//	public String TRANSACTION_STRATEGY;
 	@Property(key = AvailableSettings.JTA_PLATFORM, defaultValue = "", description = "Names the {@link org.hibernate.engine.transaction.jta.platform.spi.JtaPlatform} implementation to use for integrating with {@literal JTA} systems. Can reference either a {@link org.hibernate.engine.transaction.jta.platform.spi.JtaPlatform} instance or the name of the {@link org.hibernate.engine.transaction.jta.platform.spi.JtaPlatform} implementation class @since 4.0 / ")
 	public String JTA_PLATFORM;
 	@Property(key = AvailableSettings.JTA_PLATFORM_RESOLVER, defaultValue = "", description = "Names the {@link org.hibernate.engine.transaction.jta.platform.spi.JtaPlatformResolver} implementation to use. @since 4.3 / ")
 	public String JTA_PLATFORM_RESOLVER;
-	@Property(key = AvailableSettings.CACHE_REGION_FACTORY, defaultValue = "org.hibernate.cache.ehcache.EhCacheRegionFactory", description = "The {@link org.hibernate.cache.spi.RegionFactory} implementation class / ")
+	@Property(key = AvailableSettings.CACHE_REGION_FACTORY, defaultValue = "org.hibernate.cache.infinispan.InfinispanRegionFactory", description = "The {@link org.hibernate.cache.spi.RegionFactory} implementation class / ")
 	public String CACHE_REGION_FACTORY;
 	@Property(key = AvailableSettings.CACHE_PROVIDER_CONFIG, defaultValue = "", description = "The <tt>CacheProvider</tt> implementation class / ")
 	public String CACHE_PROVIDER_CONFIG;
-	@Property(key = AvailableSettings.CACHE_NAMESPACE, defaultValue = "", description = "The <tt>CacheProvider</tt> JNDI namespace, if pre-bound to JNDI. / ")
-	public String CACHE_NAMESPACE;
+//	@Property(key = AvailableSettings.CACHE_NAMESPACE, defaultValue = "", description = "The <tt>CacheProvider</tt> JNDI namespace, if pre-bound to JNDI. / ")
+//	public String CACHE_NAMESPACE;
 	@Property(key = AvailableSettings.USE_QUERY_CACHE, defaultValue = "true", description = "Enable the query cache (disabled by default) / ")
 	public String USE_QUERY_CACHE;
 	@Property(key = AvailableSettings.QUERY_CACHE_FACTORY, defaultValue = "", description = "The <tt>QueryCacheFactory</tt> implementation class. / ")
@@ -309,7 +309,7 @@ public abstract class HibernateConfig implements IHibernateConfig{
 	/**
 	 * Infinispan
 	 */
-	@Property(key = "hibernate.cache.infinispan.cachemanager", defaultValue = "java:CacheManager")
+	@Property(key = "hibernate.cache.infinispan.cachemanager", defaultValue = "")
 	public String INFINISPAN_CACHE_MANAGER;
 	
 
@@ -336,5 +336,4 @@ public abstract class HibernateConfig implements IHibernateConfig{
 	 */
 	@Property(key = "chrl.orm.flyway.active", defaultValue = "true", description = "Defines if Flyway is active or not")
 	public boolean FLYWAY_ACTIVE;
-	
 }

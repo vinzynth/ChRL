@@ -28,6 +28,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.StatelessSession;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.resource.transaction.spi.TransactionStatus;
 
 import at.chrl.nutils.ArrayUtils;
 import at.chrl.orm.hibernate.configuration.HibernateConfig;
@@ -43,9 +44,8 @@ public abstract class SessionTemplate implements AutoCloseable {
 
 		for (Session session : opSes.keySet()) {
 			try {
-				if (session.getTransaction().isActive())
-					if (!session.getTransaction().wasCommitted())
-						session.getTransaction().commit();
+				if(TransactionStatus.ACTIVE.equals(session.getTransaction().getStatus()))
+					session.getTransaction().commit();
 				session.close();
 			} catch (Exception e) {
 				System.err.println("Exception in Shutdown Progress");
@@ -69,7 +69,6 @@ public abstract class SessionTemplate implements AutoCloseable {
 	 * @return the pojo object for the given identifier or null if object
 	 *         doesn't exists
 	 */
-	@SuppressWarnings("unchecked")
 	public <T> T getObjectForPK(Class<T> cls, java.io.Serializable id) {
 		if (id == null)
 			return null;
@@ -199,7 +198,7 @@ public abstract class SessionTemplate implements AutoCloseable {
 	 */
 	public void save(Object obj) throws Exception {
 		try {
-			if (!session.getTransaction().isActive())
+			if(TransactionStatus.NOT_ACTIVE.equals(session.getTransaction().getStatus()))
 				session.getTransaction().begin();
 			session.persist(obj);
 		} catch (Exception e) {
@@ -216,7 +215,7 @@ public abstract class SessionTemplate implements AutoCloseable {
 	 */
 	public void saveOrUpdate(Object obj) throws Exception {
 		try {
-			if (!session.getTransaction().isActive())
+			if(TransactionStatus.NOT_ACTIVE.equals(session.getTransaction().getStatus()))
 				session.getTransaction().begin();
 			session.saveOrUpdate(obj);
 		} catch (Exception e) {
@@ -234,7 +233,7 @@ public abstract class SessionTemplate implements AutoCloseable {
 	@SuppressWarnings("unchecked")
 	public <T> T merge(T obj) throws Exception {
 		try {
-			if (!session.getTransaction().isActive())
+			if(TransactionStatus.NOT_ACTIVE.equals(session.getTransaction().getStatus()))
 				session.getTransaction().begin();
 			return (T) session.merge(obj);
 		} catch (Exception e) {
@@ -251,7 +250,7 @@ public abstract class SessionTemplate implements AutoCloseable {
 	 */
 	public void update(Object obj) throws Exception {
 		try {
-			if (!session.getTransaction().isActive())
+			if(TransactionStatus.NOT_ACTIVE.equals(session.getTransaction().getStatus()))
 				session.getTransaction().begin();
 			session.update(obj);
 		} catch (Exception e) {
@@ -268,7 +267,7 @@ public abstract class SessionTemplate implements AutoCloseable {
 	 */
 	public void refresh(Object obj) throws Exception {
 		try {
-			if (!session.getTransaction().isActive())
+			if(TransactionStatus.NOT_ACTIVE.equals(session.getTransaction().getStatus()))
 				session.getTransaction().begin();
 			session.refresh(obj);
 		} catch (Exception e) {
@@ -285,7 +284,7 @@ public abstract class SessionTemplate implements AutoCloseable {
 	 */
 	public void delete(Object obj) throws Exception {
 		try {
-			if (!session.getTransaction().isActive())
+			if(TransactionStatus.NOT_ACTIVE.equals(session.getTransaction().getStatus()))
 				session.getTransaction().begin();
 			session.delete(obj);
 		} catch (Exception e) {
@@ -302,7 +301,7 @@ public abstract class SessionTemplate implements AutoCloseable {
 	 */
 	public void persist(Object obj) throws Exception {
 		try {
-			if (!session.getTransaction().isActive())
+			if(TransactionStatus.NOT_ACTIVE.equals(session.getTransaction().getStatus()))
 				session.getTransaction().begin();
 			session.delete(obj);
 		} catch (Exception e) {
@@ -625,7 +624,7 @@ public abstract class SessionTemplate implements AutoCloseable {
 	 * @return new {@link Stream} with given ResultSet
 	 */
 	public <T> Stream<T> stream(Query q) {
-		if (!session.getTransaction().isActive())
+		if(TransactionStatus.NOT_ACTIVE.equals(session.getTransaction().getStatus()))
 			session.beginTransaction();
 
 		if (loggingEnabled)
@@ -677,7 +676,7 @@ public abstract class SessionTemplate implements AutoCloseable {
 	 * @return new {@link Stream} with given ResultSet
 	 */
 	public <T> Stream<T> stream(Criteria crit) {
-		if (!session.getTransaction().isActive())
+		if(TransactionStatus.NOT_ACTIVE.equals(session.getTransaction().getStatus()))
 			session.beginTransaction();
 
 		if (loggingEnabled)
@@ -1038,9 +1037,8 @@ public abstract class SessionTemplate implements AutoCloseable {
 	 */
 	@Override
 	public void close() throws Exception {
-		if (session.getTransaction().isActive())
-			if (!session.getTransaction().wasCommitted())
-				session.getTransaction().commit();
+		if(TransactionStatus.ACTIVE.equals(session.getTransaction().getStatus()))
+			session.getTransaction().commit();
 		session.close();
 		openSessions.remove(session);
 		if (loggingEnabled)

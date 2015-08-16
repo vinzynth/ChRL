@@ -20,9 +20,8 @@ import javax.persistence.Id;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.envers.Audited;
 
-import at.chrl.orm.hibernate.datatypes.MultiMap;
-import at.chrl.orm.hibernate.datatypes.ObjectMapable;
 import at.chrl.orm.hibernate.datatypes.ObjectMap;
+import at.chrl.orm.hibernate.datatypes.ObjectMapable;
 
 @Entity
 @Audited
@@ -80,7 +79,7 @@ public class TestClass implements ObjectMapable<Long> {
 	
 	private ObjectMap<Long> typesss;
 	
-	private MultiMap<Long> maap;
+//	private MultiMap<Long> maap;
 	
 	/**
 	 * 
@@ -238,17 +237,17 @@ public class TestClass implements ObjectMapable<Long> {
 		this.typesss = typesss;
 	}
 
-	/**
-	 * @return the maap
-	 */
-	public MultiMap<Long> getMaap() {
-		return maap;
-	}
-
-	/**
-	 * @param maap the maap to set
-	 */
-	public void setMaap(MultiMap<Long> maap) {
-		this.maap = maap;
-	}
+//	/**
+//	 * @return the maap
+//	 */
+//	public MultiMap<Long> getMaap() {
+//		return maap;
+//	}
+//
+//	/**
+//	 * @param maap the maap to set
+//	 */
+//	public void setMaap(MultiMap<Long> maap) {
+//		this.maap = maap;
+//	}
 }

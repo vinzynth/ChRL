@@ -30,7 +30,7 @@ public class MongoDBConfig extends OGMConfig {
 	@Override
 	public void overrideConfig(){
 		super.overrideConfig();
-		this.DATASTORE_PROVIDER = "org.hibernate.ogm.datastore.mongodb.impl.MongoDBDatastoreProvider";
+//		this.DATASTORE_PROVIDER = "org.hibernate.ogm.datastore.mongodb.impl.MongoDBDatastoreProvider";
 	}
 	
 }

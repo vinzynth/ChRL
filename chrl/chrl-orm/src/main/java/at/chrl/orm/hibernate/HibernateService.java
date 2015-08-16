@@ -33,9 +33,10 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.jpa.AvailableSettings;
 import org.hibernate.jpa.HibernateEntityManager;
 import org.hibernate.jpa.HibernateEntityManagerFactory;
-import org.hibernate.ogm.OgmSession;
-import org.hibernate.ogm.cfg.OgmConfiguration;
-import org.hibernate.ogm.exception.NotSupportedException;
+//import org.hibernate.ogm.OgmSession;
+//import org.hibernate.ogm.cfg.OgmConfiguration;
+//import org.hibernate.ogm.exception.NotSupportedException;
+import org.hibernate.resource.transaction.spi.TransactionStatus;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 
 import at.chrl.nutils.ArrayUtils;
@@ -89,7 +90,9 @@ public final class HibernateService implements AutoCloseable {
 
 		Properties props = PropertiesUtils.filterEmtpyValues(ConfigUtil.getProperties(config.getClass()));
 		
-		Configuration hibernateCfg = (config instanceof OGMConfig) ? new OgmConfiguration() : new Configuration();
+		Configuration hibernateCfg = 
+//				(config instanceof OGMConfig) ? new OgmConfiguration() :
+					new Configuration();
 		hibernateCfg.setProperties(props);
 
 		for (Class<?> ie : config.getAnnotatedClasses())
@@ -143,7 +146,7 @@ public final class HibernateService implements AutoCloseable {
 
 
 	private static Session persistSubList(final List<?> sublist, final HibernateConfig conf, Session session) {
-		if (session.isOpen() && !session.getTransaction().isActive())
+		if (session.isOpen() && TransactionStatus.NOT_ACTIVE.equals(session.getTransaction().getStatus()))
 			session.beginTransaction();
 		sublist.forEach(session::saveOrUpdate);
 		try {
@@ -167,7 +170,7 @@ public final class HibernateService implements AutoCloseable {
 			}
 		}
 		session.flush();
-		if (session.isOpen() && session.getTransaction().isActive())
+		if (session.isOpen() && TransactionStatus.ACTIVE.equals(session.getTransaction().getStatus()))
 			session.getTransaction().commit();
 		session.clear();
 		return session;
@@ -370,9 +373,9 @@ public final class HibernateService implements AutoCloseable {
 				emf = getEntityManagerFactory((JPAConfig) config);
 			}
 
-			if(config instanceof OGMConfig){
-				return emf.createEntityManager().unwrap(OgmSession.class);
-			}
+//			if(config instanceof OGMConfig){
+//				return emf.createEntityManager().unwrap(OgmSession.class);
+//			}
 			
 			HibernateEntityManager hem = emf.createEntityManager().unwrap(HibernateEntityManager.class);
 			return hem.getSession();
@@ -431,9 +434,9 @@ public final class HibernateService implements AutoCloseable {
 				emf = getEntityManagerFactory((JPAConfig) config);
 			}
 
-			if(config instanceof OGMConfig){
-				return emf.createEntityManager().unwrap(OgmSession.class).getSessionFactory().openStatelessSession();
-			}
+//			if(config instanceof OGMConfig){
+//				return emf.createEntityManager().unwrap(OgmSession.class).getSessionFactory().openStatelessSession();
+//			}
 			
 			HibernateEntityManager hem = emf.createEntityManager().unwrap(HibernateEntityManager.class);
 			return hem.getSession().getSessionFactory().openStatelessSession();
@@ -497,6 +500,7 @@ public final class HibernateService implements AutoCloseable {
 	 *             of config is no {@link HibernateConfig}
 	 * 
 	 */
+	@SuppressWarnings("deprecation")
 	public void exportSchema(final HibernateConfig config, final String exportFile) {
 		Properties props = PropertiesUtils.filterEmtpyValues(ConfigUtil.getProperties(config.getClass()));
 

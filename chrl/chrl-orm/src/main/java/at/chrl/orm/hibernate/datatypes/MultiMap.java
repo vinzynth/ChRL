@@ -79,7 +79,6 @@ public class MultiMap<K extends Serializable> implements INestedMap<Map<ObjectMa
 		return (Stream<T>) get(key).stream().map(l -> em.find(key.getType(), l));
 	}
 	
-	@SuppressWarnings("unchecked")
 	public <T> Stream<T> get(final Session session, final ObjectMapKey<T> key){
 		if(!containsKey(key))
 			return Stream.<T>empty();

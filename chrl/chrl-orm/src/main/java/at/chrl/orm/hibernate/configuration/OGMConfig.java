@@ -17,9 +17,9 @@
  */
 package at.chrl.orm.hibernate.configuration;
 
-import org.hibernate.ogm.cfg.OgmProperties;
+//import org.hibernate.ogm.cfg.OgmProperties;
 
-import at.chrl.nutils.configuration.Property;
+//import at.chrl.nutils.configuration.Property;
 
 /**
  * @author Vinzynth
@@ -28,14 +28,14 @@ import at.chrl.nutils.configuration.Property;
  */
 public class OGMConfig extends JPAConfig {
 
-	/**
-	 * {@inheritDoc}
-	 * @see at.chrl.orm.hibernate.configuration.JPAConfig#toString()
-	 */
-	@Override
-	public String toString() {
-		return USERNAME+"@"+HOST+":"+PORT+"/"+DATABASE;
-	}
+//	/**
+//	 * {@inheritDoc}
+//	 * @see at.chrl.orm.hibernate.configuration.JPAConfig#toString()
+//	 */
+//	@Override
+//	public String toString() {
+//		return USERNAME+"@"+HOST+":"+PORT+"/"+DATABASE;
+//	}
 	
 	/**
 	 * {@inheritDoc}
@@ -45,7 +45,7 @@ public class OGMConfig extends JPAConfig {
 	public void overrideConfig() {
 		super.overrideConfig();
 		this.PROVIDER = "org.hibernate.ogm.jpa.HibernateOgmPersistence";
-		this.TRANSACTION_STRATEGY = "org.hibernate.transaction.JTATransactionFactory";
+//		this.TRANSACTION_STRATEGY = "org.hibernate.transaction.JTATransactionFactory";
 		this.JTA_PLATFORM = "org.hibernate.service.jta.platform.internal.JBossStandAloneJtaPlatform";
 		this.HBM2DDL_AUTO = "";
 		this.DRIVER = "";
@@ -69,44 +69,43 @@ public class OGMConfig extends JPAConfig {
 	public boolean isFlywayActive() {
 		return false;
 	}
-
-	@Property(key = OgmProperties.CREATE_DATABASE, defaultValue = "")
-	public String CREATE_DATABASE;
-	
-	@Property(key = OgmProperties.DATABASE, defaultValue = "")
-	public String DATABASE;
-	
-	@Property(key = OgmProperties.DATASTORE_PROVIDER, defaultValue = "", examples = {
-			"org.hibernate.ogm.datastore.cassandra.impl.CassandraDatastoreProvider",
-			"org.hibernate.ogm.datastore.couchdb.impl.CouchDBDatastoreProvider",
-			"org.hibernate.ogm.datastore.ehcache.impl.EhcacheDatastoreProvider",
-			"org.hibernate.ogm.datastore.infinispan.impl.InfinispanDatastoreProvider",
-			"org.hibernate.ogm.datastore.map.impl.MapDatastoreProvider",
-			"org.hibernate.ogm.datastore.mongodb.impl.MongoDBDatastoreProvider",
-			"org.hibernate.ogm.datastore.mongodb.impl.FongoDBDatastoreProvider",
-			"org.hibernate.ogm.datastore.neo4j.impl.Neo4jDatastoreProvider"
-			})
-	public String DATASTORE_PROVIDER;
-	
-	@Property(key = OgmProperties.ERROR_HANDLER, defaultValue = "")
-	public String ERROR_HANDLER;
-	
-	@Property(key = OgmProperties.GRID_DIALECT, defaultValue = "")
-	public String GRID_DIALECT;
-	
-	@Property(key = OgmProperties.HOST, defaultValue = "")
-	public String HOST;
-	
-	@Property(key = OgmProperties.OPTION_CONFIGURATOR, defaultValue = "")
-	public String OPTION_CONFIGURATOR;
-	
-	@Property(key = OgmProperties.PASSWORD, defaultValue = "")
-	public String PASSWORD;
-	
-	@SuppressWarnings("deprecation")
-	@Property(key = OgmProperties.PORT, defaultValue = "")
-	public String PORT;
-	
-	@Property(key = OgmProperties.USERNAME, defaultValue = "")
-	public String USERNAME;
+//
+//	@Property(key = OgmProperties.CREATE_DATABASE, defaultValue = "")
+//	public String CREATE_DATABASE;
+//	
+//	@Property(key = OgmProperties.DATABASE, defaultValue = "")
+//	public String DATABASE;
+//	
+//	@Property(key = OgmProperties.DATASTORE_PROVIDER, defaultValue = "", examples = {
+//			"org.hibernate.ogm.datastore.cassandra.impl.CassandraDatastoreProvider",
+//			"org.hibernate.ogm.datastore.couchdb.impl.CouchDBDatastoreProvider",
+//			"org.hibernate.ogm.datastore.ehcache.impl.EhcacheDatastoreProvider",
+//			"org.hibernate.ogm.datastore.infinispan.impl.InfinispanDatastoreProvider",
+//			"org.hibernate.ogm.datastore.map.impl.MapDatastoreProvider",
+//			"org.hibernate.ogm.datastore.mongodb.impl.MongoDBDatastoreProvider",
+//			"org.hibernate.ogm.datastore.mongodb.impl.FongoDBDatastoreProvider",
+//			"org.hibernate.ogm.datastore.neo4j.impl.Neo4jDatastoreProvider"
+//			})
+//	public String DATASTORE_PROVIDER;
+//	
+////	@Property(key = OgmProperties.ERROR_HANDLER, defaultValue = "")
+////	public String ERROR_HANDLER;
+//	
+//	@Property(key = OgmProperties.GRID_DIALECT, defaultValue = "")
+//	public String GRID_DIALECT;
+//	
+//	@Property(key = OgmProperties.HOST, defaultValue = "")
+//	public String HOST;
+//	
+//	@Property(key = OgmProperties.OPTION_CONFIGURATOR, defaultValue = "")
+//	public String OPTION_CONFIGURATOR;
+//	
+//	@Property(key = OgmProperties.PASSWORD, defaultValue = "")
+//	public String PASSWORD;
+//	
+//	@Property(key = OgmProperties.PORT, defaultValue = "")
+//	public String PORT;
+//	
+//	@Property(key = OgmProperties.USERNAME, defaultValue = "")
+//	public String USERNAME;
 }

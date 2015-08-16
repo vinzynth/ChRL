@@ -93,7 +93,6 @@ public class ObjectMap<K extends Serializable> implements INestedMap<Map<ObjectM
 	 * @param key
 	 * @return persisted object instance in this map by key
 	 */
-	@SuppressWarnings("unchecked")
 	public <T> T get(Session session, ObjectMapKey<T> key){
 		return (T) session.get(key.getType(), get(key));
 	}

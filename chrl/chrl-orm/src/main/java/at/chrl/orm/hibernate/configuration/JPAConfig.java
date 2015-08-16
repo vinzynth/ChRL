@@ -37,7 +37,7 @@ public abstract class JPAConfig extends HibernateConfig {
 	@Override
 	public void overrideConfig() {
 		this.PROVIDER = "org.hibernate.ejb.HibernatePersistence";
-		this.TRANSACTION_STRATEGY = "";
+//		this.TRANSACTION_STRATEGY = "";
 		this.JTA_PLATFORM = "";
 	}
 	
@@ -134,8 +134,8 @@ public abstract class JPAConfig extends HibernateConfig {
 	public String SCHEMA_GEN_LOAD_SCRIPT_SOURCE;
 	@Property(key = AvailableSettings.ALIAS_SPECIFIC_LOCK_MODE, defaultValue = "")
 	public String ALIAS_SPECIFIC_LOCK_MODE;
-	@Property(key = AvailableSettings.AUTODETECTION, defaultValue = "")
-	public String AUTODETECTION;
+//	@Property(key = AvailableSettings.AUTODETECTION, defaultValue = "")
+//	public String AUTODETECTION;
 	@Property(key = AvailableSettings.CFG_FILE, defaultValue = "")
 	public String CFG_FILE;
 	@Property(key = AvailableSettings.CLASS_CACHE_PREFIX, defaultValue = "")
@@ -148,8 +148,8 @@ public abstract class JPAConfig extends HibernateConfig {
 	public String SESSION_INTERCEPTOR;
 	@Property(key = AvailableSettings.SESSION_FACTORY_OBSERVER, defaultValue = "")
 	public String SESSION_FACTORY_OBSERVER;
-	@Property(key = AvailableSettings.NAMING_STRATEGY, defaultValue = "")
-	public String NAMING_STRATEGY;
+//	@Property(key = AvailableSettings.NAMING_STRATEGY, defaultValue = "")
+//	public String NAMING_STRATEGY;
 	@Property(key = AvailableSettings.EVENT_LISTENER_PREFIX, defaultValue = "")
 	public String EVENT_LISTENER_PREFIX;
 	@Property(key = AvailableSettings.USE_CLASS_ENHANCER, defaultValue = "")
@@ -158,8 +158,8 @@ public abstract class JPAConfig extends HibernateConfig {
 	public String DISCARD_PC_ON_CLOSE;
 	@Property(key = AvailableSettings.FLUSH_MODE, defaultValue = "")
 	public String FLUSH_MODE;
-	@Property(key = AvailableSettings.SCANNER, defaultValue = "")
-	public String SCANNER;
+//	@Property(key = AvailableSettings.SCANNER, defaultValue = "")
+//	public String SCANNER;
 	@Property(key = AvailableSettings.ENTITY_MANAGER_FACTORY_NAME, defaultValue = "")
 	public String ENTITY_MANAGER_FACTORY_NAME;
 	@Property(key = AvailableSettings.JPA_METAMODEL_POPULATION, defaultValue = "")

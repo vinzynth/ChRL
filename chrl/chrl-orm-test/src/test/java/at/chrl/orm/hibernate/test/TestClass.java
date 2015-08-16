@@ -22,8 +22,6 @@ import javax.persistence.ManyToMany;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import at.chrl.orm.hibernate.datatypes.MultiMap;
-import at.chrl.orm.hibernate.datatypes.ObjectMap;
 import at.chrl.orm.hibernate.datatypes.ObjectMapable;
 
 @Entity
@@ -80,10 +78,10 @@ public class TestClass implements ObjectMapable<Long> {
 	@ElementCollection
 	private Map<TestEnum, String> enumMap;
 	
-	private ObjectMap<Long> typesss;
-	
-	private MultiMap<Long> maap;
-	
+//	private ObjectMap<Long> typesss;
+//	
+//	private MultiMap<Long> maap;
+//	
 	@ManyToMany(cascade = {CascadeType.ALL})
 	private List<TestClass> related;
 	
@@ -230,33 +228,33 @@ public class TestClass implements ObjectMapable<Long> {
 		this.primtiveValue = primtiveValue;
 	}
 
-	/**
-	 * @return the typesss
-	 */
-	public ObjectMap<Long> getTypesss() {
-		return typesss;
-	}
-
-	/**
-	 * @param typesss the typesss to set
-	 */
-	public void setTypesss(ObjectMap<Long> typesss) {
-		this.typesss = typesss;
-	}
-
-	/**
-	 * @return the maap
-	 */
-	public MultiMap<Long> getMaap() {
-		return maap;
-	}
-
-	/**
-	 * @param maap the maap to set
-	 */
-	public void setMaap(MultiMap<Long> maap) {
-		this.maap = maap;
-	}
+//	/**
+//	 * @return the typesss
+//	 */
+//	public ObjectMap<Long> getTypesss() {
+//		return typesss;
+//	}
+//
+//	/**
+//	 * @param typesss the typesss to set
+//	 */
+//	public void setTypesss(ObjectMap<Long> typesss) {
+//		this.typesss = typesss;
+//	}
+//
+//	/**
+//	 * @return the maap
+//	 */
+//	public MultiMap<Long> getMaap() {
+//		return maap;
+//	}
+//
+//	/**
+//	 * @param maap the maap to set
+//	 */
+//	public void setMaap(MultiMap<Long> maap) {
+//		this.maap = maap;
+//	}
 
 	/**
 	 * @return the related

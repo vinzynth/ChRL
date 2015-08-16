@@ -1,7 +1,5 @@
 package at.chrl.orm.hibernate.test;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,8 +9,6 @@ import javax.persistence.EntityManagerFactory;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.envers.AuditReader;
-import org.hibernate.envers.AuditReaderFactory;
 import org.junit.Test;
 
 import at.chrl.nutils.Rnd;
@@ -20,7 +16,7 @@ import at.chrl.orm.hibernate.HibernateService;
 import at.chrl.orm.hibernate.SessionTemplate;
 import at.chrl.orm.hibernate.configuration.HibernateConfig;
 import at.chrl.orm.hibernate.configuration.IHibernateConfig;
-import at.chrl.orm.hibernate.configuration.JPAConfig;
+import at.chrl.orm.hibernate.configuration.templates.H2Config;
 import at.chrl.orm.hibernate.datatypes.MultiMapEntry;
 
 public class HibernateServiceTest {
@@ -34,18 +30,8 @@ public class HibernateServiceTest {
 		clazzes.add(TestEnum.class);
 		clazzes.add(MultiMapEntry.class);
 	}
-	
-	private static class HibernateTestConfig extends HibernateConfig{
-		/**
-		 * {@inheritDoc}
-		 * @see com.bravestone.hibernate.configuration.IHibernateConfig#getAnnotatedClasses()
-		 */
-		@Override
-		public List<Class<?>> getAnnotatedClasses() {
-			return clazzes;
-		}
-	}
-	private static class HibernateJPATestConfig extends JPAConfig{
+
+	private static class HibernateJPATestConfig extends H2Config{
 		/**
 		 * {@inheritDoc}
 		 * @see com.bravestone.hibernate.configuration.IHibernateConfig#getAnnotatedClasses()
@@ -80,17 +66,12 @@ public class HibernateServiceTest {
 	public void testJPAConnection() {
 		HibernateService.getInstance().connect(new HibernateJPATestConfig());
 	}
-
-	@Test
-	public void testHibernateConnection() {
-		HibernateService.getInstance().connect(new HibernateTestConfig());
-	}
 	
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
-	public void rtestCreateTestEntitesHibernate() throws Exception {
-		HibernateConfig conf = new HibernateTestConfig();
+	public void testCreateTestEntitesHibernate() throws Exception {
+		HibernateConfig conf = new HibernateJPATestConfig();
 		HibernateService.getInstance().connect(conf);
 		
 		SessionFactory sf = HibernateService.getInstance().getSessionFactory(conf);
@@ -116,6 +97,7 @@ public class HibernateServiceTest {
 		}
         esession.getTransaction().commit();
         esession.close();
+		HibernateService.getInstance().disconnect(conf);
 	}
 	
 	@Test
@@ -148,49 +130,51 @@ public class HibernateServiceTest {
 		}
         entityManager.getTransaction().commit();
         entityManager.close();
+		HibernateService.getInstance().disconnect(conf);
 	}
 	
-	@Test
-	public void testCreateTestEnvers() throws Exception {
-		HibernateJPATestConfig conf = new HibernateJPATestConfig();
-		HibernateService.getInstance().connect(conf);
-		
-		EntityManagerFactory emf = HibernateService.getInstance().getEntityManagerFactory(conf);
-		
-		EntityManager entityManager = emf.createEntityManager();
+//	@Test
+//	public void testCreateTestEnvers() throws Exception {
+//		HibernateJPATestConfig conf = new HibernateJPATestConfig();
+//		HibernateService.getInstance().connect(conf);
+//		
+//		EntityManagerFactory emf = HibernateService.getInstance().getEntityManagerFactory(conf);
+//		
+//		EntityManager entityManager = emf.createEntityManager();
+////		entityManager.getTransaction().begin();
+////        List<TestClass> result = entityManager.createQuery( "from TestClass", TestClass.class ).getResultList();
+////		for ( TestClass test : result ) {
+////			System.out.println(test);
+////		}
+////        entityManager.getTransaction().commit();
+////        entityManager.close();
+//		
+//		entityManager = emf.createEntityManager();
 //		entityManager.getTransaction().begin();
-//        List<TestClass> result = entityManager.createQuery( "from TestClass", TestClass.class ).getResultList();
-//		for ( TestClass test : result ) {
-//			System.out.println(test);
+//		TestClass tc = entityManager.find( TestClass.class, 2L );
+//		tc.setText("A follow up event (rescheduled)");
+//		tc.setDate(new Date());
+//		entityManager.getTransaction().commit();
+//		entityManager.close();
+//		
+//		
+//		System.out.println(tc);
+//		
+//		entityManager = emf.createEntityManager();
+//		entityManager.getTransaction().begin();
+//		entityManager.merge(tc);
+//		assertEquals( "A follow up event (rescheduled)", tc.getText() );
+//		AuditReader reader = AuditReaderFactory.get( entityManager );
+//		
+//		for (Number number : reader.getRevisions(TestClass.class, tc.getId())) {
+//			System.out.println("Rev: " + number);
+//			System.out.println(reader.find(TestClass.class, tc.getId(), number.intValue()));
 //		}
-//        entityManager.getTransaction().commit();
+//		
+//		entityManager.getTransaction().commit();
 //        entityManager.close();
-		
-		entityManager = emf.createEntityManager();
-		entityManager.getTransaction().begin();
-		TestClass tc = entityManager.find( TestClass.class, 2L );
-		tc.setText("A follow up event (rescheduled)");
-		tc.setDate(new Date());
-		entityManager.getTransaction().commit();
-		entityManager.close();
-		
-		
-		System.out.println(tc);
-		
-		entityManager = emf.createEntityManager();
-		entityManager.getTransaction().begin();
-		entityManager.merge(tc);
-		assertEquals( "A follow up event (rescheduled)", tc.getText() );
-		AuditReader reader = AuditReaderFactory.get( entityManager );
-		
-		for (Number number : reader.getRevisions(TestClass.class, tc.getId())) {
-			System.out.println("Rev: " + number);
-			System.out.println(reader.find(TestClass.class, tc.getId(), number.intValue()));
-		}
-		
-		entityManager.getTransaction().commit();
-        entityManager.close();
-	}
+//		HibernateService.getInstance().disconnect(conf);
+//	}
 	
 	@Test
 	public void testScrollAll() throws Exception {
@@ -200,6 +184,7 @@ public class HibernateServiceTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		HibernateService.getInstance().disconnect(HibernateJPATestConfig.getInstance());
 	}
 	
 	@Test
@@ -256,8 +241,8 @@ public class HibernateServiceTest {
 		session.getTransaction().begin();
 		
 		tc = (TestClass) session.get(TestClass.class, 1L);
-		tc.getMaap().add(TestTypes.TEST_2_CLASS_1, (TestClass) session.get(TestClass.class, 3L));
-		tc.getMaap().add(TestTypes.TEST_2_CLASS_1, (TestClass) session.get(TestClass.class, 4L));
+//		tc.getMaap().add(TestTypes.TEST_2_CLASS_1, (TestClass) session.get(TestClass.class, 3L));
+//		tc.getMaap().add(TestTypes.TEST_2_CLASS_1, (TestClass) session.get(TestClass.class, 4L));
 		
 		session.getTransaction().commit();
 		
@@ -271,18 +256,19 @@ public class HibernateServiceTest {
 
 		tc = (TestClass) session.get(TestClass.class, 1L);
 		
-		tc.getMaap().get(session, TestTypes.TEST_2_CLASS_1).forEach(System.out::println);
+//		tc.getMaap().get(session, TestTypes.TEST_2_CLASS_1).forEach(System.out::println);
 		
 		session.getTransaction().commit();
 		
 		session.close();
+		HibernateService.getInstance().disconnect(conf);
 	}
 	
 	@Test
 	public void testPersistMassiveData() throws Exception {
 		HibernateService.getInstance().connect(HibernateJPATestConfig.getInstance());
 		try (TestSession session = new TestSession()){
-			int count = 2_000_000;
+			int count = 20_000;
 			List<TestClass> t = new ArrayList<TestClass>(count);
 			for (int i = 0; i < count; i++) {
 				if(i % (count >> 3) == 0)
@@ -295,6 +281,7 @@ public class HibernateServiceTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		HibernateService.getInstance().disconnect(HibernateJPATestConfig.getInstance());
 	}
 	
 	@Test
@@ -309,6 +296,7 @@ public class HibernateServiceTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		HibernateService.getInstance().disconnect(HibernateJPATestConfig.getInstance());
 	}
 
 	@Test
@@ -329,11 +317,12 @@ public class HibernateServiceTest {
 		em.close();
 		
 		System.out.println(HibernateService.getInstance());
+		HibernateService.getInstance().disconnect(conf);
 	}
 	
-	@Test
-	public void testExportSchema() throws Exception {
-		HibernateService service = HibernateService.getInstance();
-		service.exportSchema(new HibernateJPATestConfig(), "testExport");
-	}
+//	@Test
+//	public void testExportSchema() throws Exception {
+//		HibernateService service = HibernateService.getInstance();
+//		service.exportSchema(new HibernateJPATestConfig(), "testExport");
+//	}
 }
