@@ -38,16 +38,39 @@ public class Webglobe extends AbstractJavaScriptComponent {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
 	
 	/**
 	 * 
 	 */
 	public Webglobe(String background) {
-		super();
-		getState().background = background;
+		this(background, new double[][]{});
 	}
 
+	/**
+	 * Parameter should be a array of arrays with length 3(lat, lng, mag)
+	 * @param data
+	 */
+	public Webglobe(String background, double[]... data) {
+		super();
+		getState().background = background;
+		addData(data);
+	}
+
+	public void addData(double[]... data){
+		if(getState().data == null)
+			getState().data = new double[]{};
+		
+		double[] finalData = new double[getState().data.length + data.length*3];
+		
+		for (int i = 0; i < data.length; i++) {
+			finalData[getState().data.length + 3*i] = data[i][0];
+			finalData[getState().data.length + 3*i + 1] = data[i][1];
+			finalData[getState().data.length + 3*i + 2] = data[i][2];
+		}
+		
+		getState().data = finalData;
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 * @see com.vaadin.ui.AbstractJavaScriptComponent#getState()
