@@ -23,7 +23,7 @@ public class CronTest {
 			System.out.println("run!");
 			CronService.getInstance().shutdown();
 			cdl.countDown();
-		}, "0 * * * * ?");
+		}, "*/2 * * * * ?");
 		System.out.println(new Date());
 		System.out.println(schedule);
 		cdl.await();
