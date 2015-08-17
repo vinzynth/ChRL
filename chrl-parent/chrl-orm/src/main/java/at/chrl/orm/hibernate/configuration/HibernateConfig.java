@@ -311,7 +311,8 @@ public abstract class HibernateConfig implements IHibernateConfig{
 	 */
 	@Property(key = "hibernate.cache.infinispan.cachemanager", defaultValue = "")
 	public String INFINISPAN_CACHE_MANAGER;
-	
+	@Property(key = "hibernate.cache.infinispan.cfg", defaultValue = "infinispan.xml")
+	public String INFINISPAN_CONFIG;
 
 	@Property(key = "hibernate.search.default.directory_provider", defaultValue = "filesystem", examples = {"ram", "filesystem", "filesystem-master", "filesystem-slave"})
 	public String HIBERNATE_SEARCH_DIRECTORY_PROVIDER;
