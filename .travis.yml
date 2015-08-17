@@ -10,4 +10,4 @@ cache:
 before_install: mvn install -N
 install: mvn clean install -DskipTests -T 3C
 
-script: mvn test
+script: mvn clean test

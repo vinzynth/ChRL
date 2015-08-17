@@ -38,6 +38,14 @@
 		<url>https://travis-ci.org/vinzynth/ChRL</url>
 		<system>Travis CI</system>
 	</ciManagement>
+	
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
 	<!--  -->
 	
 	<!--  -->
@@ -504,5 +512,45 @@
 	<modules>
 		<module>chrl-parent</module>
 	</modules>
+	<!--  -->
+	
+	<!--  -->
+	<profiles>
+		<profile>
+			<id>coverage</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.eluder.coveralls</groupId>
+						<artifactId>coveralls-maven-plugin</artifactId>
+						<version>3.1.0</version>
+						<executions>
+							<execution>
+								<id>coveralls</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>jacoco</goal>
+								</goals>
+								<inherited>false</inherited>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.jacoco</groupId>
+						<artifactId>jacoco-maven-plugin</artifactId>
+						<version>0.7.4.201502262128</version>
+						<executions>
+							<execution>
+								<id>prepare-agent</id>
+								<goals>
+									<goal>prepare-agent</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 	<!--  -->
 </project>
