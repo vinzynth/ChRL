@@ -3,16 +3,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<!-- -->
-	<parent>
-		<groupId>at.chrl</groupId>
-		<artifactId>chrl-parent</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-	</parent>
-	<!-- -->
-
-	<!-- -->
+	<groupId>at.chrl</groupId>
 	<artifactId>chrl-orm-test</artifactId>
 	<packaging>jar</packaging>
+	<version>0.0.1-SNAPSHOT</version>
 	<!-- -->
 
 	<!-- -->

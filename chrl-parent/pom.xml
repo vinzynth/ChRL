@@ -49,13 +49,12 @@
 		<module>chrl-database</module>
 		<module>chrl-iryna</module>
 		<module>chrl-orm-spring-integration</module>
-		<module>chrl-orm-test</module>
 		<module>chrl-orm</module>
 		<module>chrl-rebellion</module>
 		<module>chrl-spring</module>
 		<module>chrl-utils</module>
 		<module>chrl-vaadin-webglobe</module>
-		
+
 		<!-- Archetypes -->
 		<module>chrl-spring-sample</module>
 	</modules>
