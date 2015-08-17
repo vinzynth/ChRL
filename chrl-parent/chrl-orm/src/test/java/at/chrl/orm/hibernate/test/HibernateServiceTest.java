@@ -41,12 +41,22 @@ public class HibernateServiceTest {
 			return clazzes;
 		}
 		
+		/**
+		 * {@inheritDoc}
+		 * @see at.chrl.orm.hibernate.configuration.templates.H2Config#overrideConfig()
+		 */
+		@Override
+		public void overrideConfig() {
+			super.overrideConfig();
+			this.SHOW_SQL = "false";
+		}
+		
 		private static class Singleton{
-			private static final HibernateJPATestConfig instancte = new HibernateJPATestConfig();
+			private static final HibernateJPATestConfig instance = new HibernateJPATestConfig();
 		}
 		
 		public static HibernateJPATestConfig getInstance(){
-			return Singleton.instancte;
+			return Singleton.instance;
 		}
 	}
 	

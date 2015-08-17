@@ -19,13 +19,14 @@ public class CronTest {
 		final CountDownLatch cdl = new CountDownLatch(1);
 
 		CronService.initSingleton(RunnableRunnerImpl.class);
+		@SuppressWarnings("unused")
 		Date schedule = CronService.getInstance().schedule(() -> {
-			System.out.println("run!");
+//			System.out.println("run!");
 			CronService.getInstance().shutdown();
 			cdl.countDown();
 		}, "*/2 * * * * ?");
-		System.out.println(new Date());
-		System.out.println(schedule);
+//		System.out.println(new Date());
+//		System.out.println(schedule);
 		cdl.await();
 	}
 }

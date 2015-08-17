@@ -3,8 +3,6 @@
  */
 package at.chrl.nutils;
 
-import java.util.Arrays;
-
 import org.junit.Test;
 
 import at.chrl.nutils.configuration.ConfigUtil;
@@ -22,9 +20,9 @@ public class AbstractConfigTest {
 		SubConfig sc = new SubConfig();
 		ConfigUtil.loadAndExport(sc);
 
-		System.out.println(sc.GAME_BIND_ADDRESS);
+//		System.out.println(sc.GAME_BIND_ADDRESS);
 
-		Arrays.stream(sc.ARGS).forEach(System.out::println);
+//		Arrays.stream(sc.ARGS).forEach(System.out::println);
 	}
 
 	public abstract class BaseConfig {

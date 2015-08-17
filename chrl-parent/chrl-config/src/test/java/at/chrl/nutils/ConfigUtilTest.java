@@ -8,7 +8,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -32,22 +31,22 @@ public class ConfigUtilTest {
 
 	@Test
 	public void testLoadProperty() throws IOException {
-		System.out.println(ExampleConfig.LOGIN_PORT);
+//		System.out.println(ExampleConfig.LOGIN_PORT);
 		assertTrue(ExampleConfig.LOGIN_PORT == 7777);
 	}
 
 	@Test
 	public void testLoadDefault() throws IOException {
-		System.out.println(ExampleConfig.GAME_PORT);
+//		System.out.println(ExampleConfig.GAME_PORT);
 		assertTrue(ExampleConfig.GAME_PORT == 9014);
-
-		for (Object b : ExampleConfig.FLAGS) {
-			System.out.println(b);
-			System.out.println(b.getClass());
-		}
-
-		Arrays.stream(ExampleConfig.ARGS).forEach(System.out::println);
-		Arrays.stream(ExampleConfig.ARGS_SINGLE).forEach(System.out::println);
+//
+//		for (Object b : ExampleConfig.FLAGS) {
+//			System.out.println(b);
+//			System.out.println(b.getClass());
+//		}
+//
+//		Arrays.stream(ExampleConfig.ARGS).forEach(System.out::println);
+//		Arrays.stream(ExampleConfig.ARGS_SINGLE).forEach(System.out::println);
 	}
 
 	@Test
@@ -58,21 +57,21 @@ public class ConfigUtilTest {
 
 	@Test
 	public void test2DArray() {
-		for (int i = 0; i < ExampleConfig.FLAGS_2.length; i++) {
-			System.out.println("i = " + i + " <");
-			for (int j = 0; j < ExampleConfig.FLAGS_2[i].length; j++) {
-				System.out.println("j = " + j + " -> " + ExampleConfig.FLAGS_2[i][j]);
-			}
-			System.out.println(" >");
-		}
+//		for (int i = 0; i < ExampleConfig.FLAGS_2.length; i++) {
+//			System.out.println("i = " + i + " <");
+//			for (int j = 0; j < ExampleConfig.FLAGS_2[i].length; j++) {
+//				System.out.println("j = " + j + " -> " + ExampleConfig.FLAGS_2[i][j]);
+//			}
+//			System.out.println(" >");
+//		}
 	}
 
 	@Test
 	public void testMathLog() {
-		Double d = 5d;
-		System.out.println(ExampleConfig.MATH.apply(d));
-		System.out.println(Math.log(d));
-		System.out.println(ExampleConfig.MATH_2.apply(5d, 3d));
+//		Double d = 5d;
+//		System.out.println(ExampleConfig.MATH.apply(d));
+//		System.out.println(Math.log(d));
+//		System.out.println(ExampleConfig.MATH_2.apply(5d, 3d));
 	}
 
 	public static class ExampleConfig {

@@ -26,7 +26,7 @@ public class ConfigurationTest {
 	public void testLoad() throws IOException {
 		Properties[] props;
 		String file = "config" + File.separator;
-		System.out.println(file);
+//		System.out.println(file);
 		props = PropertiesUtils.loadAllFromDirectory(file);
 		ConfigurableProcessor.process(ExampleConfig.class, props);
 		assertTrue(props.length > 0);
@@ -35,7 +35,7 @@ public class ConfigurationTest {
 	@Test
 	public void testLoadDefault() throws IOException {
 		ConfigurableProcessor.process(ExampleConfig.class, PropertiesUtils.load("config" + File.separator + "example2.properties"));
-		System.out.println(ExampleConfig.LOGIN_TRY_BEFORE_BAN);
+//		System.out.println(ExampleConfig.LOGIN_TRY_BEFORE_BAN);
 		assertTrue(ExampleConfig.LOGIN_TRY_BEFORE_BAN == 5);
 	}
 
