@@ -16,8 +16,6 @@
  */
 package at.chrl.rebellion.classlistener;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import at.chrl.nutils.CollectionUtils;

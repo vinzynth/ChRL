@@ -63,6 +63,5 @@ $RECYCLE.BIN/
 *.prefs
 *.classpath
 *.class
-*.properties
 *\target
 */target
