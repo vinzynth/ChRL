@@ -12,7 +12,7 @@
 	<!--  -->
 	
 	<!--  -->
-	<artifactId>chrl</artifactId>
+	<artifactId>chrl-parent</artifactId>
 	<packaging>pom</packaging>
 	<!--  -->
 	
@@ -56,7 +56,8 @@
 		<module>chrl-utils</module>
 		<module>chrl-vaadin-webglobe</module>
 		
-		<module>../chrl-archetypes/chrl-spring-sample</module>
+		<!-- Archetypes -->
+		<module>chrl-spring-sample</module>
 	</modules>
 	<!--  -->
 </project>
