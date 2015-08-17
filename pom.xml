@@ -16,6 +16,7 @@
 	<!--  -->
 	<inceptionYear>2014</inceptionYear>
 	<description>Bill of Materials for ChRL Projects</description>
+	
 	<developers>
 		<developer>
 			<id>chrl</id>
@@ -24,12 +25,19 @@
 			<organizationUrl>www.chrl.at</organizationUrl>
 		</developer>
 	</developers>
+	
 	<scm>
 		<connection>scm:git:git@github.com:vinzynth/ChRL.git</connection>
 		<developerConnection>scm:git:git@github.com:vinzynth/ChRL.git</developerConnection>
 		<url>scm:git:git@github.com:vinzynth/ChRL.git</url>
 	</scm>
+	
 	<url>https://github.com/vinzynth/ChRL</url>
+	
+	<ciManagement>
+		<url>https://travis-ci.org/vinzynth/ChRL</url>
+		<system>Travis CI</system>
+	</ciManagement>
 	<!--  -->
 	
 	<!--  -->
