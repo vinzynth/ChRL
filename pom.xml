@@ -336,6 +336,26 @@
 				<version>${hibernateVersion}</version>
 			</dependency>
 			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-spatial</artifactId>
+				<version>${hibernateVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-hikaricp</artifactId>
+				<version>${hibernateVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-testing</artifactId>
+				<version>${hibernateVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-java8</artifactId>
+				<version>${hibernateVersion}</version>
+			</dependency>
+			<dependency>
 				<groupId>org.hibernate.ogm</groupId>
 				<artifactId>hibernate-ogm-bom</artifactId>
 				<version>${hibernateOGMVersion}</version>
