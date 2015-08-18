@@ -240,6 +240,10 @@ public class DatasetGenerator {
 		}
 	}
 	
+	public void setSupportedType(final Class<?> cls, Supplier<?> supplier){
+		SUPPORTED_TYPES.put(cls, supplier);
+	}
+	
 	public boolean addExclusion(final Class<?> cls){
 		return EXCLUDED_CLASSES.add(cls);
 	}
