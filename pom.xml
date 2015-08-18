@@ -5,7 +5,7 @@
 	<!--  -->
 	<groupId>at.chrl</groupId>
 	<artifactId>chrl-bom</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>pom</packaging>
 	<!--  -->
 	
@@ -577,6 +577,9 @@
 								</goals>
 							</execution>
 						</executions>
+						<configuration>
+							<failOnError>false</failOnError>
+						</configuration>
 					</plugin>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
