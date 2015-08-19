@@ -1,11 +1,12 @@
 # ChRL Collection
 
-------------------------------------------------------------------------
 [![GitHub version](https://badge.fury.io/gh/vinzynth%2FChRL.svg)](http://badge.fury.io/gh/vinzynth%2FChRL)
 [![Build Status](https://travis-ci.org/vinzynth/ChRL.svg?branch=master)](https://travis-ci.org/vinzynth/ChRL)
 [![Coverage Status](https://coveralls.io/repos/vinzynth/ChRL/badge.svg?branch=master&service=github)](https://coveralls.io/github/vinzynth/ChRL?branch=master)
 [![Dependency Status](https://www.versioneye.com/user/projects/55d3c471265ff6001a000d5d/badge.svg?style=flat)](https://www.versioneye.com/user/projects/55d3c471265ff6001a000d5d) 
 [![License](http://img.shields.io/:license-apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
+
+------------------------------------------------------------------------
 
 The ChRL-Collection is a set of various extensions of existing frameworks, making them easier to use due enhanced api wrappers and common used preconfigurations.  
 The intention is to reduce the coders work to a minimum and keep his code as simple and short as possible.
@@ -50,8 +51,9 @@ Powerfull configuration framework.
 * Type detection via reflection API.
 * Properties can used directly as object instance.
 
-```     @Property(key = "nio.threads.read", defaultValue = "0")
-        public static int NIO_READ_THREADS;
+```java
+@Property(key = "nio.threads.read", defaultValue = "0")
+public static int NIO_READ_THREADS;
 ```
 
 * Supported configuration types:
@@ -82,9 +84,10 @@ Cron API which is based on the Quartz library.
 
 ### Usage
 
-```     CronService.getInstance().schedule(() -> {
-            System.out.println("tick");
-        }, "*/2 * * * * ?");
+```java
+CronService.getInstance().schedule(() -> {
+    System.out.println("tick");
+}, "*/2 * * * * ?");
 ```
 
 ## ORM Module
