@@ -13,11 +13,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
+import javax.transaction.NotSupportedException;
 
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.FlywayException;
@@ -43,6 +45,7 @@ import at.chrl.nutils.ArrayUtils;
 import at.chrl.nutils.JVMInfoUtil;
 import at.chrl.nutils.configuration.ConfigUtil;
 import at.chrl.nutils.configuration.PropertiesUtils;
+import at.chrl.nutils.cron.CronService;
 import at.chrl.orm.hibernate.configuration.HibernateConfig;
 import at.chrl.orm.hibernate.configuration.IHibernateConfig;
 import at.chrl.orm.hibernate.configuration.JPAConfig;
@@ -183,6 +186,17 @@ public final class HibernateService implements AutoCloseable {
 	private HibernateService() {
 		this.databaseConnections = new ConcurrentHashMap<>(5);
 		this.jpaDatabaseConnections = new ConcurrentHashMap<>(5);
+		
+		Consumer<IHibernateConfig> heartbeat = c -> {
+			Session session = this.getSession(c);
+			session.createSQLQuery("select 1").uniqueResult();
+			session.close();
+		};
+		
+		CronService.getInstance().schedule(() -> {
+			this.databaseConnections.keySet().forEach(heartbeat);
+			this.jpaDatabaseConnections.keySet().forEach(heartbeat);
+		}, "0 */2 * * * ?"); 
 	}
 
 	// --------------------------------------------------------------------------

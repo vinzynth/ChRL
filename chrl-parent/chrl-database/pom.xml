@@ -25,7 +25,6 @@
 		<dependency>
 			<groupId>com.jolbox</groupId>
 			<artifactId>bonecp</artifactId>
-			<classifier>jdk5</classifier>
 		</dependency>
 		<dependency>
 			<groupId>at.chrl</groupId>

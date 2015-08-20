@@ -37,10 +37,6 @@
 			<artifactId>hibernate-envers</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>at.chrl</groupId>
-			<artifactId>chrl-config</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
 		</dependency>
@@ -55,17 +51,21 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.zaxxer</groupId>
-			<artifactId>HikariCP</artifactId>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-infinispan</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-infinispan</artifactId>
+			<artifactId>hibernate-hikaricp</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>at.chrl</groupId>
+			<artifactId>chrl-cron</artifactId>
 		</dependency>
 	</dependencies>
 	<!--  -->
