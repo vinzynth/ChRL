@@ -48,7 +48,7 @@ public final class CronService {
 
 	public static synchronized void initSingleton(Class<? extends RunnableRunner> runableRunner) {
 		if (instance != null) {
-			throw new CronServiceException("CronService is already initialized");
+			return;
 		}
 
 		CronService cs = new CronService();
