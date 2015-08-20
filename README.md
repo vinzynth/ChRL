@@ -1,6 +1,7 @@
 # ChRL Collection
 
 [![GitHub version](https://badge.fury.io/gh/vinzynth%2FChRL.svg)](http://badge.fury.io/gh/vinzynth%2FChRL)
+[![Maven Central](http://maven-badges.herokuapp.com/maven-central/at.chrl/chrl-bom/badge.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22at.chrl%22)
 [![Build Status](https://travis-ci.org/vinzynth/ChRL.svg?branch=master)](https://travis-ci.org/vinzynth/ChRL)
 [![Coverage Status](https://coveralls.io/repos/vinzynth/ChRL/badge.svg?branch=master&service=github)](https://coveralls.io/github/vinzynth/ChRL?branch=master)
 [![Dependency Status](https://www.versioneye.com/user/projects/55d3c471265ff6001a000d5d/badge.svg?style=flat)](https://www.versioneye.com/user/projects/55d3c471265ff6001a000d5d) 
@@ -56,7 +57,7 @@ Powerfull configuration framework.
 public static int NIO_READ_THREADS;
 ```
 
-* Supported configuration types:
+* **Supported configuration types:**
     * Boolean
     * Byte
     * Character
@@ -67,7 +68,7 @@ public static int NIO_READ_THREADS;
     * Short
     * String
     * Enums
-    * **Arrays**
+    * Arrays
     * **java.util.function.Function**
     * **java.util.function.BiFunction**
     * File
@@ -95,7 +96,7 @@ CronService.getInstance().schedule(() -> {
 
 ## Additional Modules
 
-[![Dependency Status](https://www.versioneye.com/user/projects/55d13d4515ff9b001c000155/badge.svg?style=flat)](https://www.versioneye.com/user/projects/55d13d4515ff9b001c000155) - chrl-parent
+[![Dependency Status](https://www.versioneye.com/user/projects/55d13d4515ff9b001c000155/badge.svg?style=flat)](https://www.versioneye.com/user/projects/55d13d4515ff9b001c000155) - chrl-parent  
 [![Dependency Status](https://www.versioneye.com/user/projects/55d13d4715ff9b001c00015a/badge.svg?style=flat)](https://www.versioneye.com/user/projects/55d13d4715ff9b001c00015a) - chrl-spring-sample  
 [![Dependency Status](https://www.versioneye.com/user/projects/55d13d4715ff9b0014000189/badge.svg?style=flat)](https://www.versioneye.com/user/projects/55d13d4715ff9b0014000189) - chrl-spring  
 [![Dependency Status](https://www.versioneye.com/user/projects/55d13d4815ff9b00220001d2/badge.svg?style=flat)](https://www.versioneye.com/user/projects/55d13d4815ff9b00220001d2) - chrl-orm-test  
