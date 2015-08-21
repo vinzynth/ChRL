@@ -29,8 +29,12 @@ import at.chrl.orm.hibernate.configuration.JPAConfig;
  * @author bravestone
  *
  */
-public abstract class GenericIndexedRepository<T> extends GenericRepository<T> {
+public class GenericIndexedRepository<T> extends GenericRepository<T> {
 
+	public GenericIndexedRepository(Class<T> cls) {
+		super(cls);
+	}
+	
 	@Autowired
 	protected JPAConfig jpaConfig;
 

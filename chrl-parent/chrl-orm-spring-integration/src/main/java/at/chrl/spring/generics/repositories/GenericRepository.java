@@ -52,6 +52,11 @@ public abstract class GenericRepository<T> {
 		this.persistentClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
 	}
 
+	public GenericRepository(Class<T> cls) {
+		this.persistentClass = cls;
+		this.setIdFieldName();
+	}
+	
 	public Class<T> getType() {
 		return persistentClass;
 	}
