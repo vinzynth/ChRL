@@ -1,20 +1,17 @@
 package at.chrl.spring.hibernate.config;
 
-import javax.persistence.EntityManagerFactory;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.annotation.TransactionManagementConfigurer;
 
-import at.chrl.orm.hibernate.HibernateService;
-import at.chrl.orm.hibernate.SessionTemplate;
 import at.chrl.orm.hibernate.configuration.IHibernateConfig;
 import at.chrl.orm.hibernate.configuration.JPAConfig;
+import at.chrl.orm.hibernate.configuration.ORMMapping;
 
 /**
  * 
@@ -23,62 +20,46 @@ import at.chrl.orm.hibernate.configuration.JPAConfig;
  *
  */
 @Configuration
-@EnableTransactionManagement
-public class SpringJpaConfig implements TransactionManagementConfigurer {
+public class SpringJpaConfig {
 
-	@Autowired(required = true)
-	JPAConfig jpaConfig;
+//	@Autowired
+//	private Collection<GenericRepository<?>> repositories;
 	
-	@Autowired(required = true)
-	public HibernateService hibernateService;
+	@Autowired
+	private Collection<ORMMapping> configs;
 	
-	@Bean(destroyMethod = "")
-	public EntityManagerFactory getEntityManagerFactory() {
-		HibernateService.getInstance().connect(jpaConfig);
-		return getHibernateService().getEntityManagerFactory(jpaConfig);
-	}
-	
-	@Bean(destroyMethod = "")
-	public SessionFactory getSessionFactory() {
-		HibernateService.getInstance().connect(jpaConfig);
-		return getHibernateService().getSessionFactory(jpaConfig);
-	}
-	
-	@Bean
-	public SessionTemplateFactory getSessionTemplateFactory(){
-		return new SessionTemplateFactory() {
-			
+	@Bean(name = "at-chrl-orm-classes")
+	public ORMMapping getMappedClasses() {
+		return new ORMMapping(){
+			/**
+			 * {@inheritDoc}
+			 * @see at.chrl.orm.hibernate.configuration.IHibernateConfig#getAnnotatedClasses()
+			 */
 			@Override
-			public SessionTemplate createTemplate() {
-				return new SessionTemplateImplementation();
+			public List<Class<?>> getAnnotatedClasses() {
+				List<Class<?>> list = configs.stream().map(IHibernateConfig::getAnnotatedClasses).flatMap(Collection::stream).distinct().collect(Collectors.toList());
+				return list;
 			}
 		};
 	}
 	
-	@Bean(destroyMethod = "close")
-	public HibernateService getHibernateService() {
-		return HibernateService.getInstance();
-	}
-
-	@Bean
-	@Override
-	public PlatformTransactionManager annotationDrivenTransactionManager() {
-		return new JpaTransactionManager(getEntityManagerFactory());
+	@Bean(name = "at-chrl-spring-orm-config")
+	public IHibernateConfig getJpaConfig(){
+		return new JPAConfig() {
+			
+			@Autowired(required = true)
+			@Qualifier("at-chrl-orm-classes")
+			private ORMMapping mappedClasses;
+			
+			/**
+			 * {@inheritDoc}
+			 * @see at.chrl.orm.hibernate.configuration.IHibernateConfig#getAnnotatedClasses()
+			 */
+			@Override
+			public List<Class<?>> getAnnotatedClasses() {
+				return mappedClasses.getAnnotatedClasses();
+			}
+		};
 	}
 	
-	private static class SessionTemplateImplementation extends SessionTemplate{
-		
-		@Autowired(required = true)
-		JPAConfig jpaConfig;
-		
-		/**
-		 * {@inheritDoc}
-		 * @see at.chrl.orm.hibernate.SessionTemplate#getHibernateConfig()
-		 */
-		@Override
-		protected IHibernateConfig getHibernateConfig() {
-			return jpaConfig;
-		}
-		
-	}
 }

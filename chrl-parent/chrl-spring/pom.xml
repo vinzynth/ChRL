@@ -59,10 +59,6 @@
 		</dependency>
 		<!-- More Spring -->
 		<!-- ChRL Utils -->
-		<dependency>
-			<groupId>at.chrl</groupId>
-			<artifactId>chrl-config</artifactId>
-		</dependency>
 		<!-- Vaadin -->
 		<dependency>
 			<groupId>org.vaadin</groupId>
@@ -92,6 +88,10 @@
 		<dependency>
 			<groupId>ru.xpoft.vaadin</groupId>
 			<artifactId>spring-vaadin-integration</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>at.chrl</groupId>
+			<artifactId>chrl-cron</artifactId>
 		</dependency>
 	</dependencies>
 	<!-- -->
