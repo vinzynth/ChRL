@@ -1,1 +1,1 @@
-mvn clean install gpg:sign -DskipTests -T3C
+mvn clean install -DskipTests -T3C
