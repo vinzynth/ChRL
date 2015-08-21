@@ -44,22 +44,32 @@ public class SpringJpaConfig {
 	}
 	
 	@Bean(name = "at-chrl-spring-orm-config")
-	public IHibernateConfig getJpaConfig(){
-		return new JPAConfig() {
-			
-			@Autowired(required = true)
-			@Qualifier("at-chrl-orm-classes")
-			private ORMMapping mappedClasses;
-			
-			/**
-			 * {@inheritDoc}
-			 * @see at.chrl.orm.hibernate.configuration.IHibernateConfig#getAnnotatedClasses()
-			 */
-			@Override
-			public List<Class<?>> getAnnotatedClasses() {
-				return mappedClasses.getAnnotatedClasses();
-			}
-		};
+	public JPAConfig getJpaConfig(){
+		return new SpringJPAConfig();
 	}
 	
+	private static class SpringJPAConfig extends JPAConfig{
+		
+		@Autowired(required = true)
+		@Qualifier("at-chrl-orm-classes")
+		private ORMMapping mappedClasses;
+		
+		/**
+		 * {@inheritDoc}
+		 * @see at.chrl.orm.hibernate.configuration.IHibernateConfig#getAnnotatedClasses()
+		 */
+		@Override
+		public List<Class<?>> getAnnotatedClasses() {
+			return mappedClasses.getAnnotatedClasses();
+		}
+		
+		/**
+		 * {@inheritDoc}
+		 * @see at.chrl.orm.hibernate.configuration.JPAConfig#toString()
+		 */
+		@Override
+		public String toString() {
+			return "[chrl-spring] " + super.toString();
+		}
+	}
 }

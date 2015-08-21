@@ -6,6 +6,7 @@
  */
 package at.chrl.orm.hibernate.configuration;
 
+
 /**
  * @author Christian Richard Leopold - ChRL <br>
  * Aug 21, 2015 - 2:41:01 PM
@@ -13,12 +14,4 @@ package at.chrl.orm.hibernate.configuration;
  */
 public class ORMMapping implements IHibernateConfig {
 
-	/**
-	 * {@inheritDoc}
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "ORMMapping: " + this.getClass().getSimpleName();
-	}
 }
