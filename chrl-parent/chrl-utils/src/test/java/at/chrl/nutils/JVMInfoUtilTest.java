@@ -15,6 +15,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -89,6 +90,12 @@ public class JVMInfoUtilTest {
 	public void testPrintSection() throws IOException {
 		util.printSection(out, "-");	
 		verifyMock();
+	}
+	
+	@Test
+	public void testPrintSection2() throws IOException {
+		String printSection = util.printSection("-");	
+		Assert.assertTrue(!printSection.isEmpty());
 	}
 	
 	@After

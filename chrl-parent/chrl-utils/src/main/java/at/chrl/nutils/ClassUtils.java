@@ -2,6 +2,7 @@ package at.chrl.nutils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Set;
@@ -299,6 +300,22 @@ public final class ClassUtils {
 		return clazz;
 	}
 
+	public static Collection<Class<?>> getPrimitveClasses(){
+		Collection<Class<?>> returnMe = CollectionUtils.newList();
+		
+		returnMe.add(Boolean.TYPE);
+		returnMe.add(Byte.TYPE);
+		returnMe.add(Short.TYPE);
+		returnMe.add(Integer.TYPE);
+		
+		returnMe.add(Long.TYPE);
+		returnMe.add(Float.TYPE);
+		returnMe.add(Double.TYPE);
+		returnMe.add(Character.TYPE);
+		
+		return returnMe;
+	}
+	
 	public static Class<?> getNonPrimitiveClass(Class<?> clazz) {
 		if (clazz.equals(Integer.TYPE))
 			return Integer.class;

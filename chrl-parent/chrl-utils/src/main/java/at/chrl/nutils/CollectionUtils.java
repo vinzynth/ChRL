@@ -116,6 +116,11 @@ public final class CollectionUtils {
 	
 
 	public static <T> List<List<T>> chopped(List<T> list, final int length) {
+		if(length >= list.size() || length <= 0){
+			ArrayList<List<T>> ret = new ArrayList<List<T>>();
+			ret.add(list);
+			return ret;
+		}
 		List<List<T>> parts = CollectionUtils.<List<T>>newList();
 		final int n = list.size();
 		for (int i = 0; i < n; i += length) {
