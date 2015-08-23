@@ -4,7 +4,11 @@
  */
 package at.chrl.nutils;
 
-import static at.chrl.nutils.StringUtils.*;
+import static at.chrl.nutils.StringUtils.countMatches;
+import static at.chrl.nutils.StringUtils.insertLineBreaks;
+import static at.chrl.nutils.StringUtils.trim;
+import static at.chrl.nutils.StringUtils.trimAmount;
+import static at.chrl.nutils.StringUtils.trimAround;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;

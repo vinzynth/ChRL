@@ -14,17 +14,34 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
+import javax.inject.Inject;
+
+import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 /**
  * @author Vinzynth
  *
  */
+@RunWith(Arquillian.class)
 public class JVMInfoUtilTest {
 
+	@Deployment
+	public static JavaArchive createDeployment(){
+		return ShrinkWrap.create(JavaArchive.class)
+				.addClass(JVMInfoUtil.class);
+//				.addClass(Mockito.class);
+	}
+	
+	@Inject
 	private JVMInfoUtil util;
+	
 	private PrintStream out;
 	private OutputStream os;
 	
@@ -33,7 +50,7 @@ public class JVMInfoUtilTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		this.util = JVMInfoUtil.getInstance();
+//		this.util = JVMInfoUtil.getInstance();
 		this.os = mock(OutputStream.class);
 		this.out = new PrintStream(os);
 	}
