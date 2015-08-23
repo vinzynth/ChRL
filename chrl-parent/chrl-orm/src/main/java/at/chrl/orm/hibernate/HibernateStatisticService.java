@@ -34,7 +34,7 @@ public final class HibernateStatisticService {
 		if (isNull(sf))
 			throw new NullPointerException("Could not obtain SessionFactory for Config: " + hconfig);
 
-		String[] header = new String[] { JVMInfoUtil.printSection(hconfig.toString()) };
+		String[] header = new String[] { JVMInfoUtil.getInstance().printSection(hconfig.toString()) };
 
 		return ArrayUtils.addAll(ArrayUtils.addAll(ArrayUtils.addAll(ArrayUtils.addAll(ArrayUtils.addAll(header, getSessionFactoryStatistics(sf)), getEntityStatistics(hconfig)), getCollectionStatistics(hconfig)), getCacheStatistics(hconfig)), getQueryStatistics(hconfig));
 	}
@@ -48,7 +48,7 @@ public final class HibernateStatisticService {
 		if (isNull(sf))
 			throw new NullPointerException("Could not obtain SessionFactory for Config: " + hconfig);
 
-		String[] header = new String[] { JVMInfoUtil.printSection(hconfig.toString()) };
+		String[] header = new String[] { JVMInfoUtil.getInstance().printSection(hconfig.toString()) };
 
 		return ArrayUtils.addAll(header, getSessionFactoryStatistics(sf));
 	}
@@ -64,7 +64,7 @@ public final class HibernateStatisticService {
 
 		final Statistics stats = sf.getStatistics();
 
-		String[] header = new String[] { JVMInfoUtil.printSection("Entities for: " + hconfig.toString()) };
+		String[] header = new String[] { JVMInfoUtil.getInstance().printSection("Entities for: " + hconfig.toString()) };
 		return Arrays.stream(stats.getEntityNames()).reduce(header, (a, s) -> ArrayUtils.addAll(a, getEntityStatistics(sf, s)), ArrayUtils::addAll);
 	}
 
@@ -97,7 +97,7 @@ public final class HibernateStatisticService {
 
 		final Statistics stats = sf.getStatistics();
 
-		String[] header = new String[] { JVMInfoUtil.printSection("Collections for: " + hconfig.toString()) };
+		String[] header = new String[] { JVMInfoUtil.getInstance().printSection("Collections for: " + hconfig.toString()) };
 		return Arrays.stream(stats.getCollectionRoleNames()).reduce(header, (a, s) -> ArrayUtils.addAll(a, getCollectionStatistics(sf, s)), ArrayUtils::addAll);
 	}
 
@@ -130,7 +130,7 @@ public final class HibernateStatisticService {
 
 		final Statistics stats = sf.getStatistics();
 
-		String[] header = new String[] { JVMInfoUtil.printSection("Cache for: " + hconfig.toString()) };
+		String[] header = new String[] { JVMInfoUtil.getInstance().printSection("Cache for: " + hconfig.toString()) };
 		return Arrays.stream(stats.getSecondLevelCacheRegionNames()).reduce(header, (a, s) -> ArrayUtils.addAll(a, getCacheStatistics(sf, s)), ArrayUtils::addAll);
 	}
 
@@ -164,7 +164,7 @@ public final class HibernateStatisticService {
 
 		final Statistics stats = sf.getStatistics();
 
-		String[] header = new String[] { JVMInfoUtil.printSection("Querries for: " + hconfig.toString()) };
+		String[] header = new String[] { JVMInfoUtil.getInstance().printSection("Querries for: " + hconfig.toString()) };
 		return Arrays.stream(stats.getQueries()).reduce(header, (a, s) -> ArrayUtils.addAll(a, getQueryStatistics(sf, s)), ArrayUtils::addAll);
 	}
 

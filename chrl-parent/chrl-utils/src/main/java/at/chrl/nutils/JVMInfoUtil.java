@@ -10,40 +10,22 @@ import java.util.Date;
  * @author lord_rex This class is for get/log system informations.
  * 
  */
-public final class JVMInfoUtil {
+public class JVMInfoUtil {
 	public static final int PRINT_SECTION_LENGTH = 102;
 
-	public static void print(PrintStream out, String... data) {
+	public void print(PrintStream out, String... data) {
 		for (String string : data) {
 			out.println(string);
 		}
 	}
 
-	public static String[] getMemoryInfo() {
-		double max = Runtime.getRuntime().maxMemory() / 1024; // maxMemory is
-																// the upper
-																// limit the jvm
-																// can use
-		double allocated = Runtime.getRuntime().totalMemory() / 1024; // totalMemory
-																		// the
-																		// size
-																		// of
-																		// the
-																		// current
-																		// allocation
-																		// pool
-		double nonAllocated = max - allocated; // non allocated memory till jvm
-												// limit
-		double cached = Runtime.getRuntime().freeMemory() / 1024; // freeMemory
-																	// the
-																	// unused
-																	// memory in
-																	// the
-																	// allocation
-																	// pool
-		double used = allocated - cached; // really used memory
-		double useable = max - used; // allocated, but non-used and
-										// non-allocated memory
+	public String[] getMemoryInfo() {
+		double max = Runtime.getRuntime().maxMemory() / 1024; 
+		double allocated = Runtime.getRuntime().totalMemory() / 1024;
+		double nonAllocated = max - allocated;
+		double cached = Runtime.getRuntime().freeMemory() / 1024;
+		double used = allocated - cached;
+		double useable = max - used;
 		DecimalFormat df = new DecimalFormat(" (0.0000'%')");
 		DecimalFormat df2 = new DecimalFormat(" # 'KB'");
 		return new String[] { //
@@ -61,19 +43,19 @@ public final class JVMInfoUtil {
 				String.format("+") };
 	}
 
-	public static String[] getCPUInfo() {
+	public String[] getCPUInfo() {
 		return new String[] { //
 				String.format("Avaible CPU(s): %s", Runtime.getRuntime().availableProcessors()), //
 				String.format("Processor(s) Identifier: %s", System.getenv("PROCESSOR_IDENTIFIER")) };
 	}
 
-	public static String[] getOSInfo() {
+	public String[] getOSInfo() {
 		return new String[] { //
 				String.format("OS: %s Build: %s", System.getProperty("os.name"), System.getProperty("os.version")), //
 				String.format("OS Arch: %s", System.getProperty("os.arch")) };
 	}
 
-	public static String[] getJREInfo() {
+	public String[] getJREInfo() {
 		return new String[] { //
 				String.format("Java Platform Information"), //
 				String.format("Java Runtime Name: %s", System.getProperty("java.runtime.name")), //
@@ -81,7 +63,7 @@ public final class JVMInfoUtil {
 				String.format("Java Class Version: %s", System.getProperty("java.class.version")) };
 	}
 
-	public static String[] getJVMInfo() {
+	public String[] getJVMInfo() {
 		return new String[] { //
 				String.format("Virtual Machine Information (JVM)"), //
 				String.format("JVM Name: %s", System.getProperty("java.vm.name")), //
@@ -92,16 +74,16 @@ public final class JVMInfoUtil {
 				String.format("JVM Specification: %s", System.getProperty("java.vm.specification.name")) };
 	}
 
-	public static String getJVMProcess() {
+	public String getJVMProcess() {
 		return ManagementFactory.getRuntimeMXBean().getName();
 	}
 
-	public static String getHostMachineName() {
+	public String getHostMachineName() {
 		String proc = getJVMProcess();
 		return proc.substring(proc.indexOf("@") + 1);
 	}
 
-	public static int getJVMProcessId() {
+	public int getJVMProcessId() {
 		String proc = getJVMProcess();
 		try {
 			return Integer.parseInt(proc.substring(0, proc.indexOf("@")));
@@ -110,49 +92,49 @@ public final class JVMInfoUtil {
 		}
 	}
 
-	public static String getRealTime() {
+	public String getRealTime() {
 		SimpleDateFormat String = new SimpleDateFormat("H:mm:ss");
 		return String.format(new Date());
 	}
 
-	public static void printJVMProcessId(PrintStream out) {
+	public void printJVMProcessId(PrintStream out) {
 		printSection(out, "JVM Process ID: " + getJVMProcessId());
 	}
 
-	public static void printHostMachineName(PrintStream out) {
+	public void printHostMachineName(PrintStream out) {
 		printSection(out, "JVM Host: " + getHostMachineName());
 	}
 
-	public static void printMemoryInfo(PrintStream out) {
+	public void printMemoryInfo(PrintStream out) {
 		printSection(out, "MEMORY INFO");
 		print(out, getMemoryInfo());
 	}
 
-	public static void printCPUInfo(PrintStream out) {
+	public void printCPUInfo(PrintStream out) {
 		printSection(out, "CPU INFO");
 		print(out, getCPUInfo());
 	}
 
-	public static void printOSInfo(PrintStream out) {
+	public void printOSInfo(PrintStream out) {
 		printSection(out, "OS INFO");
 		print(out, getOSInfo());
 	}
 
-	public static void printJREInfo(PrintStream out) {
+	public void printJREInfo(PrintStream out) {
 		printSection(out, "JRE INFO");
 		print(out, getJREInfo());
 	}
 
-	public static void printJVMInfo(PrintStream out) {
+	public void printJVMInfo(PrintStream out) {
 		printSection(out, "JVM INFO");
 		print(out, getJVMInfo());
 	}
 
-	public static void printAllInfos() {
+	public void printAllInfos() {
 		printAllInfos(System.out);
 	}
 
-	public static void printAllInfos(PrintStream out) {
+	public void printAllInfos(PrintStream out) {
 		printOSInfo(out);
 		printCPUInfo(out);
 		printJREInfo(out);
@@ -163,7 +145,7 @@ public final class JVMInfoUtil {
 		printSection(out, "-");
 	}
 
-	public static String printSection(final String s) {
+	public String printSection(final String s) {
 		StringBuilder sb = new StringBuilder(PRINT_SECTION_LENGTH);
 		int s_length = length(s) + 5;
 		for (int i = s_length; i < PRINT_SECTION_LENGTH; i++)
@@ -172,7 +154,7 @@ public final class JVMInfoUtil {
 		return sb.toString();
 	}
 
-	public static void printSection(final PrintStream out, final String s) {
+	public void printSection(final PrintStream out, final String s) {
 		StringBuilder sb = new StringBuilder(PRINT_SECTION_LENGTH);
 		int s_length = length(s) + 5;
 		for (int i = s_length; i < PRINT_SECTION_LENGTH; i++)
@@ -181,7 +163,7 @@ public final class JVMInfoUtil {
 		out.println(sb.toString());
 	}
 
-	public static int length(String value) {
+	public int length(String value) {
 		int valueLength = 0;
 		for (int i = 0; i < value.length(); i++) {
 			String temp = value.substring(i, i + 1);
@@ -194,7 +176,7 @@ public final class JVMInfoUtil {
 		return valueLength;
 	}
 
-	private static boolean isChinese(char c) {
+	private boolean isChinese(char c) {
 		Character.UnicodeBlock ub = Character.UnicodeBlock.of(c);
 		if (ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS
 				|| ub == Character.UnicodeBlock.CJK_COMPATIBILITY_IDEOGRAPHS
@@ -208,7 +190,7 @@ public final class JVMInfoUtil {
 		return false;
 	}
 
-	public static boolean isChinese(String strName) {
+	public boolean isChinese(String strName) {
 		char[] ch = strName.toCharArray();
 		for (int i = 0; i < ch.length; i++) {
 			char c = ch[i];
@@ -220,5 +202,13 @@ public final class JVMInfoUtil {
 	}
 
 	private JVMInfoUtil() {
+	}
+
+	private static class SingletonHolder {
+		private static JVMInfoUtil instance = new JVMInfoUtil();
+	}
+
+	public static final JVMInfoUtil getInstance() {
+		return SingletonHolder.instance;
 	}
 }

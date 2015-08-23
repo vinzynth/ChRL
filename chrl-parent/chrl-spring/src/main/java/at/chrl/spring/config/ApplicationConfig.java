@@ -9,6 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 import at.chrl.Application;
+import at.chrl.nutils.JVMInfoUtil;
 import at.chrl.nutils.cron.CronService;
 
 /**
@@ -22,6 +23,11 @@ public class ApplicationConfig {
 	@Bean(destroyMethod = "shutdown")
 	public CronService getCronService(){
 		return CronService.getInstance();
+	}
+	
+	@Bean
+	public JVMInfoUtil getJVMInfoUtil(){
+		return JVMInfoUtil.getInstance();
 	}
 	
 }

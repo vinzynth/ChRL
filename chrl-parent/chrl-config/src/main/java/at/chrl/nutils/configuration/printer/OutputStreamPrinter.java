@@ -33,7 +33,7 @@ public class OutputStreamPrinter implements IConfigPrinter {
 	@Override
 	public <T> void printConfigField(Property property, String currentValue, Class<T> annotatedType) {
 		try {
-			os.write(("# " + JVMInfoUtil.printSection(property.key()) + System.lineSeparator()).getBytes());
+			os.write(("# " + JVMInfoUtil.getInstance().printSection(property.key()) + System.lineSeparator()).getBytes());
 			os.write(("# Description:" + System.lineSeparator()).getBytes());
 			os.write(("# " + StringUtils.insertRepetitive(property.description(), JVMInfoUtil.PRINT_SECTION_LENGTH - (property.key().length() + 6), "\n# ") + System.lineSeparator()).getBytes());
 

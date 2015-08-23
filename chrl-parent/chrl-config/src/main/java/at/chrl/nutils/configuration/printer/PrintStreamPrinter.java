@@ -31,7 +31,7 @@ public class PrintStreamPrinter implements IConfigPrinter {
 	 */
 	@Override
 	public <T> void printConfigField(Property property, String currentValue, Class<T> annotatedType) {
-		ps.println("# " + JVMInfoUtil.printSection(property.key()));
+		ps.println("# " + JVMInfoUtil.getInstance().printSection(property.key()));
 		ps.println("# Description:");
 		ps.println("# " + StringUtils.insertRepetitive(property.description(), JVMInfoUtil.PRINT_SECTION_LENGTH - (property.key().length() + 6), "\n# "));
 

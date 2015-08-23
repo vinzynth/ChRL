@@ -45,7 +45,7 @@ public class PropertyFileStreamPrinter implements IConfigPrinter {
 			recreated = true;
 		}
 		try (BufferedWriter writer = Files.newBufferedWriter(targetFile.toPath(), Charset.forName("UTF-8"), StandardOpenOption.APPEND, StandardOpenOption.CREATE)) {
-			writer.write("# " + JVMInfoUtil.printSection(property.key()) + System.lineSeparator());
+			writer.write("# " + JVMInfoUtil.getInstance().printSection(property.key()) + System.lineSeparator());
 			writer.write("# Description:" + System.lineSeparator());
 			writer.write("# " + StringUtils.insertRepetitive(property.description(), JVMInfoUtil.PRINT_SECTION_LENGTH - (property.key().length() + 5), "\n# ") + System.lineSeparator());
 

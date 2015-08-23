@@ -684,10 +684,10 @@ public final class HibernateService implements AutoCloseable {
 	public String toString() {
 		StringBuilder sb = new StringBuilder((databaseConnections.size() + jpaDatabaseConnections.size()) * 100);
 
-		sb.append(JVMInfoUtil.printSection(super.toString()));
+		sb.append(JVMInfoUtil.getInstance().printSection(super.toString()));
 		sb.append(System.lineSeparator());
 		if (databaseConnections.size() > 0) {
-			sb.append(JVMInfoUtil.printSection("Hibernate Connections"));
+			sb.append(JVMInfoUtil.getInstance().printSection("Hibernate Connections"));
 			sb.append(System.lineSeparator());
 			for (HibernateConfig iterable_element : databaseConnections.keySet()) {
 				sb.append(iterable_element).append(System.lineSeparator());
@@ -695,7 +695,7 @@ public final class HibernateService implements AutoCloseable {
 		}
 
 		if (jpaDatabaseConnections.size() > 0) {
-			sb.append(JVMInfoUtil.printSection("JPA Connections"));
+			sb.append(JVMInfoUtil.getInstance().printSection("JPA Connections"));
 			sb.append(System.lineSeparator());
 			for (JPAConfig iterable_element : jpaDatabaseConnections.keySet()) {
 				sb.append(iterable_element).append(System.lineSeparator());

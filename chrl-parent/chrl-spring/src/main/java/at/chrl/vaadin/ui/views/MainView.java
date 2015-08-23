@@ -57,7 +57,7 @@ public class MainView extends BasicUIView {
 
 	public Label[] loadLabls() {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		JVMInfoUtil.printAllInfos(new PrintStream(baos));
+		JVMInfoUtil.getInstance().printAllInfos(new PrintStream(baos));
 		String[] infos = baos.toString().split(System.lineSeparator());
 		return Arrays.stream(infos).map(Label::new).toArray(Label[]::new);
 	}

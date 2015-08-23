@@ -14,6 +14,7 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.ObjectWriter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -31,6 +32,9 @@ import at.chrl.nutils.configuration.PropertiesUtils;
 @RestController
 public class BasicController {
 
+	@Autowired
+	private JVMInfoUtil infoUtil;
+	
 	@RequestMapping("exception")
 	public boolean throwException() {
 		throw new RuntimeException("Test Exception thrown by request at " + new Date().toString());
@@ -39,7 +43,7 @@ public class BasicController {
 	@RequestMapping("jvm")
 	public String getJVMInfo() {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		JVMInfoUtil.printAllInfos(new PrintStream(baos));
+		infoUtil.printAllInfos(new PrintStream(baos));
 		return baos.toString().replace(System.lineSeparator(), "<br>");
 	}
 

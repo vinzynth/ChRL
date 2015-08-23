@@ -1,15 +1,16 @@
 package at.chrl.search;
 
-import at.chrl.algorithms.search.SearchUtil;
-import at.chrl.nutils.Rnd;
-
-import org.junit.Test;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Arrays;
 import java.util.Set;
 import java.util.TreeSet;
 
-import static org.junit.Assert.assertTrue;
+import org.junit.Test;
+
+import at.chrl.algorithms.search.SearchUtil;
+import at.chrl.nutils.Rnd;
 
 public class SearchUtilTest {
 
@@ -22,7 +23,11 @@ public class SearchUtilTest {
 		index.add("ttest");
 
 		String[] result = SearchUtil.search(index, "tt");
-		Arrays.stream(result).forEach(System.out::println);
+		for (int i = 0; i < result.length; i++) {
+			if(result[i].equals("ttest"))
+				return;
+		}
+		fail("Result not found in returned set");
 	}
 
 	@Test
@@ -45,24 +50,26 @@ public class SearchUtilTest {
 		index.add("s");
 
 		String[] result = SearchUtil.search(index, "setc");
-		Arrays.stream(result).forEach(System.out::println);
+		for (int i = 0; i < result.length; i++) {
+			if(result[i].equals("Set Syntax: C"))
+				return;
+		}
+		fail("Result not found in returned set");
 	}
 
 	@Test
 	public void testPerformance() throws Exception {
 		TreeSet<String> index = new TreeSet<>();
 
-		for (int i = 0; i < 100_000; i++) {
-			index.add("dsgaesauiwetgspfhga" + Rnd.nextInt(Integer.MAX_VALUE));
+		for (int i = 0; i < 10_000; i++) {
+			index.add(Rnd.nextString() + Rnd.nextInt(Integer.MAX_VALUE));
 		}
 
 		int scount = 100;
-		long t = System.nanoTime();
-		System.out.println("Start Search");
 		for (int i = 0; i < scount; i++) {
-			SearchUtil.search(index, Rnd.nextInt(Integer.MAX_VALUE) + "");
+			String[] search = SearchUtil.search(index, Rnd.nextInt(Integer.MAX_VALUE) + "");
+			assertTrue(Arrays.stream(search).filter(index::contains).count() == search.length);
 		}
-		System.out.println("Finished: " + (System.nanoTime() - t) / 1_000 / scount + "µs pre search");
 	}
 
 	@Test
