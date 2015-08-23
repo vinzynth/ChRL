@@ -60,6 +60,7 @@
 		<hibernateValidatorVersion>5.2.1.Final</hibernateValidatorVersion>
 		<hibernateOGMVersion>4.2.0.Final</hibernateOGMVersion>
 		<springframeworkVersion>4.2.0.RELEASE</springframeworkVersion>
+		<arquillianVersion>1.1.8.Final</arquillianVersion>
 		
 		<io.spring.platform-version>1.1.3.RELEASE</io.spring.platform-version>
 		
@@ -151,6 +152,11 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-resources-plugin</artifactId>
 					<version>2.7</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>2.6.1</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -506,6 +512,18 @@
 		        <artifactId>HikariCP</artifactId>
 		        <version>2.4.0</version>
 		    </dependency>
+		    <dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-core</artifactId>
+				<version>2.0.31-beta</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.arquillian</groupId>
+				<artifactId>arquillian-bom</artifactId>
+				<version>${arquillianVersion}</version>
+	            <scope>import</scope>
+	            <type>pom</type>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<!--  -->

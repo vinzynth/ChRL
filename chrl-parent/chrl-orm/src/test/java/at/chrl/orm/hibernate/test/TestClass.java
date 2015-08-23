@@ -84,9 +84,7 @@ public class TestClass implements ObjectMapable<Long> {
 	/**
 	 * 
 	 */
-	@SuppressWarnings("unused")
-	private TestClass() {
-		// for hibernate
+	protected TestClass() {
 	}
 	
 	public TestClass(String text, Date date, Integer value, TestEnum rating) {

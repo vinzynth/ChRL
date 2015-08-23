@@ -18,7 +18,6 @@
 package at.chrl.orm.hibernate.datatypes;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -51,7 +50,7 @@ public class MultiMapEntry implements INestedCollection<Collection<Long>, Long>,
 	private Long id;
 	
 	@Version
-	private Date version;
+	private Long version;
 	
 	private boolean isSet;
 	
@@ -106,14 +105,14 @@ public class MultiMapEntry implements INestedCollection<Collection<Long>, Long>,
 	/**
 	 * @return the version
 	 */
-	public Date getVersion() {
+	public Long getVersion() {
 		return version;
 	}
 
 	/**
 	 * @param version the version to set
 	 */
-	public void setVersion(Date version) {
+	public void setVersion(Long version) {
 		this.version = version;
 	}
 

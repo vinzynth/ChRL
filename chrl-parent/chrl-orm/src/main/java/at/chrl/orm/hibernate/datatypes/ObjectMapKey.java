@@ -36,8 +36,7 @@ public class ObjectMapKey<T> implements Comparable<ObjectMapKey<T>>{
 	/**
 	 * Hiberante needs me
 	 */
-	@SuppressWarnings("unused")
-	private ObjectMapKey() {
+	protected ObjectMapKey() {
 	}
 	
 	/**
