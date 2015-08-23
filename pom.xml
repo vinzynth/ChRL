@@ -188,22 +188,12 @@
 			</dependency>
 			<dependency>
 				<groupId>at.chrl</groupId>
-				<artifactId>chrl-database</artifactId>
-				<version>${chrlVersion}</version>
-			</dependency>
-			<dependency>
-				<groupId>at.chrl</groupId>
 				<artifactId>chrl-orm</artifactId>
 				<version>${chrlVersion}</version>
 			</dependency>
 			<dependency>
 				<groupId>at.chrl</groupId>
 				<artifactId>chrl-orm-spring-integration</artifactId>
-				<version>${chrlVersion}</version>
-			</dependency>
-			<dependency>
-				<groupId>at.chrl</groupId>
-				<artifactId>chrl-orm-test</artifactId>
 				<version>${chrlVersion}</version>
 			</dependency>
 			<dependency>
@@ -219,11 +209,6 @@
 			<dependency>
 				<groupId>at.chrl</groupId>
 				<artifactId>chrl-utils</artifactId>
-				<version>${chrlVersion}</version>
-			</dependency>
-			<dependency>
-				<groupId>at.chrl</groupId>
-				<artifactId>chrl-vaadin-webglobe</artifactId>
 				<version>${chrlVersion}</version>
 			</dependency>
 			<dependency>
