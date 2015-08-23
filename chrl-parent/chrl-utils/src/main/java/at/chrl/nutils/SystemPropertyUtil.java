@@ -18,8 +18,6 @@ package at.chrl.nutils;
 
 import java.util.regex.Pattern;
 
-import static at.chrl.nutils.Constants.log;
-
 /**
  * A collection of utility methods to retrieve and parse the values of the Java
  * system properties.
@@ -65,7 +63,8 @@ public final class SystemPropertyUtil {
 		try {
 			value = System.getProperty(key);
 		} catch (Exception e) {
-			log.error("Unable to retrieve a system property '" + key + "'; default values will be used.", e);
+			System.err.println("Unable to retrieve a system property '" + key + "'; default values will be used. " + e.getMessage());
+			e.printStackTrace();
 		}
 
 		if (value == null) {
@@ -166,7 +165,7 @@ public final class SystemPropertyUtil {
 	}
 
 	private static void log(String msg) {
-		log.warn(msg);
+		System.out.println(msg);
 	}
 
 	private SystemPropertyUtil() {

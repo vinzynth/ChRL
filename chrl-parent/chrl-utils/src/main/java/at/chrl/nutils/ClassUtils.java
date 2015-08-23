@@ -1,7 +1,5 @@
 package at.chrl.nutils;
 
-import static at.chrl.nutils.Constants.log;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
@@ -215,13 +213,13 @@ public final class ClassUtils {
 				}
 
 				String newPackage = file.getName();
-				if (!GenericValidator.isBlankOrNull(packageName)) {
+				if (!StreamUtils.isBlankOrNull(packageName)) {
 					newPackage = packageName + "." + newPackage;
 				}
 				classes.addAll(getClassNamesFromPackage(file, newPackage, recursive));
 			} else if (file.getName().endsWith(".class")) {
 				String className = file.getName().substring(0, file.getName().length() - 6);
-				if (!GenericValidator.isBlankOrNull(packageName)) {
+				if (!StreamUtils.isBlankOrNull(packageName)) {
 					className = packageName + "." + className;
 				}
 				classes.add(className);
@@ -271,7 +269,8 @@ public final class ClassUtils {
 				try {
 					jarFile.close();
 				} catch (IOException e) {
-					log.error("Failed to close jar file " + jarFile.getName(), e);
+					System.err.println("Failed to close jar file " + jarFile.getName() + " | " + e.getMessage());
+					e.printStackTrace();
 				}
 			}
 		}

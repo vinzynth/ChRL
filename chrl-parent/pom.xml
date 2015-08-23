@@ -46,8 +46,6 @@
 		<module>chrl-callbacks</module>
 		<module>chrl-config</module>
 		<module>chrl-cron</module>
-		<module>chrl-database</module>
-		<module>chrl-iryna</module>
 		<module>chrl-orm-spring-integration</module>
 		<module>chrl-orm</module>
 		<module>chrl-rebellion</module>

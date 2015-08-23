@@ -7,19 +7,16 @@ package at.chrl.nutils.configuration.printer;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import at.chrl.logging.Logger;
 import at.chrl.nutils.JVMInfoUtil;
+import at.chrl.nutils.StringUtils;
 import at.chrl.nutils.configuration.IConfigPrinter;
 import at.chrl.nutils.configuration.Property;
-import at.chrl.utils.StringUtils;
 
 /**
  * @author Vinzynth
  *
  */
 public class OutputStreamPrinter implements IConfigPrinter {
-
-	private static final Logger log = new Logger();
 
 	final OutputStream os;
 
@@ -62,7 +59,8 @@ public class OutputStreamPrinter implements IConfigPrinter {
 			os.write((System.lineSeparator()).getBytes());
 			os.flush();
 		} catch (IOException e) {
-			log.error("Error writing to OutputStream: " + e.getMessage(), e);
+			System.err.println("Error writing to OutputStream: " + e.getMessage());
+			e.printStackTrace();
 		}
 	}
 }

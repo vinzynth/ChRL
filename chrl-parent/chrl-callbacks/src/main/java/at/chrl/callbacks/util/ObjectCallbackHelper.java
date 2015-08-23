@@ -16,8 +16,6 @@
  */
 package at.chrl.callbacks.util;
 
-import gnu.trove.map.hash.THashMap;
-
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -28,7 +26,8 @@ import org.slf4j.LoggerFactory;
 import at.chrl.callbacks.Callback;
 import at.chrl.callbacks.CallbackResult;
 import at.chrl.callbacks.EnhancedObject;
-import at.chrl.nutils.GenericValidator;
+import at.chrl.nutils.StreamUtils;
+import gnu.trove.map.hash.THashMap;
 
 /**
  * Class that implements helper methods for callbacks.<br>
@@ -96,7 +95,7 @@ public class ObjectCallbackHelper {
 			object.getCallbackLock().writeLock().lock();
 
 			Map<Class<? extends Callback>, List<Callback>> cbMap = object.getCallbacks();
-			if (GenericValidator.isBlankOrNull(cbMap)) {
+			if (StreamUtils.isBlankOrNull(cbMap)) {
 				return;
 			}
 
@@ -134,7 +133,7 @@ public class ObjectCallbackHelper {
 	@SuppressWarnings("unchecked")
 	public static CallbackResult<?> beforeCall(EnhancedObject obj, Class callbackClass, Object... args) {
 		Map<Class<? extends Callback>, List<Callback>> cbMap = obj.getCallbacks();
-		if (GenericValidator.isBlankOrNull(cbMap)) {
+		if (StreamUtils.isBlankOrNull(cbMap)) {
 			return CallbackResult.newContinue();
 		}
 
@@ -148,7 +147,7 @@ public class ObjectCallbackHelper {
 			obj.getCallbackLock().readLock().unlock();
 		}
 
-		if (GenericValidator.isBlankOrNull(list)) {
+		if (StreamUtils.isBlankOrNull(list)) {
 			return CallbackResult.newContinue();
 		}
 
@@ -182,7 +181,7 @@ public class ObjectCallbackHelper {
 	@SuppressWarnings("unchecked")
 	public static CallbackResult<?> afterCall(EnhancedObject obj, Class callbackClass, Object[] args, Object result) {
 		Map<Class<? extends Callback>, List<Callback>> cbMap = obj.getCallbacks();
-		if (GenericValidator.isBlankOrNull(cbMap)) {
+		if (StreamUtils.isBlankOrNull(cbMap)) {
 			return CallbackResult.newContinue();
 		}
 
@@ -196,7 +195,7 @@ public class ObjectCallbackHelper {
 			obj.getCallbackLock().readLock().unlock();
 		}
 
-		if (GenericValidator.isBlankOrNull(list)) {
+		if (StreamUtils.isBlankOrNull(list)) {
 			return CallbackResult.newContinue();
 		}
 

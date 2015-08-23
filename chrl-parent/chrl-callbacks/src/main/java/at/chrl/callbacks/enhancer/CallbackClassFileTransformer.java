@@ -23,8 +23,6 @@ import java.security.ProtectionDomain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.chrl.nutils.ExitCode;
-
 /**
  * Basic class that checks if class can be transformed. JDK classes are not a
  * subject of transformation.
@@ -69,7 +67,7 @@ public abstract class CallbackClassFileTransformer implements ClassFileTransform
 			// if it is a class from core (not a script) - terminate server
 			// noinspection ConstantConditions
 			if (loader.getClass().getName().equals("sun.misc.Launcher$AppClassLoader")) {
-				Runtime.getRuntime().halt(ExitCode.CODE_ERROR);
+				Runtime.getRuntime().halt(1);
 			}
 
 			throw e1;

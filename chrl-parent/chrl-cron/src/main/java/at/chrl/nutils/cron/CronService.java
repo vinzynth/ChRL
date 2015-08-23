@@ -23,7 +23,7 @@ import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
 
 import at.chrl.nutils.CollectionUtils;
-import at.chrl.nutils.GenericValidator;
+import at.chrl.nutils.StreamUtils;
 
 /**
  * @author ChRL
@@ -177,7 +177,7 @@ public final class CronService {
 		try {
 			Set<JobKey> keys = scheduler.getJobKeys(null);
 
-			if (GenericValidator.isBlankOrNull(keys)) {
+			if (StreamUtils.isBlankOrNull(keys)) {
 				return Collections.emptySet();
 			}
 
@@ -194,13 +194,13 @@ public final class CronService {
 
 	public Map<Runnable, JobDetail> getRunnables() {
 		Collection<JobDetail> jobDetails = getJobDetails();
-		if (GenericValidator.isBlankOrNull(jobDetails)) {
+		if (StreamUtils.isBlankOrNull(jobDetails)) {
 			return Collections.emptyMap();
 		}
 
 		Map<Runnable, JobDetail> result = new HashMap<Runnable, JobDetail>();
 		for (JobDetail jd : jobDetails) {
-			if (GenericValidator.isBlankOrNull(jd.getJobDataMap())) {
+			if (StreamUtils.isBlankOrNull(jd.getJobDataMap())) {
 				continue;
 			}
 

@@ -6,8 +6,6 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static at.chrl.nutils.Constants.log;
-
 /**
  * @author lord_rex This class is for get/log system informations.
  * 
@@ -49,47 +47,49 @@ public final class JVMInfoUtil {
 		DecimalFormat df = new DecimalFormat(" (0.0000'%')");
 		DecimalFormat df2 = new DecimalFormat(" # 'KB'");
 		return new String[] { //
-		String.format("+"), //
-		String.format("+ Global Memory Informations at %s", getRealTime().toString()), //
-		String.format("+"), //
-		String.format("+ Allowed Memory:\t\t %s", df2.format(max)), //
-		String.format("+ Allocated Memory:\t\t %s", df2.format(allocated) + df.format(allocated / max * 100)), //
-		String.format("+ Non-Allocated Memory:\t\t %s", df2.format(nonAllocated) + df.format(nonAllocated / max * 100)), //
-		String.format("+ Allocated Memory:\t\t %s", df2.format(allocated)), //
-		String.format("+ Used Memory:\t\t\t %s", df2.format(used) + df.format(used / max * 100)), //
-		String.format("+ Unused (cached) Memory:\t %s", df2.format(cached) + df.format(cached / max * 100)), //
-		String.format("+ Useable Memory:\t\t %s", df2.format(useable) + df.format(useable / max * 100)), //
-		String.format("+") };
+				String.format("+"), //
+				String.format("+ Global Memory Informations at %s", getRealTime().toString()), //
+				String.format("+"), //
+				String.format("+ Allowed Memory:\t\t %s", df2.format(max)), //
+				String.format("+ Allocated Memory:\t\t %s", df2.format(allocated) + df.format(allocated / max * 100)), //
+				String.format("+ Non-Allocated Memory:\t\t %s",
+						df2.format(nonAllocated) + df.format(nonAllocated / max * 100)), //
+				String.format("+ Allocated Memory:\t\t %s", df2.format(allocated)), //
+				String.format("+ Used Memory:\t\t\t %s", df2.format(used) + df.format(used / max * 100)), //
+				String.format("+ Unused (cached) Memory:\t %s", df2.format(cached) + df.format(cached / max * 100)), //
+				String.format("+ Useable Memory:\t\t %s", df2.format(useable) + df.format(useable / max * 100)), //
+				String.format("+") };
 	}
 
 	public static String[] getCPUInfo() {
 		return new String[] { //
-		String.format("Avaible CPU(s): %s", Runtime.getRuntime().availableProcessors()), //
-		String.format("Processor(s) Identifier: %s", System.getenv("PROCESSOR_IDENTIFIER")) };
+				String.format("Avaible CPU(s): %s", Runtime.getRuntime().availableProcessors()), //
+				String.format("Processor(s) Identifier: %s", System.getenv("PROCESSOR_IDENTIFIER")) };
 	}
 
 	public static String[] getOSInfo() {
 		return new String[] { //
-		String.format("OS: %s Build: %s", System.getProperty("os.name"), System.getProperty("os.version")), //
-		String.format("OS Arch: %s", System.getProperty("os.arch")) };
+				String.format("OS: %s Build: %s", System.getProperty("os.name"), System.getProperty("os.version")), //
+				String.format("OS Arch: %s", System.getProperty("os.arch")) };
 	}
 
 	public static String[] getJREInfo() {
 		return new String[] { //
-		String.format("Java Platform Information"), //
-		String.format("Java Runtime Name: %s", System.getProperty("java.runtime.name")), //
-		String.format("Java Version: %s", System.getProperty("java.version")), //
-		String.format("Java Class Version: %s", System.getProperty("java.class.version")) };
+				String.format("Java Platform Information"), //
+				String.format("Java Runtime Name: %s", System.getProperty("java.runtime.name")), //
+				String.format("Java Version: %s", System.getProperty("java.version")), //
+				String.format("Java Class Version: %s", System.getProperty("java.class.version")) };
 	}
 
 	public static String[] getJVMInfo() {
 		return new String[] { //
-		String.format("Virtual Machine Information (JVM)"), //
-		String.format("JVM Name: %s", System.getProperty("java.vm.name")), //
-		String.format("JVM installation directory: %s", System.getProperty("java.home")), //
-		String.format("JVM version: %s", System.getProperty("java.vm.version")), //
-		String.format("JVM Vendor: %s", System.getProperty("java.vm.vendor")), //
-		String.format("JVM Info: %s", System.getProperty("java.vm.info")), String.format("JVM Specification: %s", System.getProperty("java.vm.specification.name")) };
+				String.format("Virtual Machine Information (JVM)"), //
+				String.format("JVM Name: %s", System.getProperty("java.vm.name")), //
+				String.format("JVM installation directory: %s", System.getProperty("java.home")), //
+				String.format("JVM version: %s", System.getProperty("java.vm.version")), //
+				String.format("JVM Vendor: %s", System.getProperty("java.vm.vendor")), //
+				String.format("JVM Info: %s", System.getProperty("java.vm.info")),
+				String.format("JVM Specification: %s", System.getProperty("java.vm.specification.name")) };
 	}
 
 	public static String getJVMProcess() {
@@ -113,35 +113,6 @@ public final class JVMInfoUtil {
 	public static String getRealTime() {
 		SimpleDateFormat String = new SimpleDateFormat("H:mm:ss");
 		return String.format(new Date());
-	}
-
-	public static void printJVMProcessId() {
-		log.info(getJVMProcessId());
-	}
-
-	public static void printMemoryInfo() {
-		for (String line : getMemoryInfo())
-			log.info(line);
-	}
-
-	public static void printCPUInfo() {
-		for (String line : getCPUInfo())
-			log.info(line);
-	}
-
-	public static void printOSInfo() {
-		for (String line : getOSInfo())
-			log.info(line);
-	}
-
-	public static void printJREInfo() {
-		for (String line : getJREInfo())
-			log.info(line);
-	}
-
-	public static void printJVMInfo() {
-		for (String line : getJVMInfo())
-			log.info(line);
 	}
 
 	public static void printJVMProcessId(PrintStream out) {
@@ -177,17 +148,8 @@ public final class JVMInfoUtil {
 		print(out, getJVMInfo());
 	}
 
-	public static void printRealTime() {
-		log.info(getRealTime().toString());
-	}
-
 	public static void printAllInfos() {
-		printOSInfo();
-		printCPUInfo();
-		printJREInfo();
-		printJVMInfo();
-		printJVMProcessId();
-		printMemoryInfo();
+		printAllInfos(System.out);
 	}
 
 	public static void printAllInfos(PrintStream out) {
@@ -234,7 +196,13 @@ public final class JVMInfoUtil {
 
 	private static boolean isChinese(char c) {
 		Character.UnicodeBlock ub = Character.UnicodeBlock.of(c);
-		if (ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS || ub == Character.UnicodeBlock.CJK_COMPATIBILITY_IDEOGRAPHS || ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A || ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B || ub == Character.UnicodeBlock.CJK_SYMBOLS_AND_PUNCTUATION || ub == Character.UnicodeBlock.HALFWIDTH_AND_FULLWIDTH_FORMS || ub == Character.UnicodeBlock.GENERAL_PUNCTUATION) {
+		if (ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS
+				|| ub == Character.UnicodeBlock.CJK_COMPATIBILITY_IDEOGRAPHS
+				|| ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A
+				|| ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B
+				|| ub == Character.UnicodeBlock.CJK_SYMBOLS_AND_PUNCTUATION
+				|| ub == Character.UnicodeBlock.HALFWIDTH_AND_FULLWIDTH_FORMS
+				|| ub == Character.UnicodeBlock.GENERAL_PUNCTUATION) {
 			return true;
 		}
 		return false;

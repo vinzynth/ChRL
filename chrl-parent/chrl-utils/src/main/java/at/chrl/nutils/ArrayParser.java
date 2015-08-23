@@ -2,7 +2,7 @@
  * (C) ChRL 2013 - chrl-utils - at.chrl.utils - ArrayParser.java Created:
  * 30.12.2013 - 16:56:19
  */
-package at.chrl.utils;
+package at.chrl.nutils;
 
 /**
  * @author Vinzynth

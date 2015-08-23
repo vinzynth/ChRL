@@ -1,7 +1,5 @@
 package at.chrl.nutils.configuration;
 
-import static at.chrl.nutils.Constants.log;
-
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -108,7 +106,7 @@ public class ConfigurableProcessor {
 				// Final fields should not be processed
 				if (Modifier.isFinal(f.getModifiers())) {
 					RuntimeException re = new RuntimeException("Attempt to proceed final field " + f.getName() + " of class " + clazz.getName());
-					log.error(re.toString());
+					System.err.println(re.toString());
 					throw re;
 				} else {
 					processField(f, obj, props);
@@ -177,12 +175,12 @@ public class ConfigurableProcessor {
 					f.set(obj, arr2);
 				} else
 					f.set(obj, toSet);
-			} else if (log.isDebugEnabled()) {
-				log.debug("Field " + f.getName() + " of class " + f.getDeclaringClass().getName() + " wasn't modified");
+			} else {
+				System.out.println("Field " + f.getName() + " of class " + f.getDeclaringClass().getName() + " wasn't modified");
 			}
 		} catch (Exception e) {
 			RuntimeException re = new RuntimeException("Can't transform field " + f.getName() + " of class " + f.getDeclaringClass(), e);
-			log.error(re.toString());
+			System.err.println(re.toString());
 			throw re;
 		}
 		f.setAccessible(oldAccessible);
@@ -210,16 +208,15 @@ public class ConfigurableProcessor {
 		String value = null;
 
 		if (key.isEmpty()) {
-			log.warn("Property " + field.getName() + " of class " + field.getDeclaringClass().getName() + " has empty key");
+			System.out.println("Property " + field.getName() + " of class " + field.getDeclaringClass().getName() + " has empty key");
 		} else {
 			value = findPropertyByKey(key, props);
 		}
 
 		if (value == null) {
 			value = defaultValue;
-			if (log.isDebugEnabled()) {
-				log.debug("Using default value for field " + field.getName() + " of class " + field.getDeclaringClass().getName());
-			}
+			System.out.println("Using default value for field " + field.getName() + " of class " + field.getDeclaringClass().getName());
+
 		}
 
 		PropertyTransformer pt = PropertyTransformerFactory.newTransformer(field.getType(), property.propertyTransformer());

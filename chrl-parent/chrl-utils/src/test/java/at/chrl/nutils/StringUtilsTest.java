@@ -4,7 +4,7 @@
  */
 package at.chrl.nutils;
 
-import static at.chrl.utils.StringUtils.*;
+import static at.chrl.nutils.StringUtils.*;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;

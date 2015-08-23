@@ -7,9 +7,9 @@ package at.chrl.nutils.configuration.printer;
 import java.io.PrintStream;
 
 import at.chrl.nutils.JVMInfoUtil;
+import at.chrl.nutils.StringUtils;
 import at.chrl.nutils.configuration.IConfigPrinter;
 import at.chrl.nutils.configuration.Property;
-import at.chrl.utils.StringUtils;
 
 /**
  * @author Vinzynth

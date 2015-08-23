@@ -8,10 +8,10 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 
+import at.chrl.nutils.StringUtils;
 import at.chrl.nutils.configuration.PropertyTransformer;
 import at.chrl.nutils.configuration.PropertyTransformerFactory;
 import at.chrl.nutils.configuration.TransformationException;
-import at.chrl.utils.StringUtils;
 
 /**
  * @author Vinzynth

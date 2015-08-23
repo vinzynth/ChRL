@@ -7,15 +7,11 @@ package at.chrl.nutils;
 import java.io.File;
 import java.io.IOException;
 
-import at.chrl.logging.Logger;
-
 /**
  * @author Vinzynth
  *
  */
 public final class FileUtil {
-
-	private static final Logger log = new Logger();
 
 	/**
 	 * Creates specified File. <br>
@@ -31,7 +27,8 @@ public final class FileUtil {
 				f.createNewFile();
 			}
 		} catch (IOException e) {
-			log.error("Could not create new Property File", e);
+			System.err.println("Could not create new Property File: " + e.getMessage());
+			e.printStackTrace();
 		}
 	}
 }

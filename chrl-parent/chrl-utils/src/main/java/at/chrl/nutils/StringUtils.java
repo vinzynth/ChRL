@@ -2,9 +2,7 @@
  * (C) ChRL 2013 - chrl-utils - at.chrl.utils.strings - StringUtils.java
  * Created: 31.12.2013 - 03:03:01
  */
-package at.chrl.utils;
-
-import at.chrl.nutils.ArrayUtils;
+package at.chrl.nutils;
 
 /**
  * @author Vinzynth

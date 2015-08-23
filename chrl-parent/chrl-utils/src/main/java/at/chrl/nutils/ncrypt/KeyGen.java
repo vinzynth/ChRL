@@ -24,8 +24,6 @@ import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
-import static at.chrl.nutils.Constants.log;
-
 import at.chrl.nutils.Rnd;
 
 /**
@@ -51,7 +49,7 @@ public class KeyGen {
 	 * @throws GeneralSecurityException
 	 */
 	public static void init() throws GeneralSecurityException {
-		log.info(String.format("Initializing Key Generator..."));
+		System.out.println(String.format("Initializing Key Generator..."));
 
 		blowfishKeyGen = KeyGenerator.getInstance("Blowfish");
 

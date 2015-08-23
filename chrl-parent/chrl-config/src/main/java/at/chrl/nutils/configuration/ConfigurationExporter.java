@@ -4,8 +4,6 @@
  */
 package at.chrl.nutils.configuration;
 
-import static at.chrl.nutils.Constants.log;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Properties;
@@ -57,7 +55,7 @@ public class ConfigurationExporter {
 				// Final fields should not be processed
 				if (Modifier.isFinal(f.getModifiers())) {
 					RuntimeException re = new RuntimeException("Attempt to proceed final field " + f.getName() + " of class " + clazz.getName());
-					log.error(re.toString());
+					System.err.println(re.toString());
 					throw re;
 				} else {
 					processField(f, obj, os, props);
@@ -83,7 +81,7 @@ public class ConfigurationExporter {
 			}
 		} catch (Exception e) {
 			RuntimeException re = new RuntimeException("Can't print field " + f.getName() + " of class " + f.getDeclaringClass(), e);
-			log.error(re.toString());
+			System.err.println(e.toString());
 			throw re;
 		}
 		f.setAccessible(oldAccessible);

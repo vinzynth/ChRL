@@ -10,20 +10,17 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 
-import at.chrl.logging.Logger;
 import at.chrl.nutils.FileUtil;
 import at.chrl.nutils.JVMInfoUtil;
+import at.chrl.nutils.StringUtils;
 import at.chrl.nutils.configuration.IConfigPrinter;
 import at.chrl.nutils.configuration.Property;
-import at.chrl.utils.StringUtils;
 
 /**
  * @author Vinzynth
  *
  */
 public class PropertyFileStreamPrinter implements IConfigPrinter {
-
-	public static final Logger log = new Logger();
 
 	private final File targetFile;
 
@@ -73,7 +70,8 @@ public class PropertyFileStreamPrinter implements IConfigPrinter {
 
 			writer.write(System.lineSeparator());
 		} catch (Exception e) {
-			log.error("Exception during property exportation: " + targetFile.getAbsolutePath() + " | " + e.getMessage(), e);
+			System.err.println("Exception during property exportation: " + targetFile.getAbsolutePath() + " | " + e.getMessage());
+			e.printStackTrace();
 		}
 	}
 }

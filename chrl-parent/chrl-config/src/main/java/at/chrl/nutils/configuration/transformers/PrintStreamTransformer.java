@@ -6,10 +6,10 @@ package at.chrl.nutils.configuration.transformers;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
 
-import at.chrl.nutils.Constants;
 import at.chrl.nutils.configuration.PropertyTransformer;
 import at.chrl.nutils.configuration.TransformationException;
 
@@ -19,6 +19,20 @@ import at.chrl.nutils.configuration.TransformationException;
  */
 public class PrintStreamTransformer implements PropertyTransformer<PrintStream> {
 
+	public static final PrintStream NOP_PRINT_STREAM = new PrintStream(new OutputStream() {
+		@Override
+		public void write(int b) {
+		}
+
+		@Override
+		public void write(byte[] b, int off, int len) {
+		}
+
+		@Override
+		public void write(byte[] b) {
+		}
+	});
+	
 	public static final PrintStreamTransformer SHARED_INSTANCE = new PrintStreamTransformer();
 
 	/**
@@ -50,7 +64,7 @@ public class PrintStreamTransformer implements PropertyTransformer<PrintStream> 
 				return System.err;
 
 			case "nop":
-				return Constants.NOP_PRINT_STREAM;
+				return NOP_PRINT_STREAM;
 
 			default:
 				try {
@@ -58,7 +72,7 @@ public class PrintStreamTransformer implements PropertyTransformer<PrintStream> 
 				} catch (FileNotFoundException e) {
 					e.printStackTrace(System.err);
 				}
-				return Constants.NOP_PRINT_STREAM;
+				return NOP_PRINT_STREAM;
 		}
 	}
 
