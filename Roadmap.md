@@ -6,20 +6,28 @@
 * More Junit
     * Arquillian/ShrinkWrap
     * Mockito
-* chrl-config WildFly integration
 * Better Spring integration for chrl-orm
-* JNDI for chrl-orm and chrl-config
+* Look on Narayana/HornetQ/Hazelcast/ActiveMQ
+    * JMS Spring integration - new module
+* Look on Apache Strom
 
 ## 1.3.0/1.4.0
 
 * More Archetypes
 * Generic Vaadin templates
 * Look on Ionic/Cordova
-* Look on Infinispan
+    * App Programming
 
 ## 1.5.0/1.6.0
 
-* Look on Narayana/HornetQ/Hazelcast
+* Look on Infinispan
 * Look on JBoss Forge
 * Look on Weld
+
+## Sideprojects
+
+* chrl-config
+    * Configuration in databases
+    * JBoss WildFly integration
+* JNDI for chrl-orm and chrl-config
 
