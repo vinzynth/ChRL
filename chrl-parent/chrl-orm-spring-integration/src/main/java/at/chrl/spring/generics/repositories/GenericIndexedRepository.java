@@ -38,6 +38,10 @@ public class GenericIndexedRepository<T> extends GenericRepository<T> {
 		super(cls);
 	}
 	
+	public GenericIndexedRepository() {
+		super();
+	}
+	
 	@Autowired
 	protected JPAConfig jpaConfig;
 

@@ -31,8 +31,8 @@ import at.chrl.orm.hibernate.configuration.JPAConfig;
 @EnableTransactionManagement
 public class SessionConfig implements TransactionManagementConfigurer {
 	
-	@Autowired(required = true)
-	private HibernateService hibernateService;
+//	@Autowired(required = true)
+//	private HibernateService hibernateService;
 	
 	@Autowired(required = true)
 	private SpringJpaConfig jpaConfig;

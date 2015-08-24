@@ -2,14 +2,13 @@ package at.chrl.spring.hibernate.config;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import at.chrl.orm.hibernate.configuration.IHibernateConfig;
+import at.chrl.nutils.CollectionUtils;
 import at.chrl.orm.hibernate.configuration.JPAConfig;
 import at.chrl.orm.hibernate.configuration.ORMMapping;
 
@@ -37,7 +36,10 @@ public class SpringJpaConfig {
 			 */
 			@Override
 			public List<Class<?>> getAnnotatedClasses() {
-				List<Class<?>> list = configs.stream().map(IHibernateConfig::getAnnotatedClasses).flatMap(Collection::stream).distinct().collect(Collectors.toList());
+				List<Class<?>> list = CollectionUtils.newList();
+				for (ORMMapping ormMapping : configs) {
+					list.addAll(ormMapping.getAnnotatedClasses());
+				}
 				return list;
 			}
 		};
