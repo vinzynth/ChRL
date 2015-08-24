@@ -17,13 +17,17 @@
  */
 package at.chrl.jms;
 
+import java.net.URI;
+
 import javax.jms.ConnectionFactory;
 
+import org.apache.activemq.broker.BrokerService;
+import org.apache.activemq.broker.TransportConnector;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.annotation.EnableJms;
+import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.config.JmsListenerContainerFactory;
-import org.springframework.jms.config.SimpleJmsListenerContainerFactory;
 
 /**
  * @author Vinzynth
@@ -34,19 +38,23 @@ import org.springframework.jms.config.SimpleJmsListenerContainerFactory;
 @Configuration
 public class JmsConfig {
 	
-//	@Bean
-//	public ActiveMQProperties getActiveMQProperties(){
-//		ActiveMQProperties props = new ActiveMQProperties();
-//		props.setBrokerUrl("broker:(tcp://localhost:61616,network:static:tcp://192.168.1.247:61616)");
-//		return props;
-//	}
-//	
+	@Bean
+	public BrokerService getActiveMQBrokerService() throws Exception{
+		BrokerService broker = new BrokerService();
+		broker.setPersistent(false);
+		TransportConnector con = new TransportConnector();
+		con.setUri(new URI("tcp://192.168.1.177:61616"));
+		broker.addConnector(con);
+		broker.start();
+		return broker;
+	}
+	
 	@Bean
 	public JmsListenerContainerFactory<?> myJmsContainerFactory(ConnectionFactory connectionFactory) {
-		SimpleJmsListenerContainerFactory factory = new SimpleJmsListenerContainerFactory();
-//		DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
+//		SimpleJmsListenerContainerFactory factory = new SimpleJmsListenerContainerFactory();
+		DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
 		factory.setConnectionFactory(connectionFactory);
-//		factory.setConcurrency("3-30");
+		factory.setConcurrency("3-3000");
 		return factory;
 	}
 }

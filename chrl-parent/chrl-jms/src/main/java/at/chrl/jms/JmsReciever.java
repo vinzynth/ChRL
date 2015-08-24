@@ -39,7 +39,7 @@ public class JmsReciever {
 	 */
 	@JmsListener(destination = "mailbox-destination")
 	public void receiveMessage(String message) {
-		System.out.println("Received <" + message + ">");
+//		System.out.println("Received <" + message + ">");
 //		context.close();
 //		FileSystemUtils.deleteRecursively(new File("activemq-data"));
 	}
