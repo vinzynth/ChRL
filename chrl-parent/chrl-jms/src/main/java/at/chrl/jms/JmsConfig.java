@@ -19,6 +19,7 @@ package at.chrl.jms;
 
 import javax.jms.ConnectionFactory;
 
+import org.springframework.boot.autoconfigure.jms.activemq.ActiveMQProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.annotation.EnableJms;
@@ -34,8 +35,15 @@ import org.springframework.jms.config.SimpleJmsListenerContainerFactory;
 @Configuration
 public class JmsConfig {
 	
+//	@Bean
+//	public ActiveMQProperties getActiveMQProperties(){
+//		ActiveMQProperties props = new ActiveMQProperties();
+//		props.setBrokerUrl("broker:(tcp://localhost:61616,network:static:tcp://192.168.1.247:61616)");
+//		return props;
+//	}
+//	
 	@Bean
-	JmsListenerContainerFactory<?> myJmsContainerFactory(ConnectionFactory connectionFactory) {
+	public JmsListenerContainerFactory<?> myJmsContainerFactory(ConnectionFactory connectionFactory) {
 		SimpleJmsListenerContainerFactory factory = new SimpleJmsListenerContainerFactory();
 		factory.setConnectionFactory(connectionFactory);
 		return factory;
