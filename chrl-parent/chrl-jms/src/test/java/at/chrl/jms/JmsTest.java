@@ -24,6 +24,7 @@ import javax.jms.Message;
 import javax.jms.Session;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
@@ -34,6 +35,7 @@ import org.springframework.util.FileSystemUtils;
  * 24.08.2015 - 22:28:30
  *
  */
+@SpringBootApplication
 public class JmsTest {
 
 	public static void main(String[] args) {
