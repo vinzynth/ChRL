@@ -18,16 +18,19 @@
 package at.chrl.jms;
 
 import java.io.File;
+import java.net.URI;
 
-import javax.jms.JMSException;
+import javax.jms.Connection;
+import javax.jms.Destination;
 import javax.jms.Message;
+import javax.jms.MessageConsumer;
 import javax.jms.Session;
+import javax.jms.TextMessage;
 
-import org.springframework.boot.SpringApplication;
+import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.activemq.broker.BrokerService;
+import org.apache.activemq.broker.TransportConnector;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.jms.core.JmsTemplate;
-import org.springframework.jms.core.MessageCreator;
 import org.springframework.util.FileSystemUtils;
 
 /**
@@ -38,22 +41,53 @@ import org.springframework.util.FileSystemUtils;
 @SpringBootApplication
 public class JmsTest {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		 // Clean out any ActiveMQ data from a previous run
 		FileSystemUtils.deleteRecursively(new File("activemq-data"));
 
 		// Launch the application
-		ConfigurableApplicationContext context = SpringApplication.run(JmsTest.class, args);
+//		ConfigurableApplicationContext context = SpringApplication.run(JmsTest.class, args);
+		
+		
+		BrokerService broker = new BrokerService();
+		broker.setPersistent(false);
+		TransportConnector con = new TransportConnector();
+		con.setUri(new URI("tcp://192.168.1.177:61616"));
+		broker.addConnector(con);
 
-		// Send a message
-		MessageCreator messageCreator = new MessageCreator() {
-			@Override
-			public Message createMessage(Session session) throws JMSException {
-				return session.createTextMessage("ping!");
-			}
-		};
-		JmsTemplate jmsTemplate = context.getBean(JmsTemplate.class);
-		System.out.println("Sending a new message.");
-		jmsTemplate.send("mailbox-destination", messageCreator);
+		broker.start();
+		
+		ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory("tcp://192.168.1.177:61616");
+		Connection conn = activeMQConnectionFactory.createConnection();
+		
+		conn.start();
+
+		Session session = conn.createSession(false, Session.AUTO_ACKNOWLEDGE);
+		// Create the destination (Topic or Queue)
+		Destination destination = session.createQueue("mailbox-destination");
+
+		// Create a MessageConsumer from the Session to the Topic or Queue
+		MessageConsumer consumer = session.createConsumer(destination);
+
+		// Wait for a message
+		Message message = consumer.receive(100000);
+		
+		if (message instanceof TextMessage) {
+			TextMessage textMessage = (TextMessage) message;
+			String text = textMessage.getText();
+			System.out.println("Received: " + text);
+		} else {
+			System.out.println("Received: " + message);
+		}
+//		// Send a message
+//		MessageCreator messageCreator = new MessageCreator() {
+//			@Override
+//			public Message createMessage(Session session) throws JMSException {
+//				return session.createTextMessage("ping!");
+//			}
+//		};
+//		JmsTemplate jmsTemplate = context.getBean(JmsTemplate.class);
+//		System.out.println("Sending a new message.");
+//		jmsTemplate.send("mailbox-destination", messageCreator);
 	}
 }

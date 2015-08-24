@@ -19,7 +19,6 @@ package at.chrl.jms;
 
 import javax.jms.ConnectionFactory;
 
-import org.springframework.boot.autoconfigure.jms.activemq.ActiveMQProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.annotation.EnableJms;
@@ -45,7 +44,9 @@ public class JmsConfig {
 	@Bean
 	public JmsListenerContainerFactory<?> myJmsContainerFactory(ConnectionFactory connectionFactory) {
 		SimpleJmsListenerContainerFactory factory = new SimpleJmsListenerContainerFactory();
+//		DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
 		factory.setConnectionFactory(connectionFactory);
+//		factory.setConcurrency("3-30");
 		return factory;
 	}
 }
