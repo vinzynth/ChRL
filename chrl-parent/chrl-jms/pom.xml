@@ -26,8 +26,12 @@
 			<artifactId>spring-jms</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.activemq</groupId>
-			<artifactId>activemq-broker</artifactId>
+			<groupId>org.springframework.integration</groupId>
+			<artifactId>spring-integration-java-dsl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.jms</groupId>
+			<artifactId>jms-api</artifactId>
 		</dependency>
 	</dependencies>
 	<!--  -->

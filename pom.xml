@@ -85,7 +85,23 @@
 			<id>vaadin-addons</id>
 			<url>http://maven.vaadin.com/vaadin-addons</url>
 		</repository>
+		<repository>
+			<id>spring-milestones</id>
+			<url>http://repo.spring.io/simple/libs-milestone-local/</url>
+		</repository>
+		<repository>
+			<id>spring-releases</id>
+			<name>Spring Releases</name>
+			<url>https://repo.spring.io/libs-release</url>
+		</repository>
 	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>spring-releases</id>
+			<name>Spring Releases</name>
+			<url>https://repo.spring.io/libs-release</url>
+		</pluginRepository>
+	</pluginRepositories>
 	<!--  -->
 	
 	<!--  -->
@@ -204,7 +220,7 @@
 			</dependency>
 			<dependency>
 				<groupId>at.chrl</groupId>
-				<artifactId>chrl-jms</artifactId>
+				<artifactId>chrl-amqp</artifactId>
 				<version>${chrlVersion}</version>
 			</dependency>
 			<dependency>
