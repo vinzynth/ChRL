@@ -66,8 +66,8 @@ public class RepositoryHolderImplementation implements RepositoryHolder, Applica
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends GenericRepository<?>> T getRepository(Class<?> cls) {
-		return (T) repositories.get(cls);
+	public <R extends GenericRepository<T>, T> R getRepository(Class<T> cls) {
+		return (R) repositories.get(cls);
 	}
 
 	/**

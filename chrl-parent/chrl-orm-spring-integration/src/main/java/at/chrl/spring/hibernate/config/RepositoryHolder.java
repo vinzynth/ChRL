@@ -15,5 +15,5 @@ import at.chrl.spring.generics.repositories.GenericRepository;
  */
 public interface RepositoryHolder {
 	
-	public <T extends GenericRepository<?>> T getRepository(final Class<?> cls);
+	public <R extends GenericRepository<T>, T> R getRepository(final Class<T> cls);
 }
