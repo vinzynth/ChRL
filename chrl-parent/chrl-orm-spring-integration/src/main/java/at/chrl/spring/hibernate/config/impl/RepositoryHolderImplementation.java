@@ -48,7 +48,7 @@ public class RepositoryHolderImplementation implements RepositoryHolder, Applica
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <T> GenericIndexedRepository<T> registerRepositoryBean(DefaultListableBeanFactory registry, Class<T> genericType){
+	private <T> GenericIndexedRepository<T> registerRepositoryBean(DefaultListableBeanFactory registry, Class<T> genericType){
 		AnnotatedGenericBeanDefinition bean = new AnnotatedGenericBeanDefinition(GenericIndexedRepository.class);
 		bean.setAutowireCandidate(true);
 		bean.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
@@ -67,9 +67,24 @@ public class RepositoryHolderImplementation implements RepositoryHolder, Applica
 	@SuppressWarnings("unchecked")
 	@Override
 	public <R extends GenericRepository<T>, T> R getRepository(Class<T> cls) {
+		if(!repositories.containsKey(cls))
+			throw new RuntimeException("No Repository for class " + cls.getSimpleName() + " available.");	
 		return (R) repositories.get(cls);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @see at.chrl.spring.hibernate.config.RepositoryHolder#getIndexedRepository(java.lang.Class)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public <R extends GenericIndexedRepository<T>, T> R getIndexedRepository(Class<T> cls) {
+		GenericRepository<?> genericRepository = repositories.get(cls);
+		if(genericRepository instanceof GenericIndexedRepository)
+			return (R) genericRepository;
+		throw new RuntimeException("No GenericIndexedRepository for class " + cls.getSimpleName() + " available.");
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 * @see org.springframework.context.ApplicationContextAware#setApplicationContext(org.springframework.context.ApplicationContext)
@@ -112,4 +127,5 @@ public class RepositoryHolderImplementation implements RepositoryHolder, Applica
 		System.out.println(bean);
 		return null;
 	}
+
 }

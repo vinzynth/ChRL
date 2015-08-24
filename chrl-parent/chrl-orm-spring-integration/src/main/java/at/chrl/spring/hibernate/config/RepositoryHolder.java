@@ -6,6 +6,7 @@
  */
 package at.chrl.spring.hibernate.config;
 
+import at.chrl.spring.generics.repositories.GenericIndexedRepository;
 import at.chrl.spring.generics.repositories.GenericRepository;
 
 /**
@@ -16,4 +17,6 @@ import at.chrl.spring.generics.repositories.GenericRepository;
 public interface RepositoryHolder {
 	
 	public <R extends GenericRepository<T>, T> R getRepository(final Class<T> cls);
+	
+	public <R extends GenericIndexedRepository<T>, T> R getIndexedRepository(final Class<T> cls);
 }
