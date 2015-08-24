@@ -45,16 +45,16 @@ import at.chrl.nutils.CollectionUtils;
 @SuppressWarnings("unchecked")
 public abstract class GenericRepository<T> {
 
+	
 	private final Class<T> persistentClass;
 	private String idFieldName;
 
 	public GenericRepository() {
 		this.persistentClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
 	}
-
-	public GenericRepository(Class<T> cls) {
-		this.persistentClass = cls;
-		this.setIdFieldName();
+	
+	public GenericRepository(Class<T> persistentClass) {
+		this.persistentClass = persistentClass;
 	}
 	
 	public Class<T> getType() {
@@ -62,6 +62,8 @@ public abstract class GenericRepository<T> {
 	}
 
 	protected String getIdFieldName() {
+		if(Objects.isNull(idFieldName))
+			this.setIdFieldName();
 		return idFieldName;
 	}
 

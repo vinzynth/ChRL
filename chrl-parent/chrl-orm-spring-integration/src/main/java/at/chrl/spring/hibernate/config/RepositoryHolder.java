@@ -1,0 +1,19 @@
+/**
+ * @author Christian Richard Leopold - ChRL
+ * Aug 21, 2015 - 4:57:21 PM
+ * chrl-orm-spring-integration
+ * at.chrl.spring.hibernate.config
+ */
+package at.chrl.spring.hibernate.config;
+
+import at.chrl.spring.generics.repositories.GenericRepository;
+
+/**
+ * @author Christian Richard Leopold - ChRL <br>
+ * Aug 21, 2015 - 4:57:21 PM
+ *
+ */
+public interface RepositoryHolder {
+	
+	public <T extends GenericRepository<?>> T getRepository(final Class<?> cls);
+}

@@ -30,8 +30,11 @@ import at.chrl.orm.hibernate.configuration.JPAConfig;
  *
  */
 public class GenericIndexedRepository<T> extends GenericRepository<T> {
-
-	public GenericIndexedRepository(Class<T> cls) {
+	
+	/**
+	 * 
+	 */
+	public GenericIndexedRepository(Class <T> cls) {
 		super(cls);
 	}
 	
