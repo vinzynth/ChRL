@@ -51,6 +51,7 @@
 		<module>chrl-rebellion</module>
 		<module>chrl-spring</module>
 		<module>chrl-utils</module>
+		<module>chrl-jms</module>
 
 		<!-- Archetypes -->
 		<module>chrl-spring-sample</module>
