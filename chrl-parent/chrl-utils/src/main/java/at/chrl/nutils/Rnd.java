@@ -64,12 +64,7 @@ public class Rnd {
 		return nextDouble() <= chance / 100;
 	}
 
-	/**
-	 * Though i'm not agree this one should be at Rnd, such slick move - CFx01
-	 * 
-	 * @param list
-	 * @return
-	 */
+
 	public static <T> T get(T list[]) {
 		return list[get(list.length)];
 	}

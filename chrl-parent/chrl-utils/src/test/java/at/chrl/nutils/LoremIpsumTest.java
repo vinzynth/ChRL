@@ -17,9 +17,7 @@
  */
 package at.chrl.nutils;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.function.Supplier;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -29,40 +27,31 @@ import org.junit.runners.Parameterized.Parameters;
 
 /**
  * @author Vinzynth
- * 24.08.2015 - 01:22:26
+ * 24.08.2015 - 02:33:12
  *
  */
 @RunWith(Parameterized.class)
-public class CollectionUtilSupplierTest {
+public class LoremIpsumTest {
 
-	@Parameters()
-	public static Collection<Supplier<?>> data(){
-		Collection<Supplier<?>> returnMe = new ArrayList<>();
-		returnMe.add(CollectionUtils.getConcurrentMapSupplier());
-		returnMe.add(CollectionUtils.getDequeSupplier());
-		returnMe.add(CollectionUtils.getListSupplier());
-		returnMe.add(CollectionUtils.getListSupplier(10));
-		returnMe.add(CollectionUtils.getMapSupplier());
-		returnMe.add(CollectionUtils.getMapSupplier(10));
-		returnMe.add(CollectionUtils.getQueueSupplier());
-		returnMe.add(CollectionUtils.getSetSupplier());
-		returnMe.add(CollectionUtils.getSetSupplier(10));
-		returnMe.add(CollectionUtils.getWeakMapSupplier());
-		return returnMe;
+	public static final int TEST_SET_SIZE = 1000;
+	
+	@Parameters(name = "i: {0}")
+	public static Collection<Integer> data(){
+		return CollectionUtils.range(-TEST_SET_SIZE, TEST_SET_SIZE);
 	}
 	
-
-	private Supplier<?> sup;
+	private int length;
 
 	/**
 	 * 
 	 */
-	public CollectionUtilSupplierTest(Supplier<?> sup) {
-		this.sup = sup;
+	public LoremIpsumTest(int length) {
+		this.length = length;
 	}
 	
+
 	@Test
-	public void testSupplier() {
-		Assert.assertNotNull(sup.get());
+	public void testGetRandWithParam() throws Exception {
+		Assert.assertNotNull(LoremIpsum.getRand(length));
 	}
 }

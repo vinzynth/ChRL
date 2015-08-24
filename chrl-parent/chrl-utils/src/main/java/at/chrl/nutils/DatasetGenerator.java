@@ -60,9 +60,12 @@ public class DatasetGenerator {
 	private final Collection<Class<?>> CURRENTLY_GENERATING = new CopyOnWriteArraySet<>();
 	private final Map<Class<?>, ObjectInstantiator<?>> INSTANTIATORS = CollectionUtils.newConcurrentMap();
 	
-	private static final Map<Class<?>, Supplier<?>> SUPPORTED_TYPES;
+	private final Map<Class<?>, Supplier<?>> SUPPORTED_TYPES;
 	
-	static{
+	/**
+	 * 
+	 */
+	public DatasetGenerator() {
 		SUPPORTED_TYPES = new THashMap<>();
 		
 		SUPPORTED_TYPES.put(String.class, Rnd::nextString);
@@ -104,7 +107,6 @@ public class DatasetGenerator {
 		SUPPORTED_TYPES.put(AtomicLong.class, () -> new AtomicLong(Rnd.nextLong()));
 	}
 	
-	
 	public <T> Stream<T> generate(final Class<T> cls, final int count){
 		if(EXCLUDED_CLASSES.contains(cls))
 			return Stream.empty();
@@ -134,6 +136,8 @@ public class DatasetGenerator {
 	}
 	
 	public <T> T generate(final Class<T> cls){
+		if(EXCLUDED_CLASSES.contains(cls))
+			return null;
 		for (Annotation an : cls.getAnnotations())
 			if(EXCLUDED_CLASSES.contains(an.annotationType()))
 				return null;
@@ -242,6 +246,10 @@ public class DatasetGenerator {
 	
 	public void setSupportedType(final Class<?> cls, Supplier<?> supplier){
 		SUPPORTED_TYPES.put(cls, supplier);
+	}
+	
+	public Set<Class<?>> getSupportedTypes(){
+		return SUPPORTED_TYPES.keySet();
 	}
 	
 	public boolean addExclusion(final Class<?> cls){

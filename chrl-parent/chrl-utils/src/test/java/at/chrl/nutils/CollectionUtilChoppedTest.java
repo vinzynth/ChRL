@@ -42,10 +42,10 @@ public class CollectionUtilChoppedTest {
 	private List<String> data;
 	private int length;
 	
-	@Parameters
+	@Parameters(name = "Chopped: {0}")
 	public static Collection<Integer> data() {
 		Collection<Integer> lengths = new ArrayList<>(TEST_SET_SIZE);
-		for (int i = 0; i <= TEST_SET_SIZE; i++) {
+		for (int i = 0; i <= TEST_SET_SIZE+1; i++) {
 			lengths.add(i);
 		}
 		return lengths;
@@ -87,5 +87,10 @@ public class CollectionUtilChoppedTest {
 		
 		Assert.assertTrue(capacity > 0);
 		Assert.assertTrue(capacity >= length);
+	}
+	
+	@Test
+	public void testRange() {
+		Assert.assertTrue(CollectionUtils.range(-length, length).size() == 1+2*length);
 	}
 }

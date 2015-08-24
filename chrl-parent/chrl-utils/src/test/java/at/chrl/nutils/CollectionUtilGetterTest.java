@@ -37,7 +37,7 @@ public class CollectionUtilGetterTest {
 	
 	private Object col;
 
-	@Parameters
+	@Parameters()
 	public static Collection<Object> data(){
 		Collection<Object> returnMe = new ArrayList<>();
 		returnMe.add(CollectionUtils.newList());
@@ -61,5 +61,5 @@ public class CollectionUtilGetterTest {
 	public void test() {
 		assertNotNull(col);
 	}
-
+	
 }

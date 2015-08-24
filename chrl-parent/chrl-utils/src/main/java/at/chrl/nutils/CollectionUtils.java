@@ -6,6 +6,7 @@ package at.chrl.nutils;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Deque;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,8 @@ import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
@@ -26,8 +29,6 @@ public final class CollectionUtils {
 
 	private CollectionUtils() {
 	}
-
-//	private static final MapMaker MAP_MAKER = new MapMaker();
 
 	/**
 	 * Returns a capacity that is sufficient to keep the map from being resized
@@ -114,7 +115,6 @@ public final class CollectionUtils {
 		return get(getConcurrentMapSupplier());
 	}
 	
-
 	public static <T> List<List<T>> chopped(List<T> list, final int length) {
 		if(length >= list.size() || length <= 0){
 			ArrayList<List<T>> ret = new ArrayList<List<T>>();
@@ -127,5 +127,9 @@ public final class CollectionUtils {
 			parts.add(new ArrayList<T>(list.subList(i, Math.min(n, i + length))));
 		}
 		return parts;
+	}
+	
+	public static Collection<Integer> range(int startInc, int endInc){
+		return IntStream.range(startInc, endInc+1).mapToObj(Integer::new).collect(Collectors.toList());
 	}
 }
