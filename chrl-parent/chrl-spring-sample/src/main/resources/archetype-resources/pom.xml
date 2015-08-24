@@ -17,7 +17,7 @@
 	<!--  -->
 	<properties>
 		<server.deployment.tomcat>http://localhost:8080</server.deployment.tomcat>
-		<chrlVersion>0.0.1-SNAPSHOT</chrlVersion>
+		<chrlVersion>${chrlArchtypeVersion}</chrlVersion>
 	</properties>
 	<!--  -->
 	
