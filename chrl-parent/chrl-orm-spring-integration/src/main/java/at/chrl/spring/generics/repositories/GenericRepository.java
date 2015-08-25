@@ -26,7 +26,6 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.jpa.HibernateEntityManager;
-import org.springframework.context.annotation.Scope;
 import org.springframework.transaction.annotation.Transactional;
 
 import at.chrl.nutils.ClassUtils;
@@ -40,8 +39,6 @@ import at.chrl.nutils.CollectionUtils;
  * @param <T>
  *            Type of repository objects - accessable via {@link #getType()}
  */
-@org.springframework.stereotype.Repository
-@Scope(value = "singleton")
 @SuppressWarnings("unchecked")
 public class GenericRepository<T> {
 
