@@ -53,7 +53,7 @@ public class RepositoryHolderImplementation implements RepositoryHolder, Applica
 	}
 	
 	@SuppressWarnings("unchecked")
-	private <T> GenericIndexedRepository<T> registerRepositoryBean(DefaultListableBeanFactory registry, Class<T> genericType){
+	private <T> GenericRepository<T> registerRepositoryBean(DefaultListableBeanFactory registry, Class<T> genericType){
 		boolean indexed = Objects.nonNull(genericType.getAnnotation(Indexed.class));
 		
 		AnnotatedGenericBeanDefinition bean = new AnnotatedGenericBeanDefinition(indexed ? GenericIndexedRepository.class : GenericRepository.class);
@@ -64,7 +64,7 @@ public class RepositoryHolderImplementation implements RepositoryHolder, Applica
 		bean.setConstructorArgumentValues(conVal);
 		String beanName = (indexed ? "Indexed" : "") + "GenericRepository_"+genericType.getSimpleName();
 		registry.registerBeanDefinition(beanName, bean);
-		return (GenericIndexedRepository<T>) registry.getBean(beanName);
+		return (GenericRepository<T>) registry.getBean(beanName);
 	}
 	
 	/**
