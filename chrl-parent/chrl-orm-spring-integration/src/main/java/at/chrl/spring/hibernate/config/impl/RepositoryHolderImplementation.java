@@ -7,6 +7,7 @@
 package at.chrl.spring.hibernate.config.impl;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -43,7 +44,10 @@ public class RepositoryHolderImplementation implements RepositoryHolder, Applica
 	 */
 	public RepositoryHolderImplementation(SpringJpaConfig jpaConfig, Collection<GenericRepository<?>> autoWiredRepositories) {
 		this.jpaConfig = jpaConfig;
-		this.autoWiredRepositories = autoWiredRepositories;
+		if(Objects.isNull(autoWiredRepositories))
+			this.autoWiredRepositories = Collections.emptyList();
+		else
+			this.autoWiredRepositories = autoWiredRepositories;
 
 	}
 	
