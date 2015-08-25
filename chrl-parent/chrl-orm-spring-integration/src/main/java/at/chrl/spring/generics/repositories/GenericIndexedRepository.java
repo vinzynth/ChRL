@@ -23,6 +23,7 @@ import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import at.chrl.nutils.CollectionUtils;
 import at.chrl.orm.hibernate.configuration.JPAConfig;
 
 /**
@@ -149,4 +150,37 @@ public class GenericIndexedRepository<T> extends GenericRepository<T> {
 		return entity2;
 	}
 
+	@Transactional
+	public Collection<T> persist(Collection<T> entity) {
+		Collection<T> persisted = CollectionUtils.newList(entity.size());
+		for (T t : entity) {
+			T persist = super.persist(t);
+			persisted.add(persist);
+			getFullTextEntityManager().index(persist);
+		}
+		return persisted;
+	};
+
+	@Transactional
+	public Collection<T> save(Collection<T> entity) {
+		Collection<T> persisted = CollectionUtils.newList(entity.size());
+		for (T t : entity) {
+			T persist = super.save(t);
+			persisted.add(persist);
+			getFullTextEntityManager().index(persist);
+		}
+		return persisted;
+	};
+
+	@Transactional
+	public Collection<T> saveOrUpdate(Collection<T> entity) {
+		Collection<T> persisted = CollectionUtils.newList(entity.size());
+		for (T t : entity) {
+			T persist = super.saveOrUpdate(t);
+			persisted.add(persist);
+			getFullTextEntityManager().index(persist);
+		}
+		return persisted;
+	};
+	
 }
