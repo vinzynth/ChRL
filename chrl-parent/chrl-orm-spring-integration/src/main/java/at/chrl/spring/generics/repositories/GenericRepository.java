@@ -43,7 +43,7 @@ import at.chrl.nutils.CollectionUtils;
 @org.springframework.stereotype.Repository
 @Scope(value = "singleton")
 @SuppressWarnings("unchecked")
-public abstract class GenericRepository<T> {
+public class GenericRepository<T> {
 
 	
 	private final Class<T> persistentClass;

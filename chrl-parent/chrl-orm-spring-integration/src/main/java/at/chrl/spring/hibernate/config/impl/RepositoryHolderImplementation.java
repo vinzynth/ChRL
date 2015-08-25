@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
 
+import org.hibernate.search.annotations.Indexed;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.AnnotatedGenericBeanDefinition;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -53,13 +54,15 @@ public class RepositoryHolderImplementation implements RepositoryHolder, Applica
 	
 	@SuppressWarnings("unchecked")
 	private <T> GenericIndexedRepository<T> registerRepositoryBean(DefaultListableBeanFactory registry, Class<T> genericType){
-		AnnotatedGenericBeanDefinition bean = new AnnotatedGenericBeanDefinition(GenericIndexedRepository.class);
+		boolean indexed = Objects.nonNull(genericType.getAnnotation(Indexed.class));
+		
+		AnnotatedGenericBeanDefinition bean = new AnnotatedGenericBeanDefinition(indexed ? GenericIndexedRepository.class : GenericRepository.class);
 		bean.setAutowireCandidate(true);
 		bean.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
 		ConstructorArgumentValues conVal = new ConstructorArgumentValues();
 		conVal.addGenericArgumentValue(genericType);
 		bean.setConstructorArgumentValues(conVal);
-		String beanName = "GenericIndexedRepository_"+genericType.getSimpleName();
+		String beanName = (indexed ? "Indexed" : "") + "GenericRepository_"+genericType.getSimpleName();
 		registry.registerBeanDefinition(beanName, bean);
 		return (GenericIndexedRepository<T>) registry.getBean(beanName);
 	}
