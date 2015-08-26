@@ -6,8 +6,7 @@
  */
 package at.chrl.nutils;
 
-import gnu.trove.map.hash.THashMap;
-
+import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -44,6 +43,8 @@ import org.objenesis.instantiator.ObjectInstantiator;
 import at.chrl.nutils.interfaces.INestedCollection;
 import at.chrl.nutils.interfaces.INestedMap;
 
+import gnu.trove.map.hash.THashMap;
+
 /**
  * Dataset generator
  * NOT SUPPORTED: arrays of primtives | multimaps
@@ -52,8 +53,13 @@ import at.chrl.nutils.interfaces.INestedMap;
  * Jul 29, 2015 - 12:37:41 PM
  *
  */
-public class DatasetGenerator {
+public class DatasetGenerator implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private final Objenesis objenesis = new ObjenesisStd();
 	private final int COLLECTION_POPULATION = 5;
 	private final Collection<Class<?>> EXCLUDED_CLASSES = new CopyOnWriteArraySet<>();

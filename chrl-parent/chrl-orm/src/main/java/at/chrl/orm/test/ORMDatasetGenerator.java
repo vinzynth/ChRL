@@ -37,6 +37,11 @@ public final class ORMDatasetGenerator extends DatasetGenerator {
 	/**
 	 * 
 	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * 
+	 */
 	public ORMDatasetGenerator() {
 		addExclusion(GeneratedValue.class);
 		addExclusion(Embeddable.class);

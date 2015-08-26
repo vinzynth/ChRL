@@ -4,12 +4,10 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import at.chrl.nutils.CollectionUtils;
-import at.chrl.orm.hibernate.configuration.JPAConfig;
 import at.chrl.orm.hibernate.configuration.ORMMapping;
 
 /**
@@ -46,32 +44,7 @@ public class SpringJpaConfig {
 	}
 	
 	@Bean(name = "at-chrl-spring-orm-config")
-	public JPAConfig getJpaConfig(){
-		return new SpringJPAConfig();
-	}
-	
-	private static class SpringJPAConfig extends JPAConfig{
-		
-		@Autowired(required = true)
-		@Qualifier("at-chrl-orm-classes")
-		private ORMMapping mappedClasses;
-		
-		/**
-		 * {@inheritDoc}
-		 * @see at.chrl.orm.hibernate.configuration.IHibernateConfig#getAnnotatedClasses()
-		 */
-		@Override
-		public List<Class<?>> getAnnotatedClasses() {
-			return mappedClasses.getAnnotatedClasses();
-		}
-		
-		/**
-		 * {@inheritDoc}
-		 * @see at.chrl.orm.hibernate.configuration.JPAConfig#toString()
-		 */
-		@Override
-		public String toString() {
-			return "[chrl-spring] " + super.toString();
-		}
+	public SpringGeneratedJpaConfig getJpaConfig(){
+		return new SpringGeneratedJpaConfig();
 	}
 }

@@ -755,7 +755,7 @@ public abstract class SessionTemplate implements AutoCloseable {
 				if (!scroll.next())
 					break;
 				else
-					queue.add((T) scroll.get(0));
+					queue.add((T) scroll.get()[0]);
 		}
 
 		/**
@@ -784,7 +784,7 @@ public abstract class SessionTemplate implements AutoCloseable {
 				if (!scroll.next())
 					break;
 				else
-					queue.add((T) scroll.get(0));
+					queue.add((T) scroll.get()[0]);
 		}
 
 		/**
@@ -833,7 +833,7 @@ public abstract class SessionTemplate implements AutoCloseable {
 				if (!scroll.next())
 					break;
 				else
-					queue.add((T) scroll.get(0));
+					queue.add((T) scroll.get()[0]);
 		}
 	}
 	

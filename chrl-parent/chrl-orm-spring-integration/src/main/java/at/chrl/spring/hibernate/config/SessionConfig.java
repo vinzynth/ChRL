@@ -31,11 +31,8 @@ import at.chrl.orm.hibernate.configuration.JPAConfig;
 @EnableTransactionManagement
 public class SessionConfig implements TransactionManagementConfigurer {
 	
-//	@Autowired(required = true)
-//	private HibernateService hibernateService;
-	
 	@Autowired(required = true)
-	private SpringJpaConfig jpaConfig;
+	private SpringGeneratedJpaConfig jpaConfig;
 	
 	@Bean(destroyMethod = "close")
 	public HibernateService getHibernateService() {
@@ -44,14 +41,14 @@ public class SessionConfig implements TransactionManagementConfigurer {
 	
 	@Bean(destroyMethod = "")
 	public EntityManagerFactory getEntityManagerFactory() {
-		HibernateService.getInstance().connect(jpaConfig.getJpaConfig());
-		return getHibernateService().getEntityManagerFactory(jpaConfig.getJpaConfig());
+		HibernateService.getInstance().connect(jpaConfig);
+		return getHibernateService().getEntityManagerFactory(jpaConfig);
 	}
 	
 	@Bean(destroyMethod = "")
 	public SessionFactory getSessionFactory() {
-		HibernateService.getInstance().connect(jpaConfig.getJpaConfig());
-		return getHibernateService().getSessionFactory(jpaConfig.getJpaConfig());
+		HibernateService.getInstance().connect(jpaConfig);
+		return getHibernateService().getSessionFactory(jpaConfig);
 	}
 	
 	@Bean

@@ -13,9 +13,9 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.Spatial;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.AnnotatedGenericBeanDefinition;
-import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.config.ConstructorArgumentValues;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
@@ -26,6 +26,8 @@ import org.springframework.context.support.AbstractApplicationContext;
 import at.chrl.nutils.CollectionUtils;
 import at.chrl.spring.generics.repositories.GenericIndexedRepository;
 import at.chrl.spring.generics.repositories.GenericRepository;
+import at.chrl.spring.generics.repositories.IndexSearcher;
+import at.chrl.spring.generics.repositories.SpatialIndexSearcher;
 import at.chrl.spring.hibernate.config.RepositoryHolder;
 import at.chrl.spring.hibernate.config.SpringJpaConfig;
 
@@ -34,11 +36,12 @@ import at.chrl.spring.hibernate.config.SpringJpaConfig;
  * Aug 21, 2015 - 4:58:25 PM
  *
  */
-public class RepositoryHolderImplementation implements RepositoryHolder, ApplicationContextAware, BeanPostProcessor {
+public class RepositoryHolderImplementation implements RepositoryHolder, ApplicationContextAware {
 
 	private Map<Class<?>, GenericRepository<?>> repositories;
 	private SpringJpaConfig jpaConfig;
 	private Collection<GenericRepository<?>> autoWiredRepositories;
+	private Map<Class<?>, Map<Class<?>, IndexSearcher<?>>> indexSearchers;
 	
 	/**
 	 * 
@@ -64,7 +67,38 @@ public class RepositoryHolderImplementation implements RepositoryHolder, Applica
 		bean.setConstructorArgumentValues(conVal);
 		String beanName = (indexed ? "Indexed" : "") + "GenericRepository_"+genericType.getSimpleName();
 		registry.registerBeanDefinition(beanName, bean);
-		return (GenericRepository<T>) registry.getBean(beanName);
+		
+		GenericRepository<T> repo = (GenericRepository<T>) registry.getBean(beanName);
+		
+		if(indexed){
+			Collection<IndexSearcher<T>> searchers = registerIndexSearcher(registry, genericType, repo);
+			indexSearchers.putIfAbsent(genericType, CollectionUtils.<Class<?>, IndexSearcher<?>>newMap());
+			searchers.forEach(s -> {
+				indexSearchers.get(genericType).put(s.getClass(), s);				
+			});
+		}
+		return repo;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private <T> Collection<IndexSearcher<T>> registerIndexSearcher(DefaultListableBeanFactory registry, Class<T> genericType, GenericRepository<T> repo){
+		
+		Collection<IndexSearcher<T>> searchers = CollectionUtils.newList();
+		
+		boolean spatial = Objects.nonNull(genericType.getAnnotation(Spatial.class));
+		if(spatial) {
+			AnnotatedGenericBeanDefinition bean = new AnnotatedGenericBeanDefinition(SpatialIndexSearcher.class);
+			bean.setAutowireCandidate(true);
+			bean.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
+			ConstructorArgumentValues conVal = new ConstructorArgumentValues();
+			conVal.addGenericArgumentValue(repo);
+			bean.setConstructorArgumentValues(conVal);
+			String beanName = "SpatialIndexSearcher_"+genericType.getSimpleName();
+			registry.registerBeanDefinition(beanName, bean);
+			searchers.add((IndexSearcher<T>) registry.getBean(beanName));
+		}
+		
+		return searchers;
 	}
 	
 	/**
@@ -100,6 +134,7 @@ public class RepositoryHolderImplementation implements RepositoryHolder, Applica
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		AbstractApplicationContext appCon = (AbstractApplicationContext) applicationContext;
 		this.repositories = CollectionUtils.newMap();
+		this.indexSearchers = CollectionUtils.newMap();
 		if(Objects.nonNull(autoWiredRepositories))
 			autoWiredRepositories.forEach(r -> {
 				this.repositories.putIfAbsent(r.getType(), r);
@@ -117,22 +152,12 @@ public class RepositoryHolderImplementation implements RepositoryHolder, Applica
 
 	/**
 	 * {@inheritDoc}
-	 * @see org.springframework.beans.factory.config.BeanPostProcessor#postProcessBeforeInitialization(java.lang.Object, java.lang.String)
+	 * @see at.chrl.spring.hibernate.config.RepositoryHolder#getIndexSearcher(java.lang.Class, java.lang.Class)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-		return null;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * @see org.springframework.beans.factory.config.BeanPostProcessor#postProcessAfterInitialization(java.lang.Object, java.lang.String)
-	 */
-	@Override
-	public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-		System.out.println(beanName);
-		System.out.println(bean);
-		return null;
+	public <S extends IndexSearcher<T>, T> S getIndexSearcher(Class<S> searcherClass, Class<T> type) {
+		return (S) indexSearchers.getOrDefault(type, Collections.emptyMap()).getOrDefault(searcherClass, null);
 	}
 
 }

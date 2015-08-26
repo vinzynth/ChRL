@@ -326,11 +326,90 @@ public abstract class HibernateConfig implements IHibernateConfig{
 	public String HIBERNATE_SEARCH_EXCLUSIVE_INDEX_USER;
 	@Property(key = "hibernate.search.autoregister_listeners", defaultValue = "true", examples = {"true", "false"}, description = "disable hibernate search")
 	public String HIBERNATE_SEARCH_AUTOREGISTER_LISTENERS;
-//    configProperties.put("hibernate.search.default.directory_provider", MISProperties.getProperty(MISConstants.LUCENE_PROVIDER));
-	// hibernate.search.default.exclusive_index_user=false
-//    configProperties.put("hibernate.search.default.indexBase", MISProperties.getProperty(MISConstants.LUCENE_INDEXBASE));
+//	configProperties.put("hibernate.search.default.directory_provider", MISProperties.getProperty(MISConstants.LUCENE_PROVIDER));
+//	hibernate.search.default.exclusive_index_user=false
+//	configProperties.put("hibernate.search.default.indexBase", MISProperties.getProperty(MISConstants.LUCENE_INDEXBASE));
 	
+	/**
+	 * 5.0
+	 */
+	@Property(key = AvailableSettings.IMPLICIT_NAMING_STRATEGY, defaultValue = "", description = "")
+	public String IMPLICIT_NAMING_STRATEGY;
+
+	@Property(key = AvailableSettings.PHYSICAL_NAMING_STRATEGY, defaultValue = "", description = "")
+	public String PHYSICAL_NAMING_STRATEGY;
 	
+	/**
+	 * Hikari CP
+	 */
+	@Property(key = "hibernate.hikari.autoCommit", defaultValue = "", description = "HikariCP Configuration")
+	public String HIBERNATE_HIKARI_AUTOCOMMIT;
+
+	@Property(key = "hibernate.hikari.connectionTimeout", defaultValue = "", description = "HikariCP Configuration")
+	public String HIBERNATE_HIKARI_CONNECTIONTIMEOUT;
+
+	@Property(key = "hibernate.hikari.idleTimeout", defaultValue = "", description = "HikariCP Configuration")
+	public String HIBERNATE_HIKARI_IDLETIMEOUT;
+
+	@Property(key = "hibernate.hikari.maxLifetime", defaultValue = "", description = "HikariCP Configuration")
+	public String HIBERNATE_HIKARI_MAXLIFETIME;
+
+	@Property(key = "hibernate.hikari.connectionTestQuery", defaultValue = "", description = "HikariCP Configuration")
+	public String HIBERNATE_HIKARI_CONNECTIONTESTQUERY;
+
+	@Property(key = "hibernate.hikari.minimumIdle", defaultValue = "5", description = "HikariCP Configuration")
+	public String HIBERNATE_HIKARI_MINIMUMIDLE;
+
+	@Property(key = "hibernate.hikari.maximumPoolSize", defaultValue = "500", description = "HikariCP Configuration")
+	public String HIBERNATE_HIKARI_MAXIMUMPOOLSIZE;
+
+	@Property(key = "hibernate.hikari.metricRegistry", defaultValue = "", description = "HikariCP Configuration")
+	public String HIBERNATE_HIKARI_METRICREGISTRY;
+
+	@Property(key = "hibernate.hikari.healthCheckRegistry", defaultValue = "", description = "HikariCP Configuration")
+	public String HIBERNATE_HIKARI_HEALTHCHECKREGISTRY;
+
+	@Property(key = "hibernate.hikari.poolName", defaultValue = "", description = "HikariCP Configuration")
+	public String HIBERNATE_HIKARI_POOLNAME;
+
+	@Property(key = "hibernate.hikari.initializationFailFast", defaultValue = "", description = "HikariCP Configuration")
+	public String HIBERNATE_HIKARI_INITIALIZATIONFAILFAST;
+
+	@Property(key = "hibernate.hikari.isolateInternalQueries", defaultValue = "", description = "HikariCP Configuration")
+	public String HIBERNATE_HIKARI_ISOLATEINTERNALQUERIES;
+
+	@Property(key = "hibernate.hikari.allowPoolSuspension", defaultValue = "", description = "HikariCP Configuration")
+	public String HIBERNATE_HIKARI_ALLOWPOOLSUSPENSION;
+
+	@Property(key = "hibernate.hikari.readOnly", defaultValue = "", description = "HikariCP Configuration")
+	public String HIBERNATE_HIKARI_READONLY;
+
+	@Property(key = "hibernate.hikari.registerMbeans", defaultValue = "", description = "HikariCP Configuration")
+	public String HIBERNATE_HIKARI_REGISTERMBEANS;
+
+	@Property(key = "hibernate.hikari.catalog", defaultValue = "", description = "HikariCP Configuration")
+	public String HIBERNATE_HIKARI_CATALOG;
+
+	@Property(key = "hibernate.hikari.connectionInitSql", defaultValue = "", description = "HikariCP Configuration")
+	public String HIBERNATE_HIKARI_CONNECTIONINITSQL;
+
+	@Property(key = "hibernate.hikari.driverClassName", defaultValue = "", description = "HikariCP Configuration")
+	public String HIBERNATE_HIKARI_DRIVERCLASSNAME;
+
+	@Property(key = "hibernate.hikari.transactionIsolation", defaultValue = "", description = "HikariCP Configuration")
+	public String HIBERNATE_HIKARI_TRANSACTIONISOLATION;
+
+	@Property(key = "hibernate.hikari.validationTimeout", defaultValue = "", description = "HikariCP Configuration")
+	public String HIBERNATE_HIKARI_VALIDATIONTIMEOUT;
+
+	@Property(key = "hibernate.hikari.leakDetectionThreshold", defaultValue = "", description = "HikariCP Configuration")
+	public String HIBERNATE_HIKARI_LEAKDETECTIONTHRESHOLD;
+
+	@Property(key = "hibernate.hikari.dataSource", defaultValue = "", description = "HikariCP Configuration")
+	public String HIBERNATE_HIKARI_DATASOURCE;
+
+	@Property(key = "hibernate.hikari.threadFactory", defaultValue = "", description = "HikariCP Configuration")
+	public String HIBERNATE_HIKARI_THREADFACTORY;
 
 	/**
 	 * Flyway

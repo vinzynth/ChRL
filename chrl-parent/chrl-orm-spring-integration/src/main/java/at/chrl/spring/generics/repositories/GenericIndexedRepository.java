@@ -48,7 +48,7 @@ public class GenericIndexedRepository<T> extends GenericRepository<T> {
 
 	protected FullTextEntityManager fullTextEntityManager;
 
-	private FullTextEntityManager getFullTextEntityManager() {
+	FullTextEntityManager getFullTextEntityManager() {
 		if (Objects.isNull(fullTextEntityManager))
 			fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
 		return fullTextEntityManager;
@@ -56,7 +56,7 @@ public class GenericIndexedRepository<T> extends GenericRepository<T> {
 
 	protected FullTextSession fullTextSession;
 
-	private FullTextSession getFullTextSession() {
+	FullTextSession getFullTextSession() {
 		if (Objects.isNull(fullTextSession))
 			fullTextSession = org.hibernate.search.Search.getFullTextSession(getSession());
 		return fullTextSession;
