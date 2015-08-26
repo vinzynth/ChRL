@@ -32,7 +32,7 @@ import org.junit.runners.Parameterized.Parameters;
  *
  */
 @RunWith(Parameterized.class)
-public class ClassUtilsTests {
+public class ClassUtilsTest {
 	
 	public static final int TEST_SET_SIZE = 10;
 	private Integer i;
@@ -45,7 +45,7 @@ public class ClassUtilsTests {
 	/**
 	 * 
 	 */
-	public ClassUtilsTests(Integer i) {
+	public ClassUtilsTest(Integer i) {
 		this.i = i;
 	}
 	
