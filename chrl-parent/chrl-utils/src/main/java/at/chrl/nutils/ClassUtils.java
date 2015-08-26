@@ -42,7 +42,7 @@ public final class ClassUtils {
 	 */
 	@SafeVarargs
 	public static final <T> int hashCode(T obj, Function<T, ?>... getters) {
-		int hash = obj.getClass().hashCode();
+		int hash = 0;
 		for (Function<T, ?> function : getters)
 			hash = 31 * hash + function.apply(obj).hashCode();
 		
@@ -61,7 +61,7 @@ public final class ClassUtils {
 	public static final <T> boolean equals(T obj1, Object obj2, Function<T, ?>... getters) {
 		if(obj2 == null)
 			return false;
-		if(!obj1.getClass().equals(obj2.getClass()))
+		if(!obj1.getClass().getName().equals(obj2.getClass().getName()))
 			return false;
 		
 		@SuppressWarnings("unchecked")
