@@ -20,6 +20,7 @@ package at.chrl.nutils;
 import static org.junit.Assert.*;
 
 import java.util.Collection;
+import java.util.function.Function;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,7 +35,7 @@ import org.junit.runners.Parameterized.Parameters;
 @RunWith(Parameterized.class)
 public class ClassUtilsTest {
 	
-	public static final int TEST_SET_SIZE = 10;
+	public static final int TEST_SET_SIZE = 500;
 	private Integer i;
 	
 	@Parameters(name = "i: {0}")
@@ -50,7 +51,7 @@ public class ClassUtilsTest {
 	}
 	
 	@Test
-	public void test() throws Exception {
+	public void testContract() throws Exception {
 		TestClass a = new TestClass(new Long(i));
 		
 		assertTrue(a.equals(a));
@@ -63,20 +64,64 @@ public class ClassUtilsTest {
 			assertTrue(b.equals(b));
 			assertTrue(b.hashCode() == b.hashCode());
 			
-			assertTrue("i: " + i + " | j: " + j + " | i.equals(j): " + Boolean.toString(i.equals(j)) + " | a: " + a + " | b: " + b + " | a.equals(b): " + Boolean.toString(a.equals(b)),
-					(i.equals(j)) == (a.equals(b)));
-			assertTrue("i: " + i + " | j: " + j + " | i.equals(j): " + Boolean.toString(i.equals(j)) + " | a: " + a + " | b: " + b + " | b.equals(a): " + Boolean.toString(b.equals(a)),
-					(i.equals(j)) == (b.equals(a)));
-			assertTrue("i: " + i + " | j: " + j + " | i.equals(j): " + Boolean.toString(j.equals(i)) + " | a: " + a + " | b: " + b + " | a.equals(b): " + Boolean.toString(a.equals(b)),
-					(j.equals(i)) == (a.equals(b)));
-			assertTrue("i: " + i + " | j: " + j + " | i.equals(j): " + Boolean.toString(j.equals(i)) + " | a: " + a + " | b: " + b + " | b.equals(a): " + Boolean.toString(b.equals(a)),
-					(j.equals(i)) == (b.equals(a)));
-			assertTrue("i: " + i + " | j: " + j + " | a: " + a + " | b: " + b + " | i hash: " + i.hashCode() + " | j hash: " + j.hashCode() + " | a hash: " + a.hashCode() + " | b hash: " + b.hashCode() + " | a.hashCode == b.hashCode: " + Boolean.toString(a.hashCode() == b.hashCode()),
-					(i.equals(j)) == (a.hashCode() == b.hashCode()));
+			assertTrue(error(i,j,a,b), (i.equals(j)) == (a.equals(b)));
+			assertTrue(error(i,j,a,b), (i.equals(j)) == (b.equals(a)));
+			assertTrue(error(i,j,a,b), (j.equals(i)) == (a.equals(b)));
+			assertTrue(error(i,j,a,b), (j.equals(i)) == (b.equals(a)));
+			assertTrue(error(i,j,a,b), (i.hashCode() == j.hashCode()) == (a.hashCode() == b.hashCode()));
+			assertTrue(error(i,j,a,b), (i.equals(j)) == (a.hashCode() == b.hashCode()));
+			assertTrue(error(i,j,a,b), (j.equals(i)) == (a.hashCode() == b.hashCode()));
+			assertTrue(error(i,j,a,b), (i.hashCode() == j.hashCode()) == (a.equals(b)));
+			assertTrue(error(i,j,a,b), (i.hashCode() == j.hashCode()) == (b.equals(a)));
 		});
 	}
 	
-	
+	private static String error(Number i, Number j, TestClass a, TestClass b){
+		StringBuilder sb = new StringBuilder();
+		
+		Function<TestClass, Long> idGetter = TestClass::getId;
+		
+		sb.append(System.lineSeparator())
+			.append("i: ").append(i)
+			.append(System.lineSeparator())
+			.append("j: ").append(j)
+			.append(System.lineSeparator())
+			.append("a: ").append(a)
+			.append(System.lineSeparator())
+			.append("b: ").append(b)
+			.append(System.lineSeparator())
+			.append(System.lineSeparator())
+			.append("i hash: ").append(i.hashCode())
+			.append(System.lineSeparator())
+			.append("j hash: ").append(j.hashCode())
+			.append(System.lineSeparator())
+			.append("a hash: ").append(a.hashCode())
+			.append(System.lineSeparator())
+			.append("b hash: ").append(b.hashCode())
+			.append(System.lineSeparator())
+			.append(System.lineSeparator())
+			.append("i equals j: ").append(i.equals(j))
+			.append(System.lineSeparator())
+			.append("j equals i: ").append(j.equals(i))
+			.append(System.lineSeparator())
+			.append("a equals b: ").append(a.equals(b))
+			.append(System.lineSeparator())
+			.append("b equals a: ").append(b.equals(a))
+			.append(System.lineSeparator())
+			.append(System.lineSeparator())
+			.append("a.getId: ").append(a.getId())
+			.append(System.lineSeparator())
+			.append("b.getId: ").append(b.getId())
+			.append(System.lineSeparator())
+			.append(System.lineSeparator())
+			.append("TestClass::getId.apply(a): ").append(idGetter.apply(a))
+			.append(System.lineSeparator())
+			.append("TestClass::getId.apply(b): ").append(idGetter.apply(b))
+			.append(System.lineSeparator())
+			.append(System.lineSeparator());
+		
+		return sb.toString();
+	}
 	
 	public static class TestClass {
 		

@@ -43,8 +43,15 @@ public final class ClassUtils {
 	@SafeVarargs
 	public static final <T> int hashCode(T obj, Function<T, ?>... getters) {
 		int hash = 0;
-		for (Function<T, ?> function : getters)
-			hash = 31 * hash + function.apply(obj).hashCode();
+		for (Function<T, ?> f : getters){
+			Object applied = f.apply(obj);
+			if(applied instanceof Number){
+				hash = 31 * hash + ((Number) applied).intValue();
+				continue;
+			}
+				
+			hash = 31 * hash + f.apply(obj).hashCode();
+		}
 		
 		return hash;
 	}
