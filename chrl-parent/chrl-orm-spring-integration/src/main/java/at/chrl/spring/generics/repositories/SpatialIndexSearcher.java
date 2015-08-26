@@ -32,9 +32,15 @@ public class SpatialIndexSearcher<T> extends IndexSearcher<T> {
 					.ofLatitude(latitude)
 					.andLongitude(longitude)
 					.createQuery();
-
+			
 			org.hibernate.Query hibQuery = fullTextSession.createFullTextQuery(luceneQuery, this.getType());
 			return repository.stream(hibQuery);
 		});
+	}
+	
+	public Stream<T> boxSearch(double southWestLat, double southWestLon, double northEastLat, double northEastLon) {
+		return radiusSearch((northEastLat + southWestLat)/2, (northEastLon + southWestLon)/2,
+				Math.sqrt((northEastLat-southWestLat) * (northEastLat-southWestLat) + (northEastLon-southWestLon) * (northEastLon-southWestLon))
+				);
 	}
 }
