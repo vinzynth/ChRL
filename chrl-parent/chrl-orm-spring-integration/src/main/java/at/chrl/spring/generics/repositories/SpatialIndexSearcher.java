@@ -39,8 +39,10 @@ public class SpatialIndexSearcher<T> extends IndexSearcher<T> {
 	}
 	
 	public Stream<T> boxSearch(double southWestLat, double southWestLon, double northEastLat, double northEastLon) {
+		double kmLat = (northEastLat - southWestLat) * 110.574d;
+		double kmLon = Math.cos((southWestLon - northEastLon) * Math.PI/180) * 111.320d;
 		return radiusSearch((northEastLat + southWestLat)/2, (northEastLon + southWestLon)/2,
-				Math.sqrt((northEastLat-southWestLat) * (northEastLat-southWestLat) + (northEastLon-southWestLon) * (northEastLon-southWestLon))
+				Math.sqrt(kmLat*kmLat + kmLon*kmLon)/2
 				);
 	}
 }
