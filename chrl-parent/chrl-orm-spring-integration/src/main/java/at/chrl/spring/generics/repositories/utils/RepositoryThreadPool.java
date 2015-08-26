@@ -31,9 +31,9 @@ public interface RepositoryThreadPool {
 	
 	public ScrollableResults scroll(Criteria crit);
 	public ScrollableResults scroll(Query query);
-	public List<?> list(Criteria crit);
-	public List<?> list(Query query);
-	public Object uniqueResult(Criteria crit);
-	public Object uniqueResult(Query query);
+	public <T> List<T> list(Criteria crit);
+	public <T> List<T> list(Query query);
+	public <T> T uniqueResult(Criteria crit);
+	public <T> T uniqueResult(Query query);
 	public int executeUpdate(Query query);
 }

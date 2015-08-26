@@ -6,11 +6,27 @@
  */
 package at.chrl.spring.generics.repositories.utils.impl;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+
+import javax.annotation.PostConstruct;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.ScrollMode;
 import org.hibernate.ScrollableResults;
+import org.hibernate.Session;
+import org.hibernate.jpa.HibernateEntityManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.transaction.annotation.Transactional;
 
 import at.chrl.spring.generics.repositories.utils.RepositoryThreadPool;
 
@@ -21,14 +37,42 @@ import at.chrl.spring.generics.repositories.utils.RepositoryThreadPool;
  */
 public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 
+	@Autowired
+	private ThreadPoolTaskExecutor threadPoolTaskExecutor;
+	
+	@PostConstruct
+	public void setUp(){
+		threadPoolTaskExecutor.setMaxPoolSize(100);
+	}
+	
+	@PersistenceContext(type = PersistenceContextType.EXTENDED)
+	protected EntityManager entityManager;
+
+	protected Session getSession() {
+		return entityManager.unwrap(HibernateEntityManager.class).getSession();
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 * @see at.chrl.spring.generics.repositories.utils.RepositoryThreadPool#persist(java.lang.Object)
 	 */
 	@Override
 	public <T> T persist(T entity) {
-		// TODO Auto-generated method stub
+		try {
+			return asyncPersist(entity).get();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
 		return null;
+	}
+
+	@Async
+	@Transactional
+	private <T> Future<T> asyncPersist(T entity){
+		entityManager.persist(entity);
+		return new AsyncResult<>(entity);
 	}
 
 	/**
@@ -37,8 +81,21 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 	 */
 	@Override
 	public <T> T remove(T entity) {
-		// TODO Auto-generated method stub
+		try {
+			return asyncRemove(entity).get();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
 		return null;
+	}
+
+	@Async
+	@Transactional
+	private <T> Future<T> asyncRemove(T entity){
+		entityManager.remove(entity);
+		return new AsyncResult<>(entity);
 	}
 
 	/**
@@ -47,8 +104,21 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 	 */
 	@Override
 	public <T> T refresh(T entity) {
-		// TODO Auto-generated method stub
+		try {
+			return asyncRefresh(entity).get();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
 		return null;
+	}
+
+	@Async
+	@Transactional
+	private <T> Future<T> asyncRefresh(T entity){
+		entityManager.refresh(entity);
+		return new AsyncResult<>(entity);
 	}
 
 	/**
@@ -57,8 +127,20 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 	 */
 	@Override
 	public <T> T merge(T entity) {
-		// TODO Auto-generated method stub
+		try {
+			return asyncMerge(entity).get();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
 		return null;
+	}
+
+	@Async
+	@Transactional
+	private <T> Future<T> asyncMerge(T entity){
+		return new AsyncResult<>(entityManager.merge(entity));
 	}
 
 	/**
@@ -67,8 +149,21 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 	 */
 	@Override
 	public <T> T save(T entity) {
-		// TODO Auto-generated method stub
+		try {
+			return asyncSave(entity).get();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
 		return null;
+	}
+	
+	@Async
+	@Transactional
+	private <T> Future<T> asyncSave(T entity){
+		getSession().save(entity);
+		return new AsyncResult<T>(entity);
 	}
 
 	/**
@@ -77,8 +172,21 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 	 */
 	@Override
 	public <T> T saveOrUpdate(T entity) {
-		// TODO Auto-generated method stub
+		try {
+			return asyncSaveOrUpdate(entity).get();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
 		return null;
+	}
+
+	@Async
+	@Transactional
+	private <T> Future<T> asyncSaveOrUpdate(T entity){
+		getSession().saveOrUpdate(entity);
+		return new AsyncResult<T>(entity);
 	}
 
 	/**
@@ -87,8 +195,21 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 	 */
 	@Override
 	public <T> T mergeWithSession(T entity) {
-		// TODO Auto-generated method stub
+		try {
+			return asyncMergeWithSession(entity).get();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
 		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Async
+	@Transactional
+	private <T> Future<T> asyncMergeWithSession(T entity){
+		return new AsyncResult<>((T)getSession().merge(entity));
 	}
 
 	/**
@@ -97,8 +218,21 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 	 */
 	@Override
 	public <T> T persistWithSession(T entity) {
-		// TODO Auto-generated method stub
+		try {
+			return asyncPersistWithSession(entity).get();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
 		return null;
+	}
+
+	@Async
+	@Transactional
+	private <T> Future<T> asyncPersistWithSession(T entity){
+		getSession().persist(entity);
+		return new AsyncResult<>(entity);
 	}
 
 	/**
@@ -107,8 +241,21 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 	 */
 	@Override
 	public <T> T delete(T entity) {
-		// TODO Auto-generated method stub
+		try {
+			return asyncDelete(entity).get();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
 		return null;
+	}
+
+	@Async
+	@Transactional
+	private <T> Future<T> asyncDelete(T entity){
+		getSession().delete(entity);
+		return new AsyncResult<T>(entity);
 	}
 
 	/**
@@ -117,8 +264,20 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 	 */
 	@Override
 	public ScrollableResults scroll(Criteria crit) {
-		// TODO Auto-generated method stub
+		try {
+			return asyncScroll(crit).get();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
 		return null;
+	}
+
+	@Async
+	@Transactional
+	private Future<ScrollableResults> asyncScroll(Criteria crit){
+		return new AsyncResult<ScrollableResults>(crit.scroll(ScrollMode.FORWARD_ONLY));
 	}
 
 	/**
@@ -127,8 +286,20 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 	 */
 	@Override
 	public ScrollableResults scroll(Query query) {
-		// TODO Auto-generated method stub
+		try {
+			return asyncScroll(query).get();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
 		return null;
+	}
+
+	@Async
+	@Transactional
+	private Future<ScrollableResults> asyncScroll(Query query){
+		return new AsyncResult<ScrollableResults>(query.scroll(ScrollMode.FORWARD_ONLY));
 	}
 
 	/**
@@ -136,9 +307,22 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 	 * @see at.chrl.spring.generics.repositories.utils.RepositoryThreadPool#list(org.hibernate.Criteria)
 	 */
 	@Override
-	public List<?> list(Criteria crit) {
-		// TODO Auto-generated method stub
-		return null;
+	public <T> List<T> list(Criteria crit) {
+		try {
+			return this.<T>asyncList(crit).get();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+		return Collections.emptyList();
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Async
+	@Transactional
+	private <T> Future<List<T>> asyncList(Criteria crit){
+		return new AsyncResult(crit.list());
 	}
 
 	/**
@@ -146,9 +330,22 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 	 * @see at.chrl.spring.generics.repositories.utils.RepositoryThreadPool#list(org.hibernate.Query)
 	 */
 	@Override
-	public List<?> list(Query query) {
-		// TODO Auto-generated method stub
-		return null;
+	public <T> List<T> list(Query query) {
+		try {
+			return this.<T>asyncList(query).get();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+		return Collections.emptyList();
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Async
+	@Transactional
+	private <T> Future<List<T>> asyncList(Query query){
+		return new AsyncResult(query.list());
 	}
 
 	/**
@@ -156,9 +353,22 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 	 * @see at.chrl.spring.generics.repositories.utils.RepositoryThreadPool#uniqueResult(org.hibernate.Criteria)
 	 */
 	@Override
-	public Object uniqueResult(Criteria crit) {
-		// TODO Auto-generated method stub
+	public <T> T uniqueResult(Criteria crit) {
+		try {
+			return this.<T>asyncUniqueResult(crit).get();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
 		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Async
+	@Transactional
+	private <T> Future<T> asyncUniqueResult(Criteria crit){
+		return new AsyncResult<T>((T) crit.uniqueResult());
 	}
 
 	/**
@@ -166,9 +376,22 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 	 * @see at.chrl.spring.generics.repositories.utils.RepositoryThreadPool#uniqueResult(org.hibernate.Query)
 	 */
 	@Override
-	public Object uniqueResult(Query query) {
-		// TODO Auto-generated method stub
+	public <T> T uniqueResult(Query query) {
+		try {
+			return this.<T>asyncUniqueResult(query).get();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
 		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Async
+	@Transactional
+	private <T> Future<T> asyncUniqueResult(Query query){
+		return new AsyncResult<T>((T) query.uniqueResult());
 	}
 
 	/**
@@ -177,8 +400,20 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 	 */
 	@Override
 	public int executeUpdate(Query query) {
-		// TODO Auto-generated method stub
+		try {
+			return this.asyncExecuteUpdate(query).get();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
 		return 0;
+	}
+
+	@Async
+	@Transactional
+	private Future<Integer> asyncExecuteUpdate(Query query){
+		return new AsyncResult<Integer>(query.executeUpdate());
 	}
 
 }
