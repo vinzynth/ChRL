@@ -17,10 +17,15 @@
  */
 package at.chrl.jms;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.net.URI;
+import java.util.Enumeration;
 
 import javax.jms.ConnectionFactory;
 
+import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.broker.BrokerService;
 import org.apache.activemq.broker.TransportConnector;
 import org.springframework.context.annotation.Bean;
@@ -28,6 +33,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.config.JmsListenerContainerFactory;
+import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 
 /**
  * @author Vinzynth
@@ -38,23 +44,43 @@ import org.springframework.jms.config.JmsListenerContainerFactory;
 @Configuration
 public class JmsConfig {
 	
-	@Bean
+	@Bean(destroyMethod = "stop")
 	public BrokerService getActiveMQBrokerService() throws Exception{
 		BrokerService broker = new BrokerService();
 		broker.setPersistent(false);
-		TransportConnector con = new TransportConnector();
-		con.setUri(new URI("tcp://192.168.1.177:61616"));
-		broker.addConnector(con);
+		Enumeration<NetworkInterface> e = NetworkInterface.getNetworkInterfaces();
+		while(e.hasMoreElements())
+		{
+			NetworkInterface n = (NetworkInterface) e.nextElement();
+			Enumeration<InetAddress> ee = n.getInetAddresses();
+			while (ee.hasMoreElements()) {
+				InetAddress i = (InetAddress) ee.nextElement();
+				if (i instanceof Inet4Address){
+					TransportConnector con = new TransportConnector();
+					con.setUri(new URI("tcp://" + i.getHostAddress() + ":61616"));
+					broker.addConnector(con);
+				}
+			}
+		}
 		broker.start();
 		return broker;
 	}
 	
 	@Bean
 	public JmsListenerContainerFactory<?> myJmsContainerFactory(ConnectionFactory connectionFactory) {
-//		SimpleJmsListenerContainerFactory factory = new SimpleJmsListenerContainerFactory();
+		if(connectionFactory instanceof ActiveMQConnectionFactory){
+			ActiveMQConnectionFactory activeMqConnectionFactory = (ActiveMQConnectionFactory) connectionFactory;
+			activeMqConnectionFactory.setOptimizeAcknowledge(true);
+			System.out.println("tweak me");
+		}
 		DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
+		MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
+		converter.setTypeIdPropertyName("jtype");
+		factory.setMessageConverter(converter);
 		factory.setConnectionFactory(connectionFactory);
 		factory.setConcurrency("3-3000");
+		factory.setPubSubDomain(false);
+		factory.setReplyPubSubDomain(false);
 		return factory;
 	}
 }

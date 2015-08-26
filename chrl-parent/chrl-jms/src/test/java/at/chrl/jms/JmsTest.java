@@ -22,7 +22,11 @@ import java.io.File;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 import org.springframework.util.FileSystemUtils;
+
+import at.chrl.nutils.DatasetGenerator;
 
 /**
  * @author Vinzynth
@@ -38,5 +42,19 @@ public class JmsTest {
 
 		// Launch the application
 		ConfigurableApplicationContext context = SpringApplication.run(JmsTest.class, args);
+		
+		DatasetGenerator dataGen = new DatasetGenerator();
+		
+        JmsTemplate jmsTemplate = context.getBean(JmsTemplate.class);
+        MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
+		converter.setTypeIdPropertyName("jtype");
+        jmsTemplate.setMessageConverter(converter);
+//        jmsTemplate.setDefaultDestinationName("chrl-jms-test");
+        
+        System.out.println("Sending a new message.");
+        jmsTemplate.convertAndSend("chrl-jms-test", dataGen.generate(TestObject.class));
+        System.out.println("Sent a new message.");
+        
+        
 	}
 }
