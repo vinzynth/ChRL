@@ -39,11 +39,13 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.jpa.HibernateEntityManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import at.chrl.nutils.ClassUtils;
 import at.chrl.nutils.CollectionUtils;
 import at.chrl.orm.hibernate.SessionTemplate;
+import at.chrl.spring.generics.repositories.utils.RepositoryThreadPool;
 
 /**
  * 
@@ -60,6 +62,9 @@ public class GenericRepository<T> {
 	
 	private final Class<T> persistentClass;
 	private String idFieldName;
+	
+	@Autowired
+	private RepositoryThreadPool threadPool;
 
 	public GenericRepository() {
 		this.persistentClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
