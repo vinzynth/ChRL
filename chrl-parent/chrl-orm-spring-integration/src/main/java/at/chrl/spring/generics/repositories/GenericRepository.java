@@ -23,22 +23,15 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import javax.annotation.PostConstruct;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
 
 import org.hibernate.CacheMode;
 import org.hibernate.Criteria;
 import org.hibernate.FlushMode;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
-import org.hibernate.ScrollMode;
 import org.hibernate.ScrollableResults;
-import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.envers.AuditReader;
-import org.hibernate.envers.AuditReaderFactory;
-import org.hibernate.jpa.HibernateEntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,9 +55,6 @@ public class GenericRepository<T> {
 	
 	private final Class<T> persistentClass;
 	private String idFieldName;
-	
-	@Autowired
-	private RepositoryThreadPool threadPool;
 
 	public GenericRepository() {
 		this.persistentClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
@@ -83,17 +73,21 @@ public class GenericRepository<T> {
 			this.setIdFieldName();
 		return idFieldName;
 	}
+	
+	@Autowired
+	protected RepositoryThreadPool entityManager;
+	
+//	@PersistenceContext(type = PersistenceContextType.EXTENDED)
+//	protected EntityManager entityManager;
 
-	@PersistenceContext(type = PersistenceContextType.EXTENDED)
-	protected EntityManager entityManager;
-
-	protected Session getSession() {
-		return entityManager.unwrap(HibernateEntityManager.class).getSession();
-	}
+//	protected Session getSession() {
+//		return entityManager.unwrap(HibernateEntityManager.class).getSession();
+//	}
 
 	@PostConstruct
 	private void setIdFieldName() {
-		this.idFieldName = getSession().getSessionFactory().getClassMetadata(persistentClass).getIdentifierPropertyName();
+//		this.idFieldName = getSession().getSessionFactory().getClassMetadata(persistentClass).getIdentifierPropertyName();
+		this.idFieldName = entityManager.getIdentifierPropertyName(this.persistentClass);
 	}
 
 	@Transactional
@@ -118,7 +112,7 @@ public class GenericRepository<T> {
 	public Collection<T> getByIds(Collection<Object> ids) {
 		if (Objects.isNull(this.idFieldName))
 			return Collections.emptyList();
-		return getSession().createCriteria(this.persistentClass).add(Restrictions.in(this.idFieldName, ids)).list();
+		return entityManager.createCriteria(this.persistentClass).add(Restrictions.in(this.idFieldName, ids)).list();
 	}
 
 	/**
@@ -185,37 +179,42 @@ public class GenericRepository<T> {
 
 	@Transactional
 	public T save(T entity) {
-		getSession().save(entity);
+//		getSession().save(entity);
+		entityManager.save(entity);
 		return entity;
 	}
 
 	@Transactional
 	public T saveOrUpdate(T entity) {
-		getSession().saveOrUpdate(entity);
+//		getSession().saveOrUpdate(entity);
+		entityManager.saveOrUpdate(entity);
 		return entity;
 	}
 
 	@Transactional
 	public T mergeWithSession(T entity) {
-		getSession().merge(entity);
+//		getSession().merge(entity);
+		entityManager.merge(entity);
 		return entity;
 	}
 
 	@Transactional
 	public T persistWithSession(T entity) {
-		getSession().persist(entity);
+//		getSession().persist(entity);
+		entityManager.persist(entity);
 		return entity;
 	}
 	
 	@Transactional
 	public T delete(T entity) {
-		getSession().delete(entity);
+//		getSession().delete(entity);
+		entityManager.delete(entity);
 		return entity;
 	}
 
 	@Transactional
 	public Map<Date, T> getOlderVersions(Object id){
-		AuditReader reader = AuditReaderFactory.get(entityManager);
+		AuditReader reader = entityManager.getAuditReader();
 		List<Number> revisions = reader.getRevisions(this.getType(), id).stream().collect(Collectors.toList());
 		List<T> collect = revisions.stream().map(n -> reader.find(this.getType(), id, n)).collect(Collectors.toList());
 		List<Date> dates = revisions.stream().map(reader::getRevisionDate).collect(Collectors.toList());
@@ -238,7 +237,7 @@ public class GenericRepository<T> {
 	 *            the statement
 	 */
 	public Query createQuery(String stmt) {
-		return getSession().createQuery(stmt).setCacheable(true);
+		return entityManager.createQuery(stmt).setCacheable(true);
 	}
 
 	/**
@@ -248,13 +247,13 @@ public class GenericRepository<T> {
 	 *            the SQL statement
 	 */
 	public org.hibernate.SQLQuery createSQLQuery(String stmt) {
-		return (SQLQuery) getSession().createSQLQuery(stmt).setCacheable(true);
+		return (SQLQuery) entityManager.createSQLQuery(stmt).setCacheable(true);
 	}
 
 	@Transactional
 	public Collection<T> getAll(int maxResults) {
 		return this.executeQuery(
-				getSession().createQuery("select e from "
+				entityManager.createQuery("select e from "
 						+ this.persistentClass.getSimpleName() + " e"), maxResults, true);
 	}
 	
@@ -280,7 +279,7 @@ public class GenericRepository<T> {
 	 * @return {@link Iterator} of result set
 	 */
 	public Iterable<T> scrollAll(Class<T> entityClass){
-		return this.scroll(getSession().createCriteria(entityClass));
+		return this.scroll(entityManager.createCriteria(entityClass));
 	}
 
 	@Transactional
@@ -291,7 +290,7 @@ public class GenericRepository<T> {
 
 	@Transactional
 	public Collection<T> getLast(int count) {
-		return entityManager.createQuery("select e from " + this.getType().getSimpleName() + " e order by e." + idFieldName + " desc").setMaxResults(count).getResultList();
+		return entityManager.list(entityManager.createQuery("select e from " + this.getType().getSimpleName() + " e order by e." + idFieldName + " desc").setMaxResults(count));
 	}
 	
 	/**
@@ -302,7 +301,7 @@ public class GenericRepository<T> {
 	 * @return empty criteria query
 	 */
 	public Criteria createCriteria(Class<T> persistentClass) {
-		return getSession().createCriteria(persistentClass);
+		return entityManager.createCriteria(persistentClass);
 	}
 
 	/**
@@ -346,17 +345,17 @@ public class GenericRepository<T> {
 
 	public Collection<T> executeHQLQuery(final String query,
 			final int maxResults) {
-		return executeQuery(getSession().createQuery(query), maxResults);
+		return executeQuery(entityManager.createQuery(query), maxResults);
 	}
 	
 	public Collection<T> executeSQLQuery(final String query,
 			final int maxResults) {
-		return executeQuery(getSession().createSQLQuery(query), maxResults, false);
+		return executeQuery(entityManager.createSQLQuery(query), maxResults, false);
 	}
 
 	public Collection<T> executeNamedQuery(final String query,
 			final int maxResults) {
-		return executeQuery(getSession().getNamedQuery(query), maxResults);
+		return executeQuery(entityManager.getNamedQuery(query), maxResults);
 	}
 
 	public Collection<T> executeHQLQuery(final String query) {
@@ -410,15 +409,15 @@ public class GenericRepository<T> {
 	}
 
 	public T executeHQLQueryUniqueResult(final String query) {
-		return executeQueryUniqueResult(getSession().createQuery(query));
+		return executeQueryUniqueResult(entityManager.createQuery(query));
 	}
 
 	public T executeSQLQueryUniqueResult(final String query) {
-		return executeQueryUniqueResult(getSession().createSQLQuery(query), false);
+		return executeQueryUniqueResult(entityManager.createSQLQuery(query), false);
 	}
 
 	public T executeNamedQueryUniqueResult(final String query) {
-		return executeQueryUniqueResult(getSession().getNamedQuery(query));
+		return executeQueryUniqueResult(entityManager.getNamedQuery(query));
 	}
 	
 	/**
@@ -476,7 +475,7 @@ public class GenericRepository<T> {
 	 */
 	@Transactional
 	public Iterable<T> scroll(Query q) {
-		return new QueryIterable<T>(new QueryIterator<T>(q, getSession()));
+		return new QueryIterable<T>(new QueryIterator<T>(q, entityManager));
 	}
 	
 	/**
@@ -491,7 +490,7 @@ public class GenericRepository<T> {
 	 */
 	@Transactional
 	public Iterator<T> iterator(Query q) {
-		return new QueryIterator<T>(q, getSession());
+		return new QueryIterator<T>(q, entityManager);
 	}
 
 	/**
@@ -504,7 +503,7 @@ public class GenericRepository<T> {
 	 */
 	@Transactional
 	public Iterable<T> scroll(Criteria crit) {
-		return new QueryIterable<T>(new QueryIterator<T>(crit, getSession()));
+		return new QueryIterable<T>(new QueryIterator<T>(crit, entityManager));
 	}
 	
 	/**
@@ -521,7 +520,7 @@ public class GenericRepository<T> {
 	 */
 	@Transactional
 	public Iterator<T> iterator(Criteria crit, boolean stateless) {
-		return new QueryIterator<T>(crit, getSession());
+		return new QueryIterator<T>(crit, entityManager);
 	}
 
 	/**
@@ -547,7 +546,7 @@ public class GenericRepository<T> {
 	public Stream<T> stream(Query q) {	
 		return StreamSupport.<T> stream(Spliterators.spliteratorUnknownSize(
 				new QueryIterator<T>(q.setCacheMode(CacheMode.IGNORE)
-						.setFlushMode(FlushMode.MANUAL), getSession()),
+						.setFlushMode(FlushMode.MANUAL), entityManager),
 				Spliterator.ORDERED | Spliterator.DISTINCT), false);
 	}
 
@@ -574,7 +573,7 @@ public class GenericRepository<T> {
 	public Stream<T> stream(Criteria crit) {
 		return StreamSupport.<T> stream(Spliterators.spliteratorUnknownSize(
 				new QueryIterator<T>(crit.setCacheMode(CacheMode.IGNORE)
-						.setFlushMode(FlushMode.MANUAL), getSession()),
+						.setFlushMode(FlushMode.MANUAL), entityManager),
 				Spliterator.ORDERED | Spliterator.DISTINCT), false);
 	}
 
@@ -590,7 +589,7 @@ public class GenericRepository<T> {
 		private ScrollableResults scroll;
 		private Queue<T> queue;
 		private boolean stateless;
-		private Session session;
+		private RepositoryThreadPool session;
 
 		/**
 		 * Constructor with {@link Query}
@@ -602,13 +601,13 @@ public class GenericRepository<T> {
 		 * @param stateless
 		 *            - stateless flag
 		 */
-		public QueryIterator(Query q, Session session) {
+		public QueryIterator(Query q, RepositoryThreadPool session) {
 			this.session = session;
 			this.stateless = false;
 			this.queue = new ArrayDeque<>(FETCH_SIZE);
 
 			final int fs = FETCH_SIZE;
-			scroll = q.setFetchSize(fs).scroll(ScrollMode.FORWARD_ONLY);
+			scroll = session.scroll(q.setFetchSize(fs));
 			for (int i = 0; i < fs; i++)
 				if (!scroll.next())
 					break;
@@ -626,13 +625,13 @@ public class GenericRepository<T> {
 		 * @param stateless
 		 *            - stateless flag
 		 */
-		public QueryIterator(Criteria crit, Session session) {
+		public QueryIterator(Criteria crit, RepositoryThreadPool session) {
 			this.session = session;
 			this.stateless = false;
 			this.queue = new ArrayDeque<>(FETCH_SIZE);
 
 			final int fs = FETCH_SIZE;
-			scroll = crit.setFetchSize(fs).scroll(ScrollMode.FORWARD_ONLY);
+			scroll = session.scroll(crit.setFetchSize(fs));
 			for (int i = 0; i < fs; i++)
 				if (!scroll.next())
 					break;
@@ -651,7 +650,7 @@ public class GenericRepository<T> {
 		public boolean hasNext() {
 			boolean empty = queue.isEmpty();
 			if (!stateless && empty)
-				session.flush();
+				session.getSession().flush();
 			return !empty;
 		}
 
@@ -677,8 +676,8 @@ public class GenericRepository<T> {
 		 */
 		private void nextBuffer() {
 			if (!stateless) {
-				session.flush();
-				session.clear();
+				session.getSession().flush();
+				session.getSession().clear();
 			}
 			final int fs = FETCH_SIZE;
 			for (int i = 0; i < fs; i++)

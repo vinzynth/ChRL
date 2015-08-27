@@ -50,7 +50,7 @@ public class GenericIndexedRepository<T> extends GenericRepository<T> {
 
 	FullTextEntityManager getFullTextEntityManager() {
 		if (Objects.isNull(fullTextEntityManager))
-			fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
+			fullTextEntityManager = Search.getFullTextEntityManager(entityManager.getEntityManager());
 		return fullTextEntityManager;
 	}
 
@@ -58,7 +58,7 @@ public class GenericIndexedRepository<T> extends GenericRepository<T> {
 
 	FullTextSession getFullTextSession() {
 		if (Objects.isNull(fullTextSession))
-			fullTextSession = org.hibernate.search.Search.getFullTextSession(getSession());
+			fullTextSession = org.hibernate.search.Search.getFullTextSession(entityManager.getSession());
 		return fullTextSession;
 	}
 
@@ -99,7 +99,7 @@ public class GenericIndexedRepository<T> extends GenericRepository<T> {
 			}
 			transaction.commit();
 		} catch (NullPointerException e) {
-			fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
+			fullTextEntityManager = Search.getFullTextEntityManager(entityManager.getEntityManager());
 			updateIndexPrivate();
 		} catch (Exception e) {
 			System.out.println("Error rebuilding index: " + e.getMessage());

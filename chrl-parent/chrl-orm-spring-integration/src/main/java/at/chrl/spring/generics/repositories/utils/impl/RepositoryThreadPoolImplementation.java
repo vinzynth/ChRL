@@ -11,20 +11,23 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.ScrollMode;
 import org.hibernate.ScrollableResults;
 import org.hibernate.Session;
+import org.hibernate.envers.AuditReader;
+import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.jpa.HibernateEntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,20 +38,31 @@ import at.chrl.spring.generics.repositories.utils.RepositoryThreadPool;
  * Aug 26, 2015 - 7:40:37 PM
  *
  */
+@EnableAsync
 public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 
 	@Autowired
 	private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 	
-	@PostConstruct
-	public void setUp(){
-		threadPoolTaskExecutor.setMaxPoolSize(100);
-	}
-	
 	@PersistenceContext(type = PersistenceContextType.EXTENDED)
 	protected EntityManager entityManager;
 
-	protected Session getSession() {
+
+	/**
+	 * {@inheritDoc}
+	 * @see at.chrl.spring.generics.repositories.utils.RepositoryThreadPool#getEntityManager()
+	 */
+	@Override
+	public EntityManager getEntityManager() {
+		return entityManager;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * @see at.chrl.spring.generics.repositories.utils.RepositoryThreadPool#getSession()
+	 */
+	@Override
+	public Session getSession() {
 		return entityManager.unwrap(HibernateEntityManager.class).getSession();
 	}
 	
@@ -416,4 +430,79 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 		return new AsyncResult<Integer>(query.executeUpdate());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @see at.chrl.spring.generics.repositories.utils.RepositoryThreadPool#find(java.lang.Object)
+	 */
+	@Override
+	public <T> T find(Class<T> cls, Object id) {
+		try {
+			return this.asyncFind(cls, id).get();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	@Async
+	@Transactional
+	private <T> Future<T> asyncFind(Class<T> cls, Object id){
+		return new AsyncResult<>(entityManager.find(cls, id));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @see at.chrl.spring.generics.repositories.utils.RepositoryThreadPool#getIdentifierPropertyName(java.lang.Class)
+	 */
+	@Override
+	public String getIdentifierPropertyName(Class<?> cls) {
+		return getSession().getSessionFactory().getClassMetadata(cls).getIdentifierPropertyName();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @see at.chrl.spring.generics.repositories.utils.RepositoryThreadPool#createCriteria(java.lang.Class)
+	 */
+	@Override
+	public Criteria createCriteria(Class<?> cls) {
+		return getSession().createCriteria(cls);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @see at.chrl.spring.generics.repositories.utils.RepositoryThreadPool#createQuery(java.lang.String)
+	 */
+	@Override
+	public Query createQuery(String stmt) {
+		return getSession().createQuery(stmt);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @see at.chrl.spring.generics.repositories.utils.RepositoryThreadPool#createSQLQuery(java.lang.String)
+	 */
+	@Override
+	public SQLQuery createSQLQuery(String stmt) {
+		return getSession().createSQLQuery(stmt);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @see at.chrl.spring.generics.repositories.utils.RepositoryThreadPool#getNamedQuery(java.lang.String)
+	 */
+	@Override
+	public Query getNamedQuery(String query) {
+		return getSession().getNamedQuery(query);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @see at.chrl.spring.generics.repositories.utils.RepositoryThreadPool#getAuditReader()
+	 */
+	@Override
+	public AuditReader getAuditReader() {
+		return AuditReaderFactory.get(entityManager);
+	}
 }
