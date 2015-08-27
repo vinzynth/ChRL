@@ -47,7 +47,7 @@ public class EntityTest {
 		
 		GenericRepository<TestEntity> indexedRepository = bean.getRepository(TestEntity.class);
 		
-		List<TestEntity> collect = gen.generate(TestEntity.class, 5_000_000).collect(Collectors.toList());
+		List<TestEntity> collect = gen.generate(TestEntity.class, 5000_000).collect(Collectors.toList());
 		
 		long n = System.nanoTime();
 		indexedRepository.save(collect);

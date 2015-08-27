@@ -6,13 +6,17 @@
  */
 package at.chrl.spring.generics.repositories.utils.impl;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -37,7 +41,6 @@ import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 import at.chrl.spring.generics.repositories.utils.RepositoryThreadPool;
-import at.chrl.spring.generics.repositories.utils.SpringUtils;
 import at.chrl.spring.hibernate.config.SessionTemplateFactory;
 
 /**
@@ -48,11 +51,40 @@ import at.chrl.spring.hibernate.config.SessionTemplateFactory;
 @EnableAsync
 public class RepositoryThreadPoolImplementation implements RepositoryThreadPool, DisposableBean, ApplicationContextAware{
 
-	private BlockingQueue<Object> processFunctionQueue = new LinkedBlockingQueue<>();
-//	private BlockingQueue<Consumer<EntityManager>> processConsumerQueue = new LinkedBlockingQueue<>();
+	public static final int BATCH_SIZE = 1500;
+	public static final int MAX_THREAD_POOL_SIZE = 30;
 	
-	private void addToQueue(){
+	private BlockingQueue<Object> processFunctionQueue = new LinkedBlockingQueue<>();
+
+	private CountDownLatch lock = null;
+	
+	private void addToQueue(Object o){
+		if(processFunctionQueue.size() >= 100*BATCH_SIZE){
+			lock = new CountDownLatch(1);
+			//TODO: call system overload
+		}
 		
+		if(Objects.nonNull(lock))
+			try {
+				lock.await();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		
+		processFunctionQueue.add(o);
+		
+		if(processFunctionQueue.size() >= 2.00*BATCH_SIZE) newThread(6);
+		if(processFunctionQueue.size() >= 1.75*BATCH_SIZE) newThread(5);
+		if(processFunctionQueue.size() >= 1.50*BATCH_SIZE) newThread(4);
+		if(processFunctionQueue.size() >= 1.25*BATCH_SIZE) newThread(3);
+		if(processFunctionQueue.size() >= 1.00*BATCH_SIZE) newThread(3);
+		if(processFunctionQueue.size() >= 0.80*BATCH_SIZE) newThread(2);
+		if(processFunctionQueue.size() >= 0.60*BATCH_SIZE) newThread(2);
+		if(processFunctionQueue.size() >= 0.40*BATCH_SIZE) newThread(2);
+		if(processFunctionQueue.size() >= 0.20*BATCH_SIZE) newThread(1);
+		if(processFunctionQueue.size() >= 0.10*BATCH_SIZE) newThread(1);
+		if(processFunctionQueue.size() >= 0.05*BATCH_SIZE) newThread(1);
+		if(workingThreads.isEmpty()) newThread(1);
 	}
 	
 	@Autowired
@@ -61,7 +93,25 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool,
 	@PersistenceContext(type = PersistenceContextType.EXTENDED)
 	protected EntityManager entityManager;
 
-	private ArrayList<Thread> workingThreads;
+	private Collection<TransactionThread> workingThreads = new ConcurrentLinkedQueue<>();;
+	
+	void threadFinished(TransactionThread t){
+//		System.err.println("[Stop new Transaction Thread]");
+		workingThreads.remove(t);
+		if(Objects.nonNull(lock)){
+			lock.countDown();
+			if(lock.getCount() <= 0)
+				lock = null;
+		}
+	}
+	
+	private void newThread(int count){
+		final int c = Math.min(MAX_THREAD_POOL_SIZE - workingThreads.size(), count);
+		for (int i = 0; i < c; i++) {
+//			System.err.println("[Start new Transaction Thread]");
+			workingThreads.add(new TransactionThread(processFunctionQueue, sessionTemplateFactory, this));			
+		}
+	}
 	
 	/**
 	 * {@inheritDoc}
@@ -186,7 +236,7 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool,
 	
 	@Async
 	public <T> Future<T> asyncSave(T entity){
-		this.processFunctionQueue.add(entity);
+		this.addToQueue(entity);
 //		getSession().save(entity);
 		return new AsyncResult<T>(entity);
 	}
@@ -509,10 +559,9 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool,
 	 * {@inheritDoc}
 	 * @see org.springframework.beans.factory.DisposableBean#destroy()
 	 */
-	@SuppressWarnings("deprecation")
 	@Override
 	public void destroy() throws Exception {
-		workingThreads.forEach(Thread::stop);
+//		workingThreads.stream().ma
 	}
 
 	/**
@@ -521,11 +570,6 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool,
 	 */
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		int threads = 30;
-		workingThreads = new ArrayList<>(threads);
-		for (int i = 0; i < threads; i++) {
-			TransactionThread t1 = SpringUtils.generateBean(applicationContext, TransactionThread.class, "TransactionThread_" + i, processFunctionQueue, sessionTemplateFactory);
-			workingThreads.add(t1.getThread());
-		}
+		
 	}
 }

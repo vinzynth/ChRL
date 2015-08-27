@@ -17,10 +17,10 @@
  */
 package at.chrl.spring.generics.repositories.utils.impl;
 
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 
-import at.chrl.nutils.streams.InfiniteStreams;
 import at.chrl.orm.hibernate.SessionTemplate;
 import at.chrl.spring.hibernate.config.SessionTemplateFactory;
 
@@ -42,14 +42,41 @@ public final class TransactionThread {
 	/**
 	 * 
 	 */
-	public TransactionThread(BlockingQueue<Object> processQueue, SessionTemplateFactory sessionFactory) {
+	public TransactionThread(BlockingQueue<Object> processQueue, SessionTemplateFactory sessionFactory, RepositoryThreadPoolImplementation threadPool) {
 		this.processQueue = processQueue;
 		this.sessionFactory = sessionFactory;
-		thread = new Thread(() -> {
-			InfiniteStreams.getQueueStream(processQueue).forEach(this::process);
+		this.thread = new Thread(() -> {
+			for (Object object : new Iterable<Object>() {
+
+				@Override
+				public Iterator<Object> iterator() {
+					return new Iterator<Object>() {
+						
+						@Override
+						public Object next() {
+							try {
+								return processQueue.take();
+							} catch (InterruptedException e) {
+								System.err.println("[Stop Transaction Thread] " + Thread.currentThread().getName());
+							}
+							return null;
+						}
+						
+						@Override
+						public boolean hasNext() {
+							return !processQueue.isEmpty();
+						}
+					};
+				}
+			}) {
+				process(object);
+			}
+			threadPool.threadFinished(TransactionThread.this);
 		});
-		getThread().setDaemon(true);
-		getThread().start();
+		
+		this.thread.setName("TransactionThread_" + System.nanoTime());
+		this.thread.setDaemon(true);
+		this.thread.start();
 	}
 	
 	private final SessionTemplate getSession() {
@@ -69,7 +96,7 @@ public final class TransactionThread {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if(processQueue.isEmpty() || ++i % 1500 == 0){
+		if(processQueue.isEmpty() || ++i % RepositoryThreadPoolImplementation.BATCH_SIZE == 0){
 			i = 0;
 			try {
 				this.session.close();
