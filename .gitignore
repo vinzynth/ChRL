@@ -64,7 +64,5 @@ $RECYCLE.BIN/
 *.classpath
 *.class
 *.versionsBackup
-*\target
 */target
 */indexes
-*\indexes
