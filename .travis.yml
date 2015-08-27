@@ -2,6 +2,9 @@ jdk: oraclejdk8
 language: java
 sudo: false
 
+addons:
+  postgresql: "9.4"
+
 cache:
   directories:
   - $HOME/.m2
@@ -9,5 +12,8 @@ cache:
 
 before_install: mvn install -N -Dgpg.skip=true
 install: mvn clean install -DskipTests -T 3C -Dgpg.skip=true
+
+before_script:
+  - psql -c 'create database test;' -U postgres 
 
 script: mvn clean test -Dgpg.skip=true

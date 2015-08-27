@@ -17,6 +17,7 @@ import java.util.Objects;
 import java.util.Queue;
 import java.util.Spliterator;
 import java.util.Spliterators;
+import java.util.concurrent.Future;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -687,6 +688,60 @@ public class GenericRepository<T> {
 			return iterator;
 		}
 	}
+	
+	public Collection<T> persist(Collection<T> entity) {
+		return processAsync(entityManager::asyncPersist, entity);
+	}
+	
+	public Collection<T> remove(Collection<T> entity) {
+		return processAsync(entityManager::asyncRemove, entity);
+	}
+	
+	public Collection<T> refresh(Collection<T> entity) {
+		return processAsync(entityManager::asyncRefresh, entity);
+	}
+	
+	public Collection<T> merge(Collection<T> entity) {
+		return processAsync(entityManager::asyncMerge, entity);
+	}
+	
+	public Collection<T> save(Collection<T> entity) {
+		return processAsync(entityManager::asyncSave, entity);
+	}
+	
+	public Collection<T> saveOrUpdate(Collection<T> entity) {
+		return processAsync(entityManager::asyncSaveOrUpdate, entity);
+	}
+	
+	public Collection<T> mergeWithSession(Collection<T> entity) {
+		return processAsync(entityManager::asyncMergeWithSession, entity);
+	}
+	
+	public Collection<T> persistWithSession(Collection<T> entity) {
+		return processAsync(entityManager::asyncPersistWithSession, entity);
+	}
+	
+	public Collection<T> delete(Collection<T> entity) {
+		return processAsync(entityManager::asyncDelete, entity);
+	}
+
+	private Collection<T> processAsync(Function<T, Future<T>> asyncOperation, Collection<T> entity) {
+		Collection<Future<T>> persisted = CollectionUtils.newList(entity.size());
+		for (T t : entity) {
+			Future<T> persist = asyncOperation.apply(t);
+			persisted.add(persist);
+		}
+		return persisted.stream().map(f -> {
+			try {
+				return f.get();
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+		}).filter(Objects::nonNull).collect(Collectors.toList());
+	}
+	
+	
 	
 	/**
 	 * {@inheritDoc}

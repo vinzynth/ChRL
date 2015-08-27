@@ -7,6 +7,7 @@
 package at.chrl.spring.generics.repositories.utils;
 
 import java.util.List;
+import java.util.concurrent.Future;
 
 import javax.persistence.EntityManager;
 
@@ -34,6 +35,17 @@ public interface RepositoryThreadPool {
 	public <T> T persistWithSession(T entity);
 	public <T> T delete(T entity);
 	public <T> T find(Class<T> cls, Object id);
+
+	public <T> Future<T> asyncPersist(T entity);
+	public <T> Future<T> asyncRemove(T entity);
+	public <T> Future<T> asyncRefresh(T entity);
+	public <T> Future<T> asyncMerge(T entity);
+	public <T> Future<T> asyncSave(T entity);
+	public <T> Future<T> asyncSaveOrUpdate(T entity);
+	public <T> Future<T> asyncMergeWithSession(T entity);
+	public <T> Future<T> asyncPersistWithSession(T entity);
+	public <T> Future<T> asyncDelete(T entity);
+	public <T> Future<T> asyncFind(Class<T> cls, Object id);
 	
 	public String getIdentifierPropertyName(Class<?> cls);
 	

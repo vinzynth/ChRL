@@ -6,10 +6,14 @@
  */
 package at.chrl.spring.generics.repositories.utils.impl;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.function.Function;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -24,14 +28,16 @@ import org.hibernate.Session;
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.jpa.HibernateEntityManager;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import org.springframework.transaction.annotation.Transactional;
 
 import at.chrl.spring.generics.repositories.utils.RepositoryThreadPool;
+import at.chrl.spring.generics.repositories.utils.SpringUtils;
 
 /**
  * @author Christian Richard Leopold - ChRL <br>
@@ -39,15 +45,16 @@ import at.chrl.spring.generics.repositories.utils.RepositoryThreadPool;
  *
  */
 @EnableAsync
-public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
+public class RepositoryThreadPoolImplementation implements RepositoryThreadPool, DisposableBean, ApplicationContextAware{
 
-	@Autowired
-	private ThreadPoolTaskExecutor threadPoolTaskExecutor;
+	private BlockingQueue<Function<EntityManager, ?>> processFunctionQueue = new LinkedBlockingQueue<>();
+//	private BlockingQueue<Consumer<EntityManager>> processConsumerQueue = new LinkedBlockingQueue<>();
 	
 	@PersistenceContext(type = PersistenceContextType.EXTENDED)
 	protected EntityManager entityManager;
 
-
+	private ArrayList<Thread> workingThreads;
+	
 	/**
 	 * {@inheritDoc}
 	 * @see at.chrl.spring.generics.repositories.utils.RepositoryThreadPool#getEntityManager()
@@ -56,7 +63,7 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 	public EntityManager getEntityManager() {
 		return entityManager;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * @see at.chrl.spring.generics.repositories.utils.RepositoryThreadPool#getSession()
@@ -65,6 +72,11 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 	public Session getSession() {
 		return entityManager.unwrap(HibernateEntityManager.class).getSession();
 	}
+	
+	private static final Session getSession(EntityManager e) {
+		return e.unwrap(HibernateEntityManager.class).getSession();
+	}
+	
 	
 	/**
 	 * {@inheritDoc}
@@ -83,8 +95,7 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 	}
 
 	@Async
-	@Transactional
-	private <T> Future<T> asyncPersist(T entity){
+	public <T> Future<T> asyncPersist(T entity){
 		entityManager.persist(entity);
 		return new AsyncResult<>(entity);
 	}
@@ -106,8 +117,7 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 	}
 
 	@Async
-	@Transactional
-	private <T> Future<T> asyncRemove(T entity){
+	public <T> Future<T> asyncRemove(T entity){
 		entityManager.remove(entity);
 		return new AsyncResult<>(entity);
 	}
@@ -129,8 +139,7 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 	}
 
 	@Async
-	@Transactional
-	private <T> Future<T> asyncRefresh(T entity){
+	public <T> Future<T> asyncRefresh(T entity){
 		entityManager.refresh(entity);
 		return new AsyncResult<>(entity);
 	}
@@ -152,8 +161,7 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 	}
 
 	@Async
-	@Transactional
-	private <T> Future<T> asyncMerge(T entity){
+	public <T> Future<T> asyncMerge(T entity){
 		return new AsyncResult<>(entityManager.merge(entity));
 	}
 
@@ -174,9 +182,12 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 	}
 	
 	@Async
-	@Transactional
-	private <T> Future<T> asyncSave(T entity){
-		getSession().save(entity);
+	public <T> Future<T> asyncSave(T entity){
+		this.processFunctionQueue.add(e -> {	
+			getSession(e).save(entity);
+			return entity;
+		});
+//		getSession().save(entity);
 		return new AsyncResult<T>(entity);
 	}
 
@@ -197,8 +208,7 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 	}
 
 	@Async
-	@Transactional
-	private <T> Future<T> asyncSaveOrUpdate(T entity){
+	public <T> Future<T> asyncSaveOrUpdate(T entity){
 		getSession().saveOrUpdate(entity);
 		return new AsyncResult<T>(entity);
 	}
@@ -221,8 +231,7 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 
 	@SuppressWarnings("unchecked")
 	@Async
-	@Transactional
-	private <T> Future<T> asyncMergeWithSession(T entity){
+	public <T> Future<T> asyncMergeWithSession(T entity){
 		return new AsyncResult<>((T)getSession().merge(entity));
 	}
 
@@ -243,8 +252,7 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 	}
 
 	@Async
-	@Transactional
-	private <T> Future<T> asyncPersistWithSession(T entity){
+	public <T> Future<T> asyncPersistWithSession(T entity){
 		getSession().persist(entity);
 		return new AsyncResult<>(entity);
 	}
@@ -266,8 +274,7 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 	}
 
 	@Async
-	@Transactional
-	private <T> Future<T> asyncDelete(T entity){
+	public <T> Future<T> asyncDelete(T entity){
 		getSession().delete(entity);
 		return new AsyncResult<T>(entity);
 	}
@@ -289,7 +296,6 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 	}
 
 	@Async
-	@Transactional
 	private Future<ScrollableResults> asyncScroll(Criteria crit){
 		return new AsyncResult<ScrollableResults>(crit.scroll(ScrollMode.FORWARD_ONLY));
 	}
@@ -311,7 +317,6 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 	}
 
 	@Async
-	@Transactional
 	private Future<ScrollableResults> asyncScroll(Query query){
 		return new AsyncResult<ScrollableResults>(query.scroll(ScrollMode.FORWARD_ONLY));
 	}
@@ -334,7 +339,6 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Async
-	@Transactional
 	private <T> Future<List<T>> asyncList(Criteria crit){
 		return new AsyncResult(crit.list());
 	}
@@ -357,7 +361,6 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Async
-	@Transactional
 	private <T> Future<List<T>> asyncList(Query query){
 		return new AsyncResult(query.list());
 	}
@@ -380,7 +383,6 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 
 	@SuppressWarnings("unchecked")
 	@Async
-	@Transactional
 	private <T> Future<T> asyncUniqueResult(Criteria crit){
 		return new AsyncResult<T>((T) crit.uniqueResult());
 	}
@@ -403,7 +405,6 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 
 	@SuppressWarnings("unchecked")
 	@Async
-	@Transactional
 	private <T> Future<T> asyncUniqueResult(Query query){
 		return new AsyncResult<T>((T) query.uniqueResult());
 	}
@@ -425,7 +426,6 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 	}
 
 	@Async
-	@Transactional
 	private Future<Integer> asyncExecuteUpdate(Query query){
 		return new AsyncResult<Integer>(query.executeUpdate());
 	}
@@ -447,8 +447,7 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 	}
 	
 	@Async
-	@Transactional
-	private <T> Future<T> asyncFind(Class<T> cls, Object id){
+	public <T> Future<T> asyncFind(Class<T> cls, Object id){
 		return new AsyncResult<>(entityManager.find(cls, id));
 	}
 
@@ -504,5 +503,29 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool{
 	@Override
 	public AuditReader getAuditReader() {
 		return AuditReaderFactory.get(entityManager);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @see org.springframework.beans.factory.DisposableBean#destroy()
+	 */
+	@SuppressWarnings("deprecation")
+	@Override
+	public void destroy() throws Exception {
+		workingThreads.forEach(Thread::stop);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @see org.springframework.context.ApplicationContextAware#setApplicationContext(org.springframework.context.ApplicationContext)
+	 */
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		int threads = 5;
+		workingThreads = new ArrayList<>(threads);
+		for (int i = 0; i < threads; i++) {
+			TransactionThread t1 = SpringUtils.generateBean(applicationContext, TransactionThread.class, "TransactionThread_" + i, processFunctionQueue);
+			workingThreads.add(t1.getThread());
+		}
 	}
 }

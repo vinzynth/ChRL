@@ -21,9 +21,7 @@ import org.hibernate.search.jpa.FullTextQuery;
 import org.hibernate.search.jpa.Search;
 import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
-import at.chrl.nutils.CollectionUtils;
 import at.chrl.orm.hibernate.configuration.JPAConfig;
 
 /**
@@ -127,7 +125,6 @@ public class GenericIndexedRepository<T> extends GenericRepository<T> {
 	}
 
 	@Override
-	@Transactional
 	public T persist(T entity) {
 		T persist = super.persist(entity);
 		getFullTextEntityManager().index(persist);
@@ -135,7 +132,6 @@ public class GenericIndexedRepository<T> extends GenericRepository<T> {
 	};
 
 	@Override
-	@Transactional
 	public T save(T entity) {
 		T entity2 = super.save(entity);
 		getFullTextEntityManager().index(entity2);
@@ -143,44 +139,65 @@ public class GenericIndexedRepository<T> extends GenericRepository<T> {
 	}
 
 	@Override
-	@Transactional
 	public T saveOrUpdate(T entity) {
 		T entity2 = super.saveOrUpdate(entity);
 		getFullTextEntityManager().index(entity2);
 		return entity2;
 	}
 
-	@Transactional
+	@Override
 	public Collection<T> persist(Collection<T> entity) {
-		Collection<T> persisted = CollectionUtils.newList(entity.size());
-		for (T t : entity) {
-			T persist = super.persist(t);
-			persisted.add(persist);
-			getFullTextEntityManager().index(persist);
-		}
-		return persisted;
-	};
+		Collection<T> processed = super.persist(entity);
+		processed.forEach(getFullTextEntityManager()::index);
+		return processed;
+	}
 
-	@Transactional
+	@Override
+	public Collection<T> remove(Collection<T> entity) {
+		Collection<T> processed = super.remove(entity);
+		processed.forEach(getFullTextEntityManager()::index);
+		return processed;
+	}
+
+	@Override
+	public Collection<T> refresh(Collection<T> entity) {
+		Collection<T> processed = super.refresh(entity);
+		processed.forEach(getFullTextEntityManager()::index);
+		return processed;
+	}
+
+	@Override
+	public Collection<T> merge(Collection<T> entity) {
+		Collection<T> processed = super.merge(entity);
+		processed.forEach(getFullTextEntityManager()::index);
+		return processed;
+	}
+
+	@Override
 	public Collection<T> save(Collection<T> entity) {
-		Collection<T> persisted = CollectionUtils.newList(entity.size());
-		for (T t : entity) {
-			T persist = super.save(t);
-			persisted.add(persist);
-			getFullTextEntityManager().index(persist);
-		}
-		return persisted;
-	};
+		Collection<T> processed = super.save(entity);
+		processed.forEach(getFullTextEntityManager()::index);
+		return processed;
+	}
 
-	@Transactional
+	@Override
 	public Collection<T> saveOrUpdate(Collection<T> entity) {
-		Collection<T> persisted = CollectionUtils.newList(entity.size());
-		for (T t : entity) {
-			T persist = super.saveOrUpdate(t);
-			persisted.add(persist);
-			getFullTextEntityManager().index(persist);
-		}
-		return persisted;
-	};
+		Collection<T> processed = super.saveOrUpdate(entity);
+		processed.forEach(getFullTextEntityManager()::index);
+		return processed;
+	}
+
+	@Override
+	public Collection<T> mergeWithSession(Collection<T> entity) {
+		Collection<T> processed = super.mergeWithSession(entity);
+		processed.forEach(getFullTextEntityManager()::index);
+		return processed;
+	}
 	
+	@Override
+	public Collection<T> persistWithSession(Collection<T> entity) {
+		Collection<T> processed = super.persistWithSession(entity);
+		processed.forEach(getFullTextEntityManager()::index);
+		return processed;
+	}
 }

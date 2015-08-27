@@ -14,7 +14,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.TransactionManagementConfigurer;
@@ -47,19 +46,6 @@ public class SessionConfig implements TransactionManagementConfigurer {
 	@Bean
 	public RepositoryThreadPool getRepositoryThreadPool(){
 		return new RepositoryThreadPoolImplementation();
-	}
-	
-	@Bean
-	public ThreadPoolTaskExecutor getThreadPoolTaskExecutor(SpringGeneratedJpaConfig jpaConfig){
-		ThreadPoolTaskExecutor ex = new ThreadPoolTaskExecutor();
-		int maxPoolSize = 100;
-		try {
-			maxPoolSize = Integer.parseInt(jpaConfig.HIBERNATE_HIKARI_MAXIMUMPOOLSIZE);			
-		} catch (Exception e) {
-			System.err.println("Error on parsing Hikari maximum pool size: " + e.getMessage());
-		}
-		ex.setMaxPoolSize(maxPoolSize);
-		return ex;
 	}
 	
 	@Bean(destroyMethod = "")

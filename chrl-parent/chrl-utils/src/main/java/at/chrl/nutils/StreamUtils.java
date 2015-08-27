@@ -386,6 +386,17 @@ public final class StreamUtils {
 		};
 	}
 	
+	public static <T, R> Function<T, R> catchException(Function<T, R> func){
+		return t -> {
+			try {
+				return func.apply(t);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;
+		};
+	}
+	
 	public static boolean isBlankOrNull(String s) {
 		return s == null || s.isEmpty();
 	}

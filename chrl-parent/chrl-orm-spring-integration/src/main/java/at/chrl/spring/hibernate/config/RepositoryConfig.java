@@ -23,7 +23,6 @@ import at.chrl.spring.hibernate.config.impl.RepositoryHolderImplementation;
 @Configuration
 public class RepositoryConfig {
 
-
 	@Autowired(required = false)
 	private Collection<GenericRepository<?>> repositories;
 	

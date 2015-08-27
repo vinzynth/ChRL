@@ -63,7 +63,8 @@ public final class InfiniteStreams {
 			try {
 				return queue.take();
 			} catch (Exception e) {
-				e.printStackTrace();
+				System.err.println(e.getMessage());
+//				e.printStackTrace();
 			}
 			return null;
 		});
