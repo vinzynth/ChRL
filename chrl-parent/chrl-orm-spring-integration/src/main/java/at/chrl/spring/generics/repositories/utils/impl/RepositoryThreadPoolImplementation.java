@@ -13,7 +13,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.function.Function;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -30,6 +29,7 @@ import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.jpa.HibernateEntityManager;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.scheduling.annotation.Async;
@@ -38,6 +38,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 import at.chrl.spring.generics.repositories.utils.RepositoryThreadPool;
 import at.chrl.spring.generics.repositories.utils.SpringUtils;
+import at.chrl.spring.hibernate.config.SessionTemplateFactory;
 
 /**
  * @author Christian Richard Leopold - ChRL <br>
@@ -47,8 +48,15 @@ import at.chrl.spring.generics.repositories.utils.SpringUtils;
 @EnableAsync
 public class RepositoryThreadPoolImplementation implements RepositoryThreadPool, DisposableBean, ApplicationContextAware{
 
-	private BlockingQueue<Function<EntityManager, ?>> processFunctionQueue = new LinkedBlockingQueue<>();
+	private BlockingQueue<Object> processFunctionQueue = new LinkedBlockingQueue<>();
 //	private BlockingQueue<Consumer<EntityManager>> processConsumerQueue = new LinkedBlockingQueue<>();
+	
+	private void addToQueue(){
+		
+	}
+	
+	@Autowired
+	private SessionTemplateFactory sessionTemplateFactory;
 	
 	@PersistenceContext(type = PersistenceContextType.EXTENDED)
 	protected EntityManager entityManager;
@@ -72,11 +80,6 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool,
 	public Session getSession() {
 		return entityManager.unwrap(HibernateEntityManager.class).getSession();
 	}
-	
-	private static final Session getSession(EntityManager e) {
-		return e.unwrap(HibernateEntityManager.class).getSession();
-	}
-	
 	
 	/**
 	 * {@inheritDoc}
@@ -183,10 +186,7 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool,
 	
 	@Async
 	public <T> Future<T> asyncSave(T entity){
-		this.processFunctionQueue.add(e -> {	
-			getSession(e).save(entity);
-			return entity;
-		});
+		this.processFunctionQueue.add(entity);
 //		getSession().save(entity);
 		return new AsyncResult<T>(entity);
 	}
@@ -521,10 +521,10 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool,
 	 */
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		int threads = 5;
+		int threads = 30;
 		workingThreads = new ArrayList<>(threads);
 		for (int i = 0; i < threads; i++) {
-			TransactionThread t1 = SpringUtils.generateBean(applicationContext, TransactionThread.class, "TransactionThread_" + i, processFunctionQueue);
+			TransactionThread t1 = SpringUtils.generateBean(applicationContext, TransactionThread.class, "TransactionThread_" + i, processFunctionQueue, sessionTemplateFactory);
 			workingThreads.add(t1.getThread());
 		}
 	}

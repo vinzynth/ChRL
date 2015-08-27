@@ -19,32 +19,32 @@ package at.chrl.spring.generics.repositories.utils.impl;
 
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
-import java.util.function.Function;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
-
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import at.chrl.nutils.streams.InfiniteStreams;
+import at.chrl.orm.hibernate.SessionTemplate;
+import at.chrl.spring.hibernate.config.SessionTemplateFactory;
 
 /**
  * @author Vinzynth
  * 27.08.2015 - 20:02:04
  *
  */
-@EnableTransactionManagement
-public class TransactionThread {
+public final class TransactionThread {
 	
-	@PersistenceContext(type = PersistenceContextType.EXTENDED)
-	protected EntityManager entityManager;
+	private SessionTemplateFactory sessionFactory;
+		
+	private SessionTemplate session;
 	private final Thread thread;
+	int i = 0;
 
+	private BlockingQueue<Object> processQueue;
+	
 	/**
 	 * 
 	 */
-	public TransactionThread(BlockingQueue<Function<EntityManager, ?>> processQueue) {
+	public TransactionThread(BlockingQueue<Object> processQueue, SessionTemplateFactory sessionFactory) {
+		this.processQueue = processQueue;
+		this.sessionFactory = sessionFactory;
 		thread = new Thread(() -> {
 			InfiniteStreams.getQueueStream(processQueue).forEach(this::process);
 		});
@@ -52,23 +52,34 @@ public class TransactionThread {
 		getThread().start();
 	}
 	
-	int i = 0;
-
-	public void process(Function<EntityManager, ?> f){
-		if(Objects.isNull(f))
-			return;
-		try {
-			f.apply(entityManager);			
-		} catch (Exception e) {
-			renewTransaction();
-			f.apply(entityManager);
-		}
-		if(i++ % 10 == 0)
-			renewTransaction();
+	private final SessionTemplate getSession() {
+		if(Objects.nonNull(session))
+			return this.session;
+		this.session = sessionFactory.createTemplate();
+		return this.session;
 	}
 	
-	public void renewTransaction(){}
 
+	public void process(Object f){
+		if(Objects.isNull(f)){
+			return;
+		}
+		try {
+			getSession().save(f);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if(processQueue.isEmpty() || ++i % 1500 == 0){
+			i = 0;
+			try {
+				this.session.close();
+				this.session = null;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	/**
 	 * @return the thread
 	 */

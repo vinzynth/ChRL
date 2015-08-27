@@ -63,7 +63,7 @@ public final class InfiniteStreams {
 			try {
 				return queue.take();
 			} catch (Exception e) {
-				System.err.println(e.getMessage());
+				System.out.println("[InfiniteStreams | Shutdown] " + e.getMessage());
 //				e.printStackTrace();
 			}
 			return null;

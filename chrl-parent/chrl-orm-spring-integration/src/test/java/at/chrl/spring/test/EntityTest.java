@@ -27,7 +27,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 import at.chrl.nutils.DatasetGenerator;
 import at.chrl.orm.test.ORMDatasetGenerator;
-import at.chrl.spring.generics.repositories.GenericIndexedRepository;
+import at.chrl.spring.generics.repositories.GenericRepository;
 import at.chrl.spring.hibernate.config.RepositoryHolder;
 
 /**
@@ -45,9 +45,9 @@ public class EntityTest {
 		RepositoryHolder bean = context.getBean(RepositoryHolder.class);
 		DatasetGenerator gen = new ORMDatasetGenerator();
 		
-		GenericIndexedRepository<TestEntity> indexedRepository = bean.getIndexedRepository(TestEntity.class);
+		GenericRepository<TestEntity> indexedRepository = bean.getRepository(TestEntity.class);
 		
-		List<TestEntity> collect = gen.generate(TestEntity.class, 10_000).collect(Collectors.toList());
+		List<TestEntity> collect = gen.generate(TestEntity.class, 5_000_000).collect(Collectors.toList());
 		
 		long n = System.nanoTime();
 		indexedRepository.save(collect);

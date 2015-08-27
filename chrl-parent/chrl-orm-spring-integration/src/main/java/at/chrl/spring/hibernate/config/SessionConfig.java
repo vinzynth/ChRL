@@ -19,9 +19,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.TransactionManagementConfigurer;
 
 import at.chrl.orm.hibernate.HibernateService;
-import at.chrl.orm.hibernate.SessionTemplate;
-import at.chrl.orm.hibernate.configuration.IHibernateConfig;
-import at.chrl.orm.hibernate.configuration.JPAConfig;
 import at.chrl.spring.generics.repositories.utils.RepositoryThreadPool;
 import at.chrl.spring.generics.repositories.utils.impl.RepositoryThreadPoolImplementation;
 
@@ -62,13 +59,7 @@ public class SessionConfig implements TransactionManagementConfigurer {
 	
 	@Bean
 	public SessionTemplateFactory getSessionTemplateFactory(){
-		return new SessionTemplateFactory() {
-			
-			@Override
-			public SessionTemplate createTemplate() {
-				return new SessionTemplateImplementation();
-			}
-		};
+		return new SessionTemplateFactoryImpl();
 	}
 	
 	@Bean
@@ -77,18 +68,5 @@ public class SessionConfig implements TransactionManagementConfigurer {
 		return new JpaTransactionManager(getEntityManagerFactory());
 	}
 	
-	private static class SessionTemplateImplementation extends SessionTemplate{
-		
-		@Autowired(required = true)
-		private JPAConfig jpaConfig;
-		
-		/**
-		 * {@inheritDoc}
-		 * @see at.chrl.orm.hibernate.SessionTemplate#getHibernateConfig()
-		 */
-		@Override
-		protected IHibernateConfig getHibernateConfig() {
-			return jpaConfig;
-		}
-	}
+	
 }

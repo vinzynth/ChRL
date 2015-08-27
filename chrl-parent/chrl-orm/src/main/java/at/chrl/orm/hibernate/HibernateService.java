@@ -650,6 +650,8 @@ public final class HibernateService implements AutoCloseable {
 	 */
 	@Override
 	public void close() throws Exception {
+		SessionTemplate.shutdown();
+		
 		databaseConnections.keySet().stream().forEach(this::disconnect);
 		jpaDatabaseConnections.keySet().stream().forEach(this::disconnect);
 		

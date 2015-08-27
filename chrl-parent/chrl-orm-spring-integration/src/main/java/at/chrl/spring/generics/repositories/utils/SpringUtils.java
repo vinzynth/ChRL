@@ -33,7 +33,6 @@ public final class SpringUtils {
 
 	@SuppressWarnings("unchecked")
 	public static <T> T generateBean(ApplicationContext context, Class<T> cls, String name, Object... args){
-		System.out.println("Register Bean:" + name);
 		AbstractApplicationContext appCon = (AbstractApplicationContext) context;
 		DefaultListableBeanFactory registry = (DefaultListableBeanFactory) appCon.getBeanFactory();
 		AnnotatedGenericBeanDefinition bean = new AnnotatedGenericBeanDefinition(cls);

@@ -56,8 +56,8 @@ public class TestORMMapping{
 				config.JDBC_URL = "jdbc:postgresql://localhost:5432/test";
 				config.JDBC_USER = "postgres";
 				config.JDBC_PASSWORD = "postgres";
-				config.SHOW_SQL = "true";
-				config.GENERATE_STATISTICS = "true";
+				config.SHOW_SQL = "false";
+				config.GENERATE_STATISTICS = "false";
 			}
 		};
 	}

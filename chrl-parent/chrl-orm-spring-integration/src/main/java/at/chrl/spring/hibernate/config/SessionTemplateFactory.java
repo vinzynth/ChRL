@@ -18,6 +18,7 @@
 package at.chrl.spring.hibernate.config;
 
 import at.chrl.orm.hibernate.SessionTemplate;
+import at.chrl.orm.hibernate.configuration.JPAConfig;
 
 /**
  * @author Vinzynth
@@ -27,4 +28,5 @@ import at.chrl.orm.hibernate.SessionTemplate;
 public interface SessionTemplateFactory {
 
 	public SessionTemplate createTemplate();
+	public SessionTemplate createTemplate(JPAConfig jpaConfig);
 }

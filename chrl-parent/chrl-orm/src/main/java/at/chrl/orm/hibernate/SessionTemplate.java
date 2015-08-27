@@ -44,11 +44,12 @@ public abstract class SessionTemplate implements AutoCloseable {
 
 		for (Session session : opSes.keySet()) {
 			try {
-				if(TransactionStatus.ACTIVE.equals(session.getTransaction().getStatus()))
+				if(!TransactionStatus.COMMITTED.equals(session.getTransaction().getStatus()))
 					session.getTransaction().commit();
 				session.close();
 			} catch (Exception e) {
 				System.err.println("Exception in Shutdown Progress");
+				e.printStackTrace();
 			}
 		}
 	}
@@ -161,8 +162,8 @@ public abstract class SessionTemplate implements AutoCloseable {
 			}
 		}
 		sb.append(" - ").append(new Date().toString());
-		openSessions.put(returnMe, sb.toString());
 		returnMe.beginTransaction();
+		openSessions.put(returnMe, sb.toString());
 		return returnMe;
 	}
 
@@ -885,7 +886,7 @@ public abstract class SessionTemplate implements AutoCloseable {
 				fetchSize = Integer
 						.valueOf(((HibernateConfig) getHibernateConfig()).STATEMENT_BATCH_SIZE);
 			} catch (Exception e) {
-				System.err.println(e.getMessage());
+				System.err.println("[Session Template]" + e.getMessage());
 			}
 		return fetchSize;
 	}
@@ -1037,7 +1038,7 @@ public abstract class SessionTemplate implements AutoCloseable {
 	 */
 	@Override
 	public void close() throws Exception {
-		if(TransactionStatus.ACTIVE.equals(session.getTransaction().getStatus()))
+		if(!TransactionStatus.COMMITTED.equals(session.getTransaction().getStatus()))
 			session.getTransaction().commit();
 		session.close();
 		openSessions.remove(session);

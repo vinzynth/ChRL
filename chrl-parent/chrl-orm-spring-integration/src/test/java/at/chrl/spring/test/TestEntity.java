@@ -24,11 +24,6 @@ import javax.persistence.Id;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.search.annotations.Indexed;
-import org.hibernate.search.annotations.Latitude;
-import org.hibernate.search.annotations.Longitude;
-import org.hibernate.search.annotations.Spatial;
-import org.hibernate.search.annotations.SpatialMode;
 
 /**
  * @author Vinzynth
@@ -36,8 +31,6 @@ import org.hibernate.search.annotations.SpatialMode;
  *
  */
 @Entity
-@Indexed
-@Spatial(spatialMode = SpatialMode.HASH)
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class TestEntity {
 
@@ -51,10 +44,8 @@ public class TestEntity {
 	@GeneratedValue( strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Longitude
 	double lon;
 	
-	@Latitude
 	double lat;
 
 	public Long getId() {
