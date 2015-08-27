@@ -16,7 +16,6 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.locks.ReentrantLock;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -52,11 +51,14 @@ import at.chrl.spring.hibernate.config.SessionTemplateFactory;
 public class RepositoryThreadPoolImplementation implements RepositoryThreadPool, DisposableBean, ApplicationContextAware{
 
 	public static final int BATCH_SIZE = 1500;
-	public static final int MAX_THREAD_POOL_SIZE = 30;
+	public static final int MAX_THREAD_POOL_SIZE = 100;
+	public static final double STEP = 0.007;
 	
+//	private final RankFilter rank = new RankFilter(BATCH_SIZE/10);
 	private BlockingQueue<Object> processFunctionQueue = new LinkedBlockingQueue<>();
-
+	
 	private CountDownLatch lock = null;
+	private volatile double threshold = STEP;
 	
 	private void addToQueue(Object o){
 		if(processFunctionQueue.size() >= 100*BATCH_SIZE){
@@ -73,18 +75,18 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool,
 		
 		processFunctionQueue.add(o);
 		
-		if(processFunctionQueue.size() >= 2.00*BATCH_SIZE) newThread(6);
-		if(processFunctionQueue.size() >= 1.75*BATCH_SIZE) newThread(5);
-		if(processFunctionQueue.size() >= 1.50*BATCH_SIZE) newThread(4);
-		if(processFunctionQueue.size() >= 1.25*BATCH_SIZE) newThread(3);
-		if(processFunctionQueue.size() >= 1.00*BATCH_SIZE) newThread(3);
-		if(processFunctionQueue.size() >= 0.80*BATCH_SIZE) newThread(2);
-		if(processFunctionQueue.size() >= 0.60*BATCH_SIZE) newThread(2);
-		if(processFunctionQueue.size() >= 0.40*BATCH_SIZE) newThread(2);
-		if(processFunctionQueue.size() >= 0.20*BATCH_SIZE) newThread(1);
-		if(processFunctionQueue.size() >= 0.10*BATCH_SIZE) newThread(1);
-		if(processFunctionQueue.size() >= 0.05*BATCH_SIZE) newThread(1);
-		if(workingThreads.isEmpty()) newThread(1);
+//		float load = rank.get(processFunctionQueue.size());
+		float load = processFunctionQueue.size();
+		
+//		if(processFunctionQueue.size() >= 0.60*BATCH_SIZE) newThread(2);
+//		if(processFunctionQueue.size() >= 0.40*BATCH_SIZE) newThread(2);
+		if(load >= Math.sqrt(threshold)*BATCH_SIZE) newThread(1);
+//		if(processFunctionQueue.size() >= 0.10*BATCH_SIZE) newThread(1);
+//		if(processFunctionQueue.size() >= 0.05*BATCH_SIZE) newThread(1);
+		if(workingThreads.isEmpty()){
+			threshold = STEP;
+			newThread(1);
+		}
 	}
 	
 	@Autowired
@@ -98,6 +100,7 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool,
 	void threadFinished(TransactionThread t){
 //		System.err.println("[Stop new Transaction Thread]");
 		workingThreads.remove(t);
+		threshold = threshold - STEP;
 		if(Objects.nonNull(lock)){
 			lock.countDown();
 			if(lock.getCount() <= 0)
@@ -108,8 +111,9 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool,
 	private void newThread(int count){
 		final int c = Math.min(MAX_THREAD_POOL_SIZE - workingThreads.size(), count);
 		for (int i = 0; i < c; i++) {
-//			System.err.println("[Start new Transaction Thread]");
+			System.err.println("[Start new Transaction Thread] " + workingThreads.size() + " threshold: " + threshold);
 			workingThreads.add(new TransactionThread(processFunctionQueue, sessionTemplateFactory, this));			
+			threshold = threshold + STEP;
 		}
 	}
 	
