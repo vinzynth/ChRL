@@ -77,20 +77,11 @@ public class GenericRepository<T> {
 	@Autowired
 	protected RepositoryThreadPool entityManager;
 	
-//	@PersistenceContext(type = PersistenceContextType.EXTENDED)
-//	protected EntityManager entityManager;
-
-//	protected Session getSession() {
-//		return entityManager.unwrap(HibernateEntityManager.class).getSession();
-//	}
-
 	@PostConstruct
 	private void setIdFieldName() {
-//		this.idFieldName = getSession().getSessionFactory().getClassMetadata(persistentClass).getIdentifierPropertyName();
 		this.idFieldName = entityManager.getIdentifierPropertyName(this.persistentClass);
 	}
 
-	@Transactional
 	public T getById(Object id) {
 		return entityManager.find(this.getType(), id);
 	}
@@ -108,7 +99,6 @@ public class GenericRepository<T> {
 	 * 
 	 * @return Collection with given Objects (persistent)
 	 */
-	@Transactional
 	public Collection<T> getByIds(Collection<Object> ids) {
 		if (Objects.isNull(this.idFieldName))
 			return Collections.emptyList();
@@ -125,7 +115,6 @@ public class GenericRepository<T> {
 	 * 
 	 * @return Stream with given Objects (persistent)
 	 */
-	@Transactional
 	public <K> Stream<T> streamObjectsForPK(Collection<K> ids) {
 		if (ids == null || ids.isEmpty())
 			return Stream.<T>empty();
@@ -144,7 +133,6 @@ public class GenericRepository<T> {
 	 * 
 	 * @return Stream with given Objects (persistent)
 	 */
-	@Transactional
 	public <K> Iterable<T> scrollObjectsForPK(Collection<K> ids) {
 		if (ids == null || ids.isEmpty())
 			return Collections.<T>emptyList();
@@ -153,61 +141,47 @@ public class GenericRepository<T> {
 				.add(Restrictions.in(this.idFieldName, ids)));
 	}
 	
-	@Transactional
 	public T persist(T entity) {
 		entityManager.persist(entity);
 		return entity;
 	}
 
-	@Transactional
 	public T remove(T entity) {
 		entityManager.remove(entity);
 		return entity;
 	}
 
-	@Transactional
 	public T refresh(T entity) {
 		entityManager.refresh(entity);
 		return entity;
 	}
 
-	@Transactional
 	public T merge(T entity) {
 		entityManager.merge(entity);
 		return entity;
 	}
 
-	@Transactional
 	public T save(T entity) {
-//		getSession().save(entity);
 		entityManager.save(entity);
 		return entity;
 	}
 
-	@Transactional
 	public T saveOrUpdate(T entity) {
-//		getSession().saveOrUpdate(entity);
 		entityManager.saveOrUpdate(entity);
 		return entity;
 	}
 
-	@Transactional
 	public T mergeWithSession(T entity) {
-//		getSession().merge(entity);
 		entityManager.merge(entity);
 		return entity;
 	}
 
-	@Transactional
 	public T persistWithSession(T entity) {
-//		getSession().persist(entity);
 		entityManager.persist(entity);
 		return entity;
 	}
 	
-	@Transactional
 	public T delete(T entity) {
-//		getSession().delete(entity);
 		entityManager.delete(entity);
 		return entity;
 	}
@@ -250,7 +224,6 @@ public class GenericRepository<T> {
 		return (SQLQuery) entityManager.createSQLQuery(stmt).setCacheable(true);
 	}
 
-	@Transactional
 	public Collection<T> getAll(int maxResults) {
 		return this.executeQuery(
 				entityManager.createQuery("select e from "
@@ -282,13 +255,11 @@ public class GenericRepository<T> {
 		return this.scroll(entityManager.createCriteria(entityClass));
 	}
 
-	@Transactional
 	public long count() {
 		Query q = createQuery("select count(e) from " + this.persistentClass.getSimpleName() + " e");
 		return (Long) executeQueryUniqueResult(q);
 	}
 
-	@Transactional
 	public Collection<T> getLast(int count) {
 		return entityManager.list(entityManager.createQuery("select e from " + this.getType().getSimpleName() + " e order by e." + idFieldName + " desc").setMaxResults(count));
 	}
@@ -377,21 +348,19 @@ public class GenericRepository<T> {
 	 *            - given query
 	 * @return affected row count
 	 */
-	@Transactional
 	public int executeUpdate(Query q) {
-		return q.executeUpdate();
+		return entityManager.executeUpdate(q);
 	}
 
 	public T executeQueryUniqueResult(Query q) {
 		return executeQueryUniqueResult(q, true);
 	}
 
-	@Transactional
 	public T executeQueryUniqueResult(Query q, boolean chacheable) {
 		q = q.setMaxResults(1);
 		q = q.setCacheable(chacheable);
 
-		Object uniqueResult = q.uniqueResult();
+		Object uniqueResult = entityManager.uniqueResult(q);
 		return (T) uniqueResult;
 	}
 	
@@ -399,12 +368,11 @@ public class GenericRepository<T> {
 		return executeQueryUniqueResult(q, true);
 	}
 
-	@Transactional
 	public T executeQueryUniqueResult(Criteria crit, boolean chacheable) {
 		crit = crit.setMaxResults(1);
 		crit = crit.setCacheable(chacheable);
 
-		Object uniqueResult = crit.uniqueResult();
+		Object uniqueResult = entityManager.uniqueResult(crit);
 		return (T) uniqueResult;
 	}
 
@@ -432,14 +400,13 @@ public class GenericRepository<T> {
 	 * 
 	 * @return Collection with results or empty collection(No null elements)
 	 */
-	@Transactional
 	public Collection<T> executeQuery(Query q, final int maxResults,
 			boolean chacheable) {
 		if (maxResults > 0)
 			q = q.setMaxResults(maxResults);
 		q = q.setCacheable(chacheable);
 
-		return SessionTemplate.filterNull(q.list());
+		return SessionTemplate.filterNull(entityManager.list(q));
 	}
 
 	/**
@@ -461,7 +428,7 @@ public class GenericRepository<T> {
 			crit = crit.setMaxResults(maxResults);
 		crit = crit.setCacheable(chacheable);
 
-		return SessionTemplate.filterNull(crit.list());
+		return SessionTemplate.filterNull(entityManager.list(crit));
 	}
 
 
