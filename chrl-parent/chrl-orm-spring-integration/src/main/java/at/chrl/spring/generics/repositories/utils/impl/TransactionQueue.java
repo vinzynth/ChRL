@@ -26,8 +26,9 @@ import at.chrl.spring.hibernate.config.SessionTemplateFactory;
 public class TransactionQueue {
 	
 	public static final int BATCH_SIZE = 1500;
-	public static final int MAX_THREAD_POOL_SIZE = 100;
 	public static final double STEP = 0.007;
+	
+	private final int maxThreadPoolSize;
 	
 	private volatile double threshold = STEP;
 	
@@ -42,10 +43,11 @@ public class TransactionQueue {
 	/**
 	 * 
 	 */
-	public TransactionQueue(SessionTemplateFactory sessionTemplateFactory, BiConsumer<SessionTemplate, Object> function) {
+	public TransactionQueue(int maxThreadPoolSize, SessionTemplateFactory sessionTemplateFactory, BiConsumer<SessionTemplate, Object> function) {
 		this.sessionTemplateFactory = sessionTemplateFactory;
 		this.function = function;
 		this.afterFunctionHooks = CollectionUtils.newSet();
+		this.maxThreadPoolSize = maxThreadPoolSize;
 	}
 	
 	void addToQueue(Object o){
@@ -74,7 +76,7 @@ public class TransactionQueue {
 	}
 	
 	private void newThread(int count){
-		final int c = Math.min(MAX_THREAD_POOL_SIZE - workingThreads.size(), count);
+		final int c = Math.min(maxThreadPoolSize - workingThreads.size(), count);
 		for (int i = 0; i < c; i++) {
 //			System.err.println("[Start new Transaction Thread] " + workingThreads.size() + " threshold: " + threshold);
 			workingThreads.add(new TransactionThread(processFunctionQueue, sessionTemplateFactory, this));			

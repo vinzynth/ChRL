@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import at.chrl.orm.hibernate.SessionTemplate;
 import at.chrl.spring.generics.repositories.utils.RepositoryTransactionPool;
 import at.chrl.spring.hibernate.config.SessionTemplateFactory;
+import at.chrl.spring.hibernate.config.SpringGeneratedJpaConfig;
 
 /**
  * @author Christian Richard Leopold - ChRL <br>
@@ -36,6 +37,9 @@ public class RepositoryTransactionPoolImplementation implements RepositoryTransa
 	@Autowired
 	private SessionTemplateFactory sessionTemplateFactory;
 	
+	@Autowired
+	private SpringGeneratedJpaConfig jpaConfig;
+	
 	@PersistenceContext(type = PersistenceContextType.EXTENDED)
 	protected EntityManager entityManager;
 
@@ -45,6 +49,26 @@ public class RepositoryTransactionPoolImplementation implements RepositoryTransa
 	private TransactionQueue asyncSaveTransactionQueue;
 	private TransactionQueue asyncSaveOrUpdateTransactionQueue;
 	private TransactionQueue asyncDeleteTransactionQueue;
+
+	/**
+	 * {@inheritDoc}
+	 * @see org.springframework.context.ApplicationContextAware#setApplicationContext(org.springframework.context.ApplicationContext)
+	 */
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		int maxCon = 100;
+		try {
+			maxCon = Integer.parseInt(jpaConfig.HIBERNATE_HIKARI_MAXIMUMPOOLSIZE);
+		} catch (Exception e2) {
+			System.err.println("[Transaction Pool] Error parsing maximum pool size");
+		}
+        this.asyncPersistTransactionQueue = new TransactionQueue(maxCon, sessionTemplateFactory, (sf, o) -> { try { sf.persist(o);} catch(Exception e){e.printStackTrace();}});
+        this.asyncRefreshTransactionQueue = new TransactionQueue(maxCon, sessionTemplateFactory, (sf, o) -> { try { sf.refresh(o);} catch(Exception e){e.printStackTrace();}});
+        this.asyncMergeTransactionQueue = new TransactionQueue(maxCon, sessionTemplateFactory, (sf, o) -> { try { sf.merge(o);} catch(Exception e){e.printStackTrace();}});
+        this.asyncSaveTransactionQueue = new TransactionQueue(maxCon, sessionTemplateFactory, (sf, o) -> { try { sf.save(o);} catch(Exception e){e.printStackTrace();}});
+        this.asyncSaveOrUpdateTransactionQueue = new TransactionQueue(maxCon, sessionTemplateFactory, (sf, o) -> { try { sf.saveOrUpdate(o);} catch(Exception e){e.printStackTrace();}});
+        this.asyncDeleteTransactionQueue = new TransactionQueue(maxCon, sessionTemplateFactory, (sf, o) -> { try { sf.delete(o);} catch(Exception e){e.printStackTrace();}});
+	}
 	
 	/**
 	 * {@inheritDoc}
@@ -80,20 +104,6 @@ public class RepositoryTransactionPoolImplementation implements RepositoryTransa
 	@Override
 	public AuditReader getAuditReader() {
 		return AuditReaderFactory.get(entityManager);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * @see org.springframework.context.ApplicationContextAware#setApplicationContext(org.springframework.context.ApplicationContext)
-	 */
-	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.asyncPersistTransactionQueue = new TransactionQueue(sessionTemplateFactory, (sf, o) -> { try { sf.persist(o);} catch(Exception e){e.printStackTrace();}});
-        this.asyncRefreshTransactionQueue = new TransactionQueue(sessionTemplateFactory, (sf, o) -> { try { sf.refresh(o);} catch(Exception e){e.printStackTrace();}});
-        this.asyncMergeTransactionQueue = new TransactionQueue(sessionTemplateFactory, (sf, o) -> { try { sf.merge(o);} catch(Exception e){e.printStackTrace();}});
-        this.asyncSaveTransactionQueue = new TransactionQueue(sessionTemplateFactory, (sf, o) -> { try { sf.save(o);} catch(Exception e){e.printStackTrace();}});
-        this.asyncSaveOrUpdateTransactionQueue = new TransactionQueue(sessionTemplateFactory, (sf, o) -> { try { sf.saveOrUpdate(o);} catch(Exception e){e.printStackTrace();}});
-        this.asyncDeleteTransactionQueue = new TransactionQueue(sessionTemplateFactory, (sf, o) -> { try { sf.delete(o);} catch(Exception e){e.printStackTrace();}});
 	}
 
 	/**
