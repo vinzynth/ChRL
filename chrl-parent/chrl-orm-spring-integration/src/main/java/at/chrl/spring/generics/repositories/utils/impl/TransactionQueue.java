@@ -14,6 +14,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.BiConsumer;
 
+import at.chrl.nutils.CollectionUtils;
 import at.chrl.orm.hibernate.SessionTemplate;
 import at.chrl.spring.hibernate.config.SessionTemplateFactory;
 
@@ -36,6 +37,7 @@ public class TransactionQueue {
 	
 	private CountDownLatch lock = null;
 	private BiConsumer<SessionTemplate, Object> function;
+	private Collection<BiConsumer<SessionTemplate, Object>> afterFunctionHooks;
 	
 	/**
 	 * 
@@ -43,6 +45,7 @@ public class TransactionQueue {
 	public TransactionQueue(SessionTemplateFactory sessionTemplateFactory, BiConsumer<SessionTemplate, Object> function) {
 		this.sessionTemplateFactory = sessionTemplateFactory;
 		this.function = function;
+		this.afterFunctionHooks = CollectionUtils.newSet();
 	}
 	
 	void addToQueue(Object o){
@@ -93,5 +96,13 @@ public class TransactionQueue {
 
 	BiConsumer<SessionTemplate, Object> getFunction() {
 		return function;
+	}
+
+	public Collection<BiConsumer<SessionTemplate, Object>> getAfterFunctionHooks() {
+		return afterFunctionHooks;
+	}
+
+	public void addAfterFunctionHook(BiConsumer<SessionTemplate, Object> afterFunctionHook) {
+		this.afterFunctionHooks.add(afterFunctionHook);
 	}
 }

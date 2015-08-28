@@ -13,6 +13,7 @@ import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -29,8 +30,11 @@ import org.hibernate.SessionFactory;
 import org.hibernate.StatelessSession;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
+import org.hibernate.search.Search;
+import org.hibernate.search.annotations.Indexed;
 
 import at.chrl.nutils.ArrayUtils;
+import at.chrl.nutils.Memoizer;
 import at.chrl.orm.hibernate.configuration.HibernateConfig;
 import at.chrl.orm.hibernate.configuration.IHibernateConfig;
 
@@ -53,7 +57,13 @@ public abstract class SessionTemplate implements AutoCloseable {
 			}
 		}
 	}
-
+	
+	private static final Predicate<Class<?>> IS_INDEXED = Memoizer.memoizePredicate((Class<?> c) -> c.isAnnotationPresent(Indexed.class));
+	
+	public static final boolean isIndexed(Object o){
+		return IS_INDEXED.test(o.getClass());
+	}
+	
 	protected abstract IHibernateConfig getHibernateConfig();
 
 	protected final Session session;
@@ -202,6 +212,8 @@ public abstract class SessionTemplate implements AutoCloseable {
 			if(TransactionStatus.NOT_ACTIVE.equals(session.getTransaction().getStatus()))
 				session.getTransaction().begin();
 			session.persist(obj);
+			if(isIndexed(obj))
+				Search.getFullTextSession(session).index(obj);
 		} catch (Exception e) {
 			rollback();
 			throw e;
@@ -219,6 +231,8 @@ public abstract class SessionTemplate implements AutoCloseable {
 			if(TransactionStatus.NOT_ACTIVE.equals(session.getTransaction().getStatus()))
 				session.getTransaction().begin();
 			session.saveOrUpdate(obj);
+			if(isIndexed(obj))
+				Search.getFullTextSession(session).index(obj);
 		} catch (Exception e) {
 			rollback();
 			throw e;
@@ -236,7 +250,10 @@ public abstract class SessionTemplate implements AutoCloseable {
 		try {
 			if(TransactionStatus.NOT_ACTIVE.equals(session.getTransaction().getStatus()))
 				session.getTransaction().begin();
-			return (T) session.merge(obj);
+			T t = (T) session.merge(obj);
+			if(isIndexed(t))
+				Search.getFullTextSession(session).index(t);
+			return t;
 		} catch (Exception e) {
 			rollback();
 			throw e;
@@ -254,6 +271,8 @@ public abstract class SessionTemplate implements AutoCloseable {
 			if(TransactionStatus.NOT_ACTIVE.equals(session.getTransaction().getStatus()))
 				session.getTransaction().begin();
 			session.update(obj);
+			if(isIndexed(obj))
+				Search.getFullTextSession(session).index(obj);
 		} catch (Exception e) {
 			rollback();
 			throw e;
@@ -271,6 +290,8 @@ public abstract class SessionTemplate implements AutoCloseable {
 			if(TransactionStatus.NOT_ACTIVE.equals(session.getTransaction().getStatus()))
 				session.getTransaction().begin();
 			session.refresh(obj);
+			if(isIndexed(obj))
+				Search.getFullTextSession(session).index(obj);
 		} catch (Exception e) {
 			rollback();
 			throw e;
@@ -305,6 +326,8 @@ public abstract class SessionTemplate implements AutoCloseable {
 			if(TransactionStatus.NOT_ACTIVE.equals(session.getTransaction().getStatus()))
 				session.getTransaction().begin();
 			session.delete(obj);
+			if(isIndexed(obj))
+				Search.getFullTextSession(session).index(obj);
 		} catch (Exception e) {
 			rollback();
 			throw e;

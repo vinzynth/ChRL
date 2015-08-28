@@ -67,6 +67,14 @@
 			<groupId>at.chrl</groupId>
 			<artifactId>chrl-cron</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-search-orm</artifactId>
+		</dependency>
 	</dependencies>
 	<!--  -->
 </project>

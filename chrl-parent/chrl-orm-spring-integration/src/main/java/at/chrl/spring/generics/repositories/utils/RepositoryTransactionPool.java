@@ -6,6 +6,8 @@
  */
 package at.chrl.spring.generics.repositories.utils;
 
+import java.util.function.BiConsumer;
+
 import javax.persistence.EntityManager;
 
 import org.hibernate.Session;
@@ -34,4 +36,6 @@ public interface RepositoryTransactionPool {
 	public Session getSession();
 	public EntityManager getEntityManager();
 	public SessionTemplate getSessionTemplate();
+	
+	public void addAfterFunctionHook(BiConsumer<SessionTemplate, Object> function);
 }

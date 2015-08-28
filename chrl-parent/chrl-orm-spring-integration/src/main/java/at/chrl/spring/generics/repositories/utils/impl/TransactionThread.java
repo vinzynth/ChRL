@@ -17,6 +17,8 @@
  */
 package at.chrl.spring.generics.repositories.utils.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
@@ -40,6 +42,7 @@ public final class TransactionThread {
 
 	private BlockingQueue<Object> processQueue;
 	private BiConsumer<SessionTemplate, Object> function;
+	private Collection<BiConsumer<SessionTemplate, Object>> afterFunctionHooks;
 
 	
 	/**
@@ -49,6 +52,7 @@ public final class TransactionThread {
 		this.processQueue = processQueue;
 		this.sessionFactory = sessionFactory;
 		this.function = transactionQueue.getFunction();
+		this.afterFunctionHooks = new ArrayList<>(transactionQueue.getAfterFunctionHooks());
 		this.thread = new Thread(() -> {
 			for (Object object : new Iterable<Object>() {
 
@@ -97,6 +101,7 @@ public final class TransactionThread {
 		}
 		try {
 			function.accept(getSession(), f);
+			afterFunctionHooks.forEach(h -> h.accept(getSession(), f));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -6,6 +6,8 @@
  */
 package at.chrl.spring.generics.repositories.utils.impl;
 
+import java.util.function.BiConsumer;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
@@ -18,7 +20,6 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.Transactional;
 
 import at.chrl.orm.hibernate.SessionTemplate;
@@ -30,7 +31,6 @@ import at.chrl.spring.hibernate.config.SessionTemplateFactory;
  * Aug 26, 2015 - 7:40:37 PM
  *
  */
-@EnableAsync
 public class RepositoryTransactionPoolImplementation implements RepositoryTransactionPool, ApplicationContextAware{
 	
 	@Autowired
@@ -157,5 +157,20 @@ public class RepositoryTransactionPoolImplementation implements RepositoryTransa
 	@Override
 	public SessionTemplate getSessionTemplate() {
 		return sessionTemplateFactory.createTemplate();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @see at.chrl.spring.generics.repositories.utils.RepositoryTransactionPool#addAfterFunctionHook(java.util.function.BiConsumer)
+	 */
+	@Override
+	@Deprecated
+	public void addAfterFunctionHook(BiConsumer<SessionTemplate, Object> function) {
+//		  this.asyncPersistTransactionQueue.addAfterFunctionHook(function);
+//        this.asyncRefreshTransactionQueue.addAfterFunctionHook(function);
+//        this.asyncMergeTransactionQueue.addAfterFunctionHook(function);
+//        this.asyncSaveTransactionQueue.addAfterFunctionHook(function);
+//        this.asyncSaveOrUpdateTransactionQueue.addAfterFunctionHook(function);
+//        this.asyncDeleteTransactionQueue.addAfterFunctionHook(function);
 	}
 }

@@ -6,6 +6,7 @@ package at.chrl.spring.generics.repositories;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -31,7 +32,6 @@ import at.chrl.nutils.ClassUtils;
 import at.chrl.nutils.CollectionUtils;
 import at.chrl.orm.hibernate.SessionTemplate;
 import at.chrl.spring.generics.repositories.utils.RepositoryTransactionPool;
-import at.chrl.spring.generics.repositories.utils.RepositoryTransactionPoolConsumer;
 
 /**
  * 
@@ -42,7 +42,7 @@ import at.chrl.spring.generics.repositories.utils.RepositoryTransactionPoolConsu
  *            Type of repository objects - accessable via {@link #getType()}
  */
 @SuppressWarnings("unchecked")
-public class GenericRepository<T> implements RepositoryTransactionPoolConsumer<T> {
+public class GenericRepository<T> {
 
 	@PersistenceContext(type = PersistenceContextType.EXTENDED)
 	protected EntityManager entityManager;
@@ -174,13 +174,59 @@ public class GenericRepository<T> implements RepositoryTransactionPoolConsumer<T
 		getAll(maxResults, c -> col.addAll(c));
 		return col;
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 * @see at.chrl.spring.generics.repositories.utils.RepositoryTransactionPoolConsumer#getTransactionPool()
-	 */
-	@Override
-	public RepositoryTransactionPool getTransactionPool() {
-		return transactionPool;
+
+	public void asyncPersist(T entity){
+		transactionPool.asyncPersist(entity);
+	}
+	public void asyncRefresh(T entity){
+		transactionPool.asyncRefresh(entity);
+	}
+	public void asyncMerge(T entity){
+		transactionPool.asyncMerge(entity);
+	}
+	public void asyncSave(T entity){
+		transactionPool.asyncSave(entity);
+	}
+	public void asyncSaveOrUpdate(T entity){
+		transactionPool.asyncSaveOrUpdate(entity);
+	}
+	public void asyncDelete(T entity){
+		transactionPool.asyncDelete(entity);
+	}
+	public void asyncPersist(Collection<T> entities){
+		entities.forEach(entity -> transactionPool.asyncPersist(entity));
+	}
+	public void asyncRefresh(Collection<T> entities){
+		entities.forEach(entity -> transactionPool.asyncRefresh(entity));
+	}
+	public void asyncMerge(Collection<T> entities){
+		entities.forEach(entity -> transactionPool.asyncMerge(entity));
+	}
+	public void asyncSave(Collection<T> entities){
+		entities.forEach(entity -> transactionPool.asyncSave(entity));
+	}
+	public void asyncSaveOrUpdate(Collection<T> entities){
+		entities.forEach(entity -> transactionPool.asyncSaveOrUpdate(entity));
+	}
+	public void asyncDelete(Collection<T> entities){
+		entities.forEach(entity -> transactionPool.asyncDelete(entity));
+	}
+	public void asyncPersist(T... entities){
+		Arrays.stream(entities).forEach(entity -> transactionPool.asyncPersist(entity));
+	}
+	public void asyncRefresh(T... entities){
+		Arrays.stream(entities).forEach(entity -> transactionPool.asyncRefresh(entity));
+	}
+	public void asyncMerge(T... entities){
+		Arrays.stream(entities).forEach(entity -> transactionPool.asyncMerge(entity));
+	}
+	public void asyncSave(T... entities){
+		Arrays.stream(entities).forEach(entity -> transactionPool.asyncSave(entity));
+	}
+	public void asyncSaveOrUpdate(T... entities){
+		Arrays.stream(entities).forEach(entity -> transactionPool.asyncSaveOrUpdate(entity));
+	}
+	public void asyncDelete(T... entities){
+		Arrays.stream(entities).forEach(entity -> transactionPool.asyncDelete(entity));
 	}
 }
