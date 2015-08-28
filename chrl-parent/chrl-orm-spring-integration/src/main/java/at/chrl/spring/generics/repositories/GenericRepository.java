@@ -4,7 +4,9 @@
  */
 package at.chrl.spring.generics.repositories;
 
+import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +14,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
@@ -147,6 +150,25 @@ public class GenericRepository<T> implements RepositoryTransactionPoolConsumer<T
 	@Transactional
 	public void delete(T entity){
 		getSession().delete(entity);
+	}
+	
+	@Transactional
+	public T getById(Serializable id){
+		return getSession().get(this.persistentClass, id);
+	}
+	
+	public void getByIds(Collection<Serializable> ids, Consumer<Stream<T>> streamConsumer){
+		process(s -> streamConsumer.accept(s.streamObjectsForPK(this.persistentClass, ids)));
+	}
+	
+	public void getAll(int maxResults, Consumer<Collection<T>> collectionConsumer){
+		process(s -> collectionConsumer.accept(s.getAll(this.persistentClass, maxResults)));
+	}
+	
+	public Collection<T> getAll(int maxResults){
+		Collection<T> col = CollectionUtils.newList();
+		getAll(maxResults, c -> col.addAll(c));
+		return col;
 	}
 	
 	/**
