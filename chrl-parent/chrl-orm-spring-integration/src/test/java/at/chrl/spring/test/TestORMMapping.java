@@ -52,8 +52,10 @@ public class TestORMMapping{
 			
 			@Override
 			public void modify(SpringGeneratedJpaConfig config) {
-				config.JDBC_DRIVER = "org.postgresql.Driver";
-				config.JDBC_URL = "jdbc:postgresql://localhost:5432/test";
+//				config.JDBC_DRIVER = "org.postgresql.Driver";
+//				config.JDBC_URL = "jdbc:postgresql://localhost:5432/test";
+				config.JDBC_DRIVER = "org.mariadb.jdbc.Driver";
+				config.JDBC_URL = "jdbc:mysql://localhost:3307/test";
 				config.JDBC_USER = "postgres";
 				config.JDBC_PASSWORD = "postgres";
 				config.SHOW_SQL = "false";

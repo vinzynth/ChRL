@@ -111,7 +111,7 @@ public class RepositoryThreadPoolImplementation implements RepositoryThreadPool,
 	private void newThread(int count){
 		final int c = Math.min(MAX_THREAD_POOL_SIZE - workingThreads.size(), count);
 		for (int i = 0; i < c; i++) {
-			System.err.println("[Start new Transaction Thread] " + workingThreads.size() + " threshold: " + threshold);
+//			System.err.println("[Start new Transaction Thread] " + workingThreads.size() + " threshold: " + threshold);
 			workingThreads.add(new TransactionThread(processFunctionQueue, sessionTemplateFactory, this));			
 			threshold = threshold + STEP;
 		}
