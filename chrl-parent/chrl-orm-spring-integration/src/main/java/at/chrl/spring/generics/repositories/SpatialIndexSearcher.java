@@ -6,6 +6,7 @@
  */
 package at.chrl.spring.generics.repositories;
 
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import org.apache.lucene.search.Query;
@@ -23,26 +24,25 @@ public class SpatialIndexSearcher<T> extends IndexSearcher<T> {
 		super(repository);
 	}
 
-	public Stream<T> radiusSearch(double latitude, double longitude, double radius) {
-		return searchWithSession(fullTextSession -> {
-			QueryBuilder builder = fullTextSession.getSearchFactory().buildQueryBuilder().forEntity(this.getType()).get();
+	public void radiusSearch(double latitude, double longitude, double radius, Consumer<Stream<T>> streamConsumer) {
+		QueryBuilder builder = repository.getFullTextSession().getSearchFactory().buildQueryBuilder().forEntity(this.getType()).get();
 
-			Query luceneQuery = builder.spatial()
-					.within(radius, Unit.KM)
-					.ofLatitude(latitude)
-					.andLongitude(longitude)
-					.createQuery();
-			
-			org.hibernate.Query hibQuery = fullTextSession.createFullTextQuery(luceneQuery, this.getType());
-			return repository.stream(hibQuery);
-		});
+		Query luceneQuery = builder.spatial()
+				.within(radius, Unit.KM)
+				.ofLatitude(latitude)
+				.andLongitude(longitude)
+				.createQuery();
+		
+		org.hibernate.Query hibQuery = repository.getFullTextSession().createFullTextQuery(luceneQuery, this.getType());
+		repository.process(s -> streamConsumer.accept(s.stream(hibQuery)));
 	}
 	
-	public Stream<T> boxSearch(double southWestLat, double southWestLon, double northEastLat, double northEastLon) {
+	public void boxSearch(double southWestLat, double southWestLon, double northEastLat, double northEastLon, Consumer<Stream<T>> streamConsumer) {
 		double kmLat = (northEastLat - southWestLat) * 110.574d;
 		double kmLon = Math.cos((southWestLon - northEastLon) * Math.PI/180) * 111.320d;
-		return radiusSearch((northEastLat + southWestLat)/2, (northEastLon + southWestLon)/2,
-				Math.sqrt(kmLat*kmLat + kmLon*kmLon)/2
+		radiusSearch((northEastLat + southWestLat)/2, (northEastLon + southWestLon)/2,
+				Math.sqrt(kmLat*kmLat + kmLon*kmLon)/2,
+				streamConsumer
 				);
 	}
 }

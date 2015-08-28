@@ -19,8 +19,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.TransactionManagementConfigurer;
 
 import at.chrl.orm.hibernate.HibernateService;
-import at.chrl.spring.generics.repositories.utils.RepositoryThreadPool;
-import at.chrl.spring.generics.repositories.utils.impl.RepositoryThreadPoolImplementation;
+import at.chrl.spring.generics.repositories.utils.RepositoryTransactionPool;
+import at.chrl.spring.generics.repositories.utils.impl.RepositoryTransactionPoolImplementation;
 
 /**
  * @author Christian Richard Leopold - ChRL <br>
@@ -41,8 +41,8 @@ public class SessionConfig implements TransactionManagementConfigurer {
 	}
 	
 	@Bean
-	public RepositoryThreadPool getRepositoryThreadPool(){
-		return new RepositoryThreadPoolImplementation();
+	public RepositoryTransactionPool getRepositoryThreadPool(){
+		return new RepositoryTransactionPoolImplementation();
 	}
 	
 	@Bean(destroyMethod = "")

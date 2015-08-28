@@ -20,6 +20,7 @@ package at.chrl.spring.generics.repositories.utils.impl;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
+import java.util.function.BiConsumer;
 
 import at.chrl.orm.hibernate.SessionTemplate;
 import at.chrl.spring.hibernate.config.SessionTemplateFactory;
@@ -31,20 +32,23 @@ import at.chrl.spring.hibernate.config.SessionTemplateFactory;
  */
 public final class TransactionThread {
 	
-	private SessionTemplateFactory sessionFactory;
-		
-	private SessionTemplate session;
 	private final Thread thread;
-	int i = 0;
+		
+	private SessionTemplateFactory sessionFactory;
+	private SessionTemplate session;
+	private int i = 0;
 
 	private BlockingQueue<Object> processQueue;
+	private BiConsumer<SessionTemplate, Object> function;
+
 	
 	/**
 	 * 
 	 */
-	public TransactionThread(BlockingQueue<Object> processQueue, SessionTemplateFactory sessionFactory, RepositoryThreadPoolImplementation threadPool) {
+	public TransactionThread(BlockingQueue<Object> processQueue, SessionTemplateFactory sessionFactory, TransactionQueue transactionQueue) {
 		this.processQueue = processQueue;
 		this.sessionFactory = sessionFactory;
+		this.function = transactionQueue.getFunction();
 		this.thread = new Thread(() -> {
 			for (Object object : new Iterable<Object>() {
 
@@ -71,7 +75,7 @@ public final class TransactionThread {
 			}) {
 				process(object);
 			}
-			threadPool.threadFinished(TransactionThread.this);
+			transactionQueue.threadFinished(TransactionThread.this);
 		});
 		
 		this.thread.setName("TransactionThread_" + System.nanoTime());
@@ -92,11 +96,11 @@ public final class TransactionThread {
 			return;
 		}
 		try {
-			getSession().save(f);
+			function.accept(getSession(), f);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if(processQueue.isEmpty() || ++i % RepositoryThreadPoolImplementation.BATCH_SIZE == 0){
+		if(processQueue.isEmpty() || ++i % TransactionQueue.BATCH_SIZE == 0){
 			i = 0;
 			try {
 				this.session.close();

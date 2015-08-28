@@ -20,7 +20,6 @@ package at.chrl.spring.test;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.junit.Test;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
@@ -38,8 +37,7 @@ import at.chrl.spring.hibernate.config.RepositoryHolder;
 @ComponentScan("at.chrl.spring")
 public class EntityTest {
 
-	
-	@Test
+//	@Test
 	public void test() throws InterruptedException {
 		ConfigurableApplicationContext context = SpringApplication.run(EntityTest.class);
 		RepositoryHolder bean = context.getBean(RepositoryHolder.class);
@@ -50,7 +48,7 @@ public class EntityTest {
 		List<TestEntity> collect = gen.generate(TestEntity.class, 200_000).collect(Collectors.toList());
 		
 		long n = System.nanoTime();
-		indexedRepository.save(collect);
+		indexedRepository.asyncSave(collect);
 		System.out.println((System.nanoTime() - n)/(1_000*1_000) + " ms");
 		
 		Thread.sleep(5000);
