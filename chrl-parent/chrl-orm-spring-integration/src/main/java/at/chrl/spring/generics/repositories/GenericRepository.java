@@ -165,6 +165,10 @@ public class GenericRepository<T> implements RepositoryTransactionPoolConsumer<T
 		process(s -> collectionConsumer.accept(s.getAll(this.persistentClass, maxResults)));
 	}
 	
+	public Collection<T> getAll(){
+		return getAll(0);
+	}
+	
 	public Collection<T> getAll(int maxResults){
 		Collection<T> col = CollectionUtils.newList();
 		getAll(maxResults, c -> col.addAll(c));
