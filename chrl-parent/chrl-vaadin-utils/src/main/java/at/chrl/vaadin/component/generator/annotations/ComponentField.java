@@ -22,6 +22,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.vaadin.ui.Component;
+
 /**
  * @author Vinzynth
  * 29.08.2015 - 02:16:51
@@ -31,4 +33,12 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface ComponentField {
 
+	Class<? extends Component> componentType();
+	
+	ComponentValidator[] validators();
+	
+	String caption();
+	String description();
+	String styleName();
+	boolean readOnly();
 }
