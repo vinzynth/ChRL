@@ -22,25 +22,17 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.vaadin.ui.Component;
+import com.vaadin.ui.AbstractSelect;
 
 /**
+ * Must be annotated on a Collection
+ * 
  * @author Vinzynth
- * 29.08.2015 - 02:16:51
+ * 29.08.2015 - 16:04:06
  *
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface ComponentField {
-
-	Class<? extends Component> value();
-	
-	ComponentValidator[] validators() default {};
-	
-	String[] callsAfterCreation() default {};
-	
-	String caption() default "";
-	String description() default "";
-	boolean readOnly() default false;
-
+public @interface ComponentCollection {
+	Class<? extends AbstractSelect> value(); 
 }
