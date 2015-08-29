@@ -177,6 +177,17 @@ public class DatasetGenerator implements Serializable{
 			return enumConstants[Rnd.get(enumConstants.length)];
 		}
 		
+		return createInstanceOnly(cls);
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T> T createInstanceOnly(Class<T> cls) {
+		try {
+			return cls.newInstance();
+		} catch (Exception e) {
+			// nothing todo here
+		}
+		
 		INSTANTIATORS.putIfAbsent(cls, objenesis.getInstantiatorOf(cls));
 		
 		return (T) INSTANTIATORS.get(cls).newInstance();
