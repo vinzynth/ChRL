@@ -55,6 +55,7 @@
 
 		<!-- Archetypes -->
 		<module>chrl-spring-sample</module>
+		<module>chrl-vaadin-utils</module>
 	</modules>
 	<!--  -->
 	<dependencies>
