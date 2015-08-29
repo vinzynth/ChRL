@@ -124,7 +124,7 @@ public class ComponentGeneratorImpl implements ComponentGenerator{
 			String err = "Annotation type Exception for Field " + field.getName() + " in Class" + field.getDeclaringClass().getName() + " | AbstractField type and Field type dont match";
 			System.err.println(e.getMessage() + " | " + err);
 			e.printStackTrace();
-			error = err + System.lineSeparator() + e.getMessage();
+			error = err + System.lineSeparator() + e.toString();
 			
 			// Fallback Component
 			try {
@@ -137,11 +137,12 @@ public class ComponentGeneratorImpl implements ComponentGenerator{
 			} catch (Exception e2) {
 				System.err.println("Annotated Class type can not be instantiated as component: " + e.getMessage());
 				e2.printStackTrace();
+				error = e2.toString();
 			}
 			
-		} catch (Throwable e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-			error = e.getMessage();
+			error = e.toString();
 		}
 		final String fError = error;
 		return () -> new Label(fError);
