@@ -22,7 +22,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.vaadin.ui.Component;
+import com.vaadin.ui.AbstractField;
 
 /**
  * @author Vinzynth
@@ -33,12 +33,12 @@ import com.vaadin.ui.Component;
 @Target(ElementType.FIELD)
 public @interface ComponentField {
 
-	Class<? extends Component> componentType();
+	Class<? extends AbstractField<?>> value();
 	
-	ComponentValidator[] validators();
+	ComponentValidator[] validators() default {};
 	
-	String caption();
-	String description();
-	String styleName();
-	boolean readOnly();
+	String caption() default "";
+	String description() default "";
+	boolean readOnly() default false;
+
 }

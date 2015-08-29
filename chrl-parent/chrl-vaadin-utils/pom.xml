@@ -42,6 +42,10 @@
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-push</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>at.chrl</groupId>
+			<artifactId>chrl-utils</artifactId>
+		</dependency>
 	</dependencies>
 	<!--  -->
 </project>

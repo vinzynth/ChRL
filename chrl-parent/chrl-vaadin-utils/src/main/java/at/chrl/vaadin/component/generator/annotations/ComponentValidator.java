@@ -34,5 +34,5 @@ import com.vaadin.data.Validator;
 @Target({})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ComponentValidator {
-	Class<? extends Validator> validator();
+	Class<? extends Validator> value();
 }

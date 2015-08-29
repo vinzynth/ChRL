@@ -17,11 +17,25 @@
  */
 package at.chrl.vaadin.component.generator;
 
+import com.vaadin.ui.Component;
+
 /**
  * @author Vinzynth
  * 29.08.2015 - 02:12:11
  *
+ * <p>
+ * Default implementation:
+ * {@link ComponentGeneratorImpl} 
+ * 
+ * @see ComponentGeneratorImpl
+ *
  */
-public class ComponentGenerator {
+public interface ComponentGenerator {
 
+	public Component generate(Class<?> cls);
+	
+	public default Component generate(Object o){
+		return generate(o.getClass());
+	}
+	
 }
