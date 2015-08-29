@@ -30,6 +30,7 @@ import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
 
+import at.chrl.nutils.CollectionUtils;
 import at.chrl.nutils.DatasetGenerator;
 import at.chrl.nutils.Memoizer;
 import at.chrl.vaadin.component.generator.annotations.ComponentField;
@@ -55,7 +56,7 @@ public class ComponentGeneratorImpl implements ComponentGenerator{
 			.map(FIELD_SUPPLIER::apply)
 			.collect(Collectors.toList());
 		
-		return () -> new VerticalLayout(fieldSupplier.stream().map(Supplier::get).toArray(AbstractField<?>[]::new));
+		return () -> new VerticalLayout(fieldSupplier.stream().map(s -> s.get()).toArray(AbstractField<?>[]::new));
 	}
 	
 	@SuppressWarnings({ "unchecked", "unused" })
@@ -65,7 +66,10 @@ public class ComponentGeneratorImpl implements ComponentGenerator{
 			ComponentField annotation = field.getAnnotation(ComponentField.class);
 			Class<? extends AbstractField<T>> componentType = (Class<? extends AbstractField<T>>) annotation.value();
 			
-			List<? extends Validator> validators = Arrays.stream(annotation.validators()).map(ComponentValidator::value).map(COMPONENT_GENERATOR::generate).collect(Collectors.toList());
+			Validator[] validators = Arrays.stream(annotation.validators())
+					.map(ComponentValidator::value)
+					.map(COMPONENT_GENERATOR::generate)
+					.toArray(Validator[]::new);
 			
 			return () -> {
 				AbstractField<T> component = COMPONENT_GENERATOR.generate(componentType);
@@ -77,7 +81,7 @@ public class ComponentGeneratorImpl implements ComponentGenerator{
 				
 				component.setReadOnly(annotation.readOnly());
 				
-				validators.forEach(component::addValidator);
+				Arrays.asList(validators).forEach(component::addValidator);
 				
 				return component;
 			};
