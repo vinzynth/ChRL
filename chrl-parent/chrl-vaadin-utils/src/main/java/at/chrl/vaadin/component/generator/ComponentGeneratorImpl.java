@@ -19,6 +19,7 @@ package at.chrl.vaadin.component.generator;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
@@ -26,18 +27,17 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import com.vaadin.data.Validator;
-import com.vaadin.ui.AbstractField;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.VerticalLayout;
-
 import at.chrl.nutils.DatasetGenerator;
 import at.chrl.nutils.Memoizer;
 import at.chrl.vaadin.component.generator.annotations.ComponentCollection;
 import at.chrl.vaadin.component.generator.annotations.ComponentField;
 import at.chrl.vaadin.component.generator.annotations.ComponentValidator;
 import at.chrl.vaadin.component.generator.annotations.VaadinComponent;
+
+import com.vaadin.data.Validator;
+import com.vaadin.ui.AbstractField;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.Label;
 
 /**
  * @author Vinzynth
@@ -52,26 +52,51 @@ import at.chrl.vaadin.component.generator.annotations.VaadinComponent;
 public class ComponentGeneratorImpl implements ComponentGenerator{
 
 	private final Predicate<Class<?>> IS_VAADIN_COMPONENT = Memoizer.memoizePredicate(c -> c.isAnnotationPresent(VaadinComponent.class));
-	private final Function<Class<?>, Supplier<? extends Component>> COMPONENT_SUPPLIER = Memoizer.memoize(this::getComponent);
+	private final Function<Class<?>, Supplier<? extends GeneratedAbstractField<?>>> COMPONENT_SUPPLIER = Memoizer.memoize(this::getComponent);
 	private final Function<Field, Supplier<? extends Component>> FIELD_SUPPLIER = Memoizer.memoize(this::getSupplierForField);
+	private final Function<Field, Supplier<? extends AccessTuple<?>>> ACCESS_TUPLE_SUPPLIER = Memoizer.memoize(this::getAccessTupleSupplierForField);
 	
 	private final DatasetGenerator COMPONENT_GENERATOR = new DatasetGenerator();
 	
-	private final <T> Supplier<? extends Component> getComponent(Class<T> cls){
+	@SuppressWarnings("unchecked")
+	private final <T> Supplier<GeneratedAbstractField<T>> getComponent(Class<?> cls){
 		List<Supplier<? extends Component>> fieldSupplier = Arrays.stream(cls.getDeclaredFields())
 			.filter(f -> f.isAnnotationPresent(ComponentField.class))
 			.map(FIELD_SUPPLIER::apply)
 			.collect(Collectors.toList());
 		
+		List<Supplier<? extends AccessTuple<?>>> accessTupleSupplier = Arrays.stream(cls.getDeclaredFields())
+				.filter(f -> f.isAnnotationPresent(ComponentField.class))
+				.map(ACCESS_TUPLE_SUPPLIER::apply)
+				.collect(Collectors.toList());
+		
 		return () -> {
-			VerticalLayout layout = new VerticalLayout();
-			layout.setSpacing(true);
-			layout.setMargin(true);
+			List<Component> fields = new ArrayList<>(fieldSupplier.size());
+			List<AccessTuple<?>> accessTuples = new ArrayList<>(accessTupleSupplier.size());
 			
-			fieldSupplier.forEach(s -> layout.addComponent(s.get()));
+			fieldSupplier.forEach(s -> fields.add(s.get()));
+			accessTupleSupplier.forEach(s -> accessTuples.add(s.get()));
 			
-			return layout;
+			return new GeneratedAbstractField<T>((Class<T>) cls, fields, accessTuples);
 		};
+	}
+	
+	@SuppressWarnings("unchecked")
+	private final <T> Supplier<AccessTuple<T>> getAccessTupleSupplierForField(Field field){
+		return () -> new AccessTuple<T>(o -> {
+			try {
+				return (T)field.get(o);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+		}, (o, v) -> {
+			try {
+				field.set(o, v);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
 	}
 	
 	@SuppressWarnings({ "unchecked", "unused" })
@@ -152,11 +177,12 @@ public class ComponentGeneratorImpl implements ComponentGenerator{
 	 * {@inheritDoc}
 	 * @see com.bravestone.diango.gui.ComponentGenerator#generate(java.lang.Object)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public Component generate(Class<?> cls) {
+	public <T> GeneratedAbstractField<T> generate(Class<T> cls) {
 		if(!IS_VAADIN_COMPONENT.test(cls))
 			return null;
 		
-		return COMPONENT_SUPPLIER.apply(cls).get();
+		return (GeneratedAbstractField<T>) COMPONENT_SUPPLIER.apply(cls).get();
 	}
 }

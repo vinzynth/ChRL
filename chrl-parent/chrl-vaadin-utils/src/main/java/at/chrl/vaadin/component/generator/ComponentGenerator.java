@@ -17,8 +17,6 @@
  */
 package at.chrl.vaadin.component.generator;
 
-import com.vaadin.ui.Component;
-
 /**
  * @author Vinzynth
  * 29.08.2015 - 02:12:11
@@ -32,10 +30,13 @@ import com.vaadin.ui.Component;
  */
 public interface ComponentGenerator {
 
-	public Component generate(Class<?> cls);
+	public <T> GeneratedAbstractField<T> generate(Class<T> cls);
 	
-	public default Component generate(Object o){
-		return generate(o.getClass());
+	@SuppressWarnings("unchecked")
+	public default <T> GeneratedAbstractField<T> generate(T o){
+		GeneratedAbstractField<T> generate = (GeneratedAbstractField<T>) generate(o.getClass());
+		generate.setValue(o);
+		return generate;
 	}
 	
 }
