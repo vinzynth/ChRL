@@ -22,6 +22,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -75,7 +76,11 @@ public class ComponentGeneratorImpl implements ComponentGenerator{
 			List<AccessTuple<?>> accessTuples = new ArrayList<>(accessTupleSupplier.size());
 			
 			fieldSupplier.forEach(s -> fields.add(s.get()));
-			accessTupleSupplier.forEach(s -> accessTuples.add(s.get()));
+			accessTupleSupplier.forEach(s -> {
+				AccessTuple<?> accessTuple = s.get();
+				if(Objects.nonNull(accessTuple))
+					accessTuples.add(accessTuple);
+			});
 			
 			return new GeneratedAbstractField<T>((Class<T>) cls, fields, accessTuples);
 		};
@@ -83,16 +88,25 @@ public class ComponentGeneratorImpl implements ComponentGenerator{
 	
 	@SuppressWarnings("unchecked")
 	private final <T> Supplier<AccessTuple<T>> getAccessTupleSupplierForField(Field field){
+		if(!(FIELD_SUPPLIER.apply(field).get() instanceof AbstractField<?>))
+			return () -> null;
+			
+		final boolean acc = field.isAccessible();
 		return () -> new AccessTuple<T>(o -> {
 			try {
-				return (T)field.get(o);
+				field.setAccessible(true);
+				T t = (T) field.get(o);
+				field.setAccessible(acc);
+				return t;
 			} catch (Exception e) {
 				e.printStackTrace();
 				return null;
 			}
 		}, (o, v) -> {
 			try {
+				field.setAccessible(true);
 				field.set(o, v);
+				field.setAccessible(acc);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -103,9 +117,12 @@ public class ComponentGeneratorImpl implements ComponentGenerator{
 	private final <T> Supplier<Component> getSupplierForField(Field field){
 		String error = "";
 		ComponentField annotation = field.getAnnotation(ComponentField.class);
-		try {
+		try1: try {
 			Class<T> fieldType = (Class<T>) field.getType();
 			Class<? extends AbstractField<T>> componentType = (Class<? extends AbstractField<T>>) annotation.value();
+			
+			if(!AbstractField.class.isAssignableFrom(componentType))
+				break try1;
 			
 			List<String> calls = Arrays.asList(annotation.callsAfterCreation());
 			Method[] declaredMethods = componentType.getDeclaredMethods();
@@ -150,25 +167,25 @@ public class ComponentGeneratorImpl implements ComponentGenerator{
 			System.err.println(e.getMessage() + " | " + err);
 			e.printStackTrace();
 			error = err + System.lineSeparator() + e.toString();
-			
-			// Fallback Component
-			try {
-				Class<? extends Component> comp = annotation.value();
-				Supplier<Component> returnMe = () -> COMPONENT_GENERATOR.createInstanceOnly(comp);
-				
-				returnMe.get();
-				
-				return returnMe;
-			} catch (Exception e2) {
-				System.err.println("Annotated Class type can not be instantiated as component: " + e.getMessage());
-				e2.printStackTrace();
-				error = e2.toString();
-			}
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 			error = e.toString();
 		}
+		
+		// Fallback Component
+		try {
+			Class<? extends Component> comp = annotation.value();
+			Supplier<Component> returnMe = () -> COMPONENT_GENERATOR.createInstanceOnly(comp);
+			
+			returnMe.get();
+			
+			return returnMe;
+		} catch (Exception e2) {
+			System.err.println("Annotated Class type can not be instantiated as component: " + e2.getMessage());
+			e2.printStackTrace();
+			error = e2.toString();
+		}
+		
 		final String fError = error;
 		return () -> new Label(fError);
 	}

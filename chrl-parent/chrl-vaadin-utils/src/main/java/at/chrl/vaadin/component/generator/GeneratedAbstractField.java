@@ -9,6 +9,8 @@ package at.chrl.vaadin.component.generator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import at.chrl.nutils.DatasetGenerator;
+
 import com.vaadin.data.util.converter.Converter.ConversionException;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Component;
@@ -23,11 +25,14 @@ import com.vaadin.ui.VerticalLayout;
 @SuppressWarnings({ "rawtypes", "unchecked", "serial" })
 public class GeneratedAbstractField<T> extends CustomField<T> {
 
+	private final static DatasetGenerator VALUE_GENERATOR = new DatasetGenerator();
+	
 	private final int fieldCount;
 	private Class<T> type;
 	private List<AccessTuple<?>> accessTuples;
 	private List<AbstractField<?>> fields;
 	private VerticalLayout layout;
+	private T value;
 
 	/**
 	 * 
@@ -35,9 +40,11 @@ public class GeneratedAbstractField<T> extends CustomField<T> {
 	public GeneratedAbstractField(Class<T> type, List<Component> components, List<AccessTuple<?>> accessTuples) {
 		this.fields = components.stream().filter(c -> c instanceof AbstractField<?>).map(c -> (AbstractField<?>)c).collect(Collectors.toList());
 		if(this.fields.size() != accessTuples.size())
-			throw new IllegalArgumentException("Fields and AccessTuple count does not match: " + components.size() + " vs. " + accessTuples.size());
+			throw new IllegalArgumentException("Fields and AccessTuple count does not match: " + this.fields.size() + " vs. " + accessTuples.size());
 		
-		this.fieldCount = components.size();
+		this.value = VALUE_GENERATOR.createInstanceOnly(type);
+		
+		this.fieldCount = this.fields.size();
 		this.type = type;
 		this.accessTuples = accessTuples;
 		this.layout = new VerticalLayout();
@@ -68,11 +75,11 @@ public class GeneratedAbstractField<T> extends CustomField<T> {
 	}
 	
 	private void setFieldValue(AbstractField field, AccessTuple tuple){
-		field.setValue(tuple.getGetter().apply(this));
+		field.setValue(tuple.getGetter().apply(this.value));
 	}
 	
 	private void getFieldValue(AbstractField field, AccessTuple tuple){
-		tuple.getSetter().accept(this, field.getValue());
+		tuple.getSetter().accept(this.value, field.getValue());
 	}
 	
 	/**
