@@ -62,6 +62,7 @@ public class GeneratedAbstractField<T> extends CustomField<T> {
 		
 		if(saveable){
 			saveButton = new Button("Save");
+			layout.addComponent(saveButton);
 		}
 	}
 	
