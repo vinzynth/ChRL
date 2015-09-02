@@ -28,6 +28,8 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import org.vaadin.viritin.fields.EnumSelect;
+
 import at.chrl.nutils.DatasetGenerator;
 import at.chrl.nutils.Memoizer;
 import at.chrl.vaadin.component.generator.annotations.ComponentCollection;
@@ -53,14 +55,24 @@ import com.vaadin.ui.Label;
 public class ComponentGeneratorImpl implements ComponentGenerator{
 
 	private final Predicate<Class<?>> IS_VAADIN_COMPONENT = Memoizer.memoizePredicate(c -> c.isAnnotationPresent(VaadinComponent.class));
-	private final Function<Class<?>, Supplier<? extends GeneratedAbstractField<?>>> COMPONENT_SUPPLIER = Memoizer.memoize(this::getComponent);
-	private final Function<Field, Supplier<? extends Component>> FIELD_SUPPLIER = Memoizer.memoize(this::getSupplierForField);
+	private final Function<Class<?>, Supplier<? extends GeneratedAbstractField<?>>> COMPONENT_SUPPLIER = Memoizer.memoize(this::getSaveableComponent);
+	private final Function<Class<?>, Supplier<? extends GeneratedAbstractField<?>>> READ_ONLY_COMPONENT_SUPPLIER = Memoizer.memoize(this::getReadOnlyComponent);
+	private final Function<Field, Supplier<? extends Component>> FIELD_SUPPLIER = Memoizer.memoize(this::getSupplierForSaveableField);
+	private final Function<Field, Supplier<? extends Component>> READ_ONLY_FIELD_SUPPLIER = Memoizer.memoize(this::getSupplierForReadOnlyField);
 	private final Function<Field, Supplier<? extends AccessTuple<?>>> ACCESS_TUPLE_SUPPLIER = Memoizer.memoize(this::getAccessTupleSupplierForField);
 	
 	private final DatasetGenerator COMPONENT_GENERATOR = new DatasetGenerator();
 	
+	private final <T> Supplier<GeneratedAbstractField<T>> getSaveableComponent(Class<?> cls){
+		return getComponent(cls, false);
+	}
+	
+	private final <T> Supplier<GeneratedAbstractField<T>> getReadOnlyComponent(Class<?> cls){
+		return getComponent(cls, true);
+	}
+	
 	@SuppressWarnings("unchecked")
-	private final <T> Supplier<GeneratedAbstractField<T>> getComponent(Class<?> cls){
+	private final <T> Supplier<GeneratedAbstractField<T>> getComponent(Class<?> cls, boolean readOnly){
 		List<Supplier<? extends Component>> fieldSupplier = Arrays.stream(cls.getDeclaredFields())
 			.filter(f -> f.isAnnotationPresent(ComponentField.class))
 			.map(FIELD_SUPPLIER::apply)
@@ -82,7 +94,7 @@ public class ComponentGeneratorImpl implements ComponentGenerator{
 					accessTuples.add(accessTuple);
 			});
 			
-			return new GeneratedAbstractField<T>((Class<T>) cls, fields, accessTuples);
+			return new GeneratedAbstractField<T>((Class<T>) cls, fields, accessTuples, readOnly);
 		};
 	}
 	
@@ -113,15 +125,30 @@ public class ComponentGeneratorImpl implements ComponentGenerator{
 		});
 	}
 	
+	private final <T> Supplier<Component> getSupplierForSaveableField(Field field){
+		return getSupplierForField(field, false);
+	}
+	
+	private final <T> Supplier<Component> getSupplierForReadOnlyField(Field field){
+		return getSupplierForField(field, true);
+	}
+	
 	@SuppressWarnings({ "unchecked", "unused" })
-	private final <T> Supplier<Component> getSupplierForField(Field field){
+	private final <T> Supplier<Component> getSupplierForField(Field field, Boolean readOnly){
 		String error = "";
 		ComponentField annotation = field.getAnnotation(ComponentField.class);
 
 		if(annotation.value().equals(GeneratedAbstractField.class))
 			return () -> this.generate(field.getType());
 		
-		
+		if(annotation.value().equals(EnumSelect.class) && field.getType().isEnum()){
+			return () -> {
+				EnumSelect<T> t = new EnumSelect<>();
+				t.setOptions(((Class<T>) field.getType()).getEnumConstants());
+				return t;
+			};
+		}
+			
 		try1: try {
 			Class<T> fieldType = (Class<T>) field.getType();
 			Class<? extends AbstractField<T>> componentType = (Class<? extends AbstractField<T>>) annotation.value();
@@ -157,7 +184,7 @@ public class ComponentGeneratorImpl implements ComponentGenerator{
 				if(!annotation.description().isEmpty())
 					component.setDescription(annotation.description());
 				
-				component.setReadOnly(annotation.readOnly());
+				component.setReadOnly(readOnly || annotation.readOnly());
 				
 				Arrays.asList(validators).forEach(component::addValidator);
 				
@@ -201,10 +228,13 @@ public class ComponentGeneratorImpl implements ComponentGenerator{
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> GeneratedAbstractField<T> generate(Class<T> cls) {
+	public <T> GeneratedAbstractField<T> generate(Class<T> cls, boolean readOnly) {
 		if(!IS_VAADIN_COMPONENT.test(cls))
 			return null;
 		
-		return (GeneratedAbstractField<T>) COMPONENT_SUPPLIER.apply(cls).get();
+		if(readOnly)
+			return (GeneratedAbstractField<T>) READ_ONLY_COMPONENT_SUPPLIER.apply(cls).get();
+		else
+			return (GeneratedAbstractField<T>) COMPONENT_SUPPLIER.apply(cls).get();
 	}
 }

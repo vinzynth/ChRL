@@ -30,13 +30,19 @@ package at.chrl.vaadin.component.generator;
  */
 public interface ComponentGenerator {
 
-	public <T> GeneratedAbstractField<T> generate(Class<T> cls);
+	public <T> GeneratedAbstractField<T> generate(Class<T> cls, boolean readOnly);
 	
 	@SuppressWarnings("unchecked")
-	public default <T> GeneratedAbstractField<T> generate(T o){
-		GeneratedAbstractField<T> generate = (GeneratedAbstractField<T>) generate(o.getClass());
+	public default <T> GeneratedAbstractField<T> generate(T o, boolean readOnly){
+		GeneratedAbstractField<T> generate = (GeneratedAbstractField<T>) generate(o.getClass(), readOnly);
 		generate.setValue(o);
 		return generate;
 	}
 	
+	public default <T> GeneratedAbstractField<T> generate(Class<T> cls){
+		return generate(cls, true);
+	}
+	public default <T> GeneratedAbstractField<T> generate(T o){
+		return generate(o, true);
+	}
 }

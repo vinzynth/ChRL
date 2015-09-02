@@ -7,12 +7,15 @@
 package at.chrl.vaadin.component.generator;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import at.chrl.nutils.DatasetGenerator;
 
 import com.vaadin.data.util.converter.Converter.ConversionException;
 import com.vaadin.ui.AbstractField;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomField;
 import com.vaadin.ui.VerticalLayout;
@@ -33,11 +36,16 @@ public class GeneratedAbstractField<T> extends CustomField<T> {
 	private List<AbstractField<?>> fields;
 	private VerticalLayout layout;
 	private T value;
+	private Button saveButton;
 
+	public GeneratedAbstractField(Class<T> type, List<Component> components, List<AccessTuple<?>> accessTuples) {
+		this(type, components, accessTuples, true);
+	}
+	
 	/**
 	 * 
 	 */
-	public GeneratedAbstractField(Class<T> type, List<Component> components, List<AccessTuple<?>> accessTuples) {
+	public GeneratedAbstractField(Class<T> type, List<Component> components, List<AccessTuple<?>> accessTuples, boolean saveable) {
 		this.fields = components.stream().filter(c -> c instanceof AbstractField<?>).map(c -> (AbstractField<?>)c).collect(Collectors.toList());
 		if(this.fields.size() != accessTuples.size())
 			throw new IllegalArgumentException("Fields and AccessTuple count does not match: " + this.fields.size() + " vs. " + accessTuples.size());
@@ -51,6 +59,15 @@ public class GeneratedAbstractField<T> extends CustomField<T> {
 		layout.setSpacing(true);
 		layout.setMargin(true);
 		components.forEach(layout::addComponent);
+		
+		if(saveable){
+			saveButton = new Button("Save");
+		}
+	}
+	
+	public void addSaveListener(ClickListener listener) {
+		if(Objects.nonNull(saveButton))
+			saveButton.addClickListener(listener);
 	}
 	
 	/**
