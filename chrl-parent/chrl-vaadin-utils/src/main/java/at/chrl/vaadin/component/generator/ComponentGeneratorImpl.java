@@ -117,6 +117,11 @@ public class ComponentGeneratorImpl implements ComponentGenerator{
 	private final <T> Supplier<Component> getSupplierForField(Field field){
 		String error = "";
 		ComponentField annotation = field.getAnnotation(ComponentField.class);
+
+		if(annotation.value().equals(GeneratedAbstractField.class))
+			return () -> this.generate(field.getType());
+		
+		
 		try1: try {
 			Class<T> fieldType = (Class<T>) field.getType();
 			Class<? extends AbstractField<T>> componentType = (Class<? extends AbstractField<T>>) annotation.value();
