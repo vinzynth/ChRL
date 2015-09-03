@@ -23,7 +23,8 @@ hs_err_pid*
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*
@@ -66,3 +67,7 @@ $RECYCLE.BIN/
 *.versionsBackup
 */target
 */indexes
+
+*/.settings
+
+*.tmp

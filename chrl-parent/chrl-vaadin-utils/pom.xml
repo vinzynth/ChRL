@@ -25,6 +25,10 @@
 			<groupId>at.chrl</groupId>
 			<artifactId>chrl-utils</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.vaadin</groupId>
+			<artifactId>viritin</artifactId>
+		</dependency>
 	</dependencies>
 	<!--  -->
 </project>
