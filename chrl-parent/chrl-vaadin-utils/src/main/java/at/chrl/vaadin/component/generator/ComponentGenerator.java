@@ -40,9 +40,9 @@ public interface ComponentGenerator {
 	}
 	
 	public default <T> GeneratedAbstractField<T> generate(Class<T> cls){
-		return generate(cls, true);
+		return generate(cls, false);
 	}
 	public default <T> GeneratedAbstractField<T> generate(T o){
-		return generate(o, true);
+		return generate(o, false);
 	}
 }

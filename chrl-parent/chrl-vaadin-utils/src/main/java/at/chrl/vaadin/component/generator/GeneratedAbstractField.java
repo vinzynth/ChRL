@@ -45,7 +45,7 @@ public class GeneratedAbstractField<T> extends CustomField<T> {
 	/**
 	 * 
 	 */
-	public GeneratedAbstractField(Class<T> type, List<Component> components, List<AccessTuple<?>> accessTuples, boolean saveable) {
+	public GeneratedAbstractField(Class<T> type, List<Component> components, List<AccessTuple<?>> accessTuples, boolean readOnly) {
 		this.fields = components.stream().filter(c -> c instanceof AbstractField<?>).map(c -> (AbstractField<?>)c).collect(Collectors.toList());
 		if(this.fields.size() != accessTuples.size())
 			throw new IllegalArgumentException("Fields and AccessTuple count does not match: " + this.fields.size() + " vs. " + accessTuples.size());
@@ -60,7 +60,7 @@ public class GeneratedAbstractField<T> extends CustomField<T> {
 		layout.setMargin(true);
 		components.forEach(layout::addComponent);
 		
-		if(saveable){
+		if(!readOnly){
 			saveButton = new Button("Save");
 			layout.addComponent(saveButton);
 		}
