@@ -75,7 +75,7 @@ public class ComponentGeneratorImpl implements ComponentGenerator{
 	private final <T> Supplier<GeneratedAbstractField<T>> getComponent(Class<?> cls, boolean readOnly){
 		List<Supplier<? extends Component>> fieldSupplier = Arrays.stream(cls.getDeclaredFields())
 			.filter(f -> f.isAnnotationPresent(ComponentField.class))
-			.map(FIELD_SUPPLIER::apply)
+			.map(e -> readOnly ? READ_ONLY_FIELD_SUPPLIER.apply(e) : FIELD_SUPPLIER.apply(e))
 			.collect(Collectors.toList());
 		
 		List<Supplier<? extends AccessTuple<?>>> accessTupleSupplier = Arrays.stream(cls.getDeclaredFields())
