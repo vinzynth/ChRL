@@ -154,6 +154,11 @@ public abstract class SessionTemplate implements AutoCloseable {
 		this.session = newSession();
 		this.loggingEnabled = getHibernateConfig().isLoggingEnabled();
 	}
+	
+	protected SessionTemplate(Session session) {
+		this.session = session;
+		this.loggingEnabled = getHibernateConfig().isLoggingEnabled();
+	}
 
 	/**
 	 * Creates and opens a new Session

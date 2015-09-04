@@ -17,6 +17,12 @@
  */
 package at.chrl.spring.hibernate.config;
 
+import javax.persistence.EntityManager;
+
+import org.hibernate.Session;
+import org.hibernate.jpa.HibernateEntityManager;
+
+import at.chrl.orm.hibernate.ExtendedSessionTemplate;
 import at.chrl.orm.hibernate.SessionTemplate;
 import at.chrl.orm.hibernate.configuration.JPAConfig;
 
@@ -29,4 +35,8 @@ public interface SessionTemplateFactory {
 
 	public SessionTemplate createTemplate();
 	public SessionTemplate createTemplate(JPAConfig jpaConfig);
+	public ExtendedSessionTemplate createTemplate(Session session);
+	public default ExtendedSessionTemplate createTemplate(EntityManager entityManager){
+		return createTemplate(entityManager.unwrap(HibernateEntityManager.class).getSession());
+	}
 }

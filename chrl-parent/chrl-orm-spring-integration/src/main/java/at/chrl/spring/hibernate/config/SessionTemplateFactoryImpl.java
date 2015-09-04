@@ -17,8 +17,10 @@
  */
 package at.chrl.spring.hibernate.config;
 
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import at.chrl.orm.hibernate.ExtendedSessionTemplate;
 import at.chrl.orm.hibernate.SessionTemplate;
 import at.chrl.orm.hibernate.configuration.IHibernateConfig;
 import at.chrl.orm.hibernate.configuration.JPAConfig;
@@ -63,4 +65,18 @@ public class SessionTemplateFactoryImpl implements SessionTemplateFactory{
 		};
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @see at.chrl.spring.hibernate.config.SessionTemplateFactory#createTemplate(org.hibernate.Session)
+	 */
+	@Override
+	public ExtendedSessionTemplate createTemplate(Session session) {
+		return new ExtendedSessionTemplate(session) {
+			
+			@Override
+			protected IHibernateConfig getHibernateConfig() {
+				return jpaConfig;
+			}
+		};
+	}
 }
