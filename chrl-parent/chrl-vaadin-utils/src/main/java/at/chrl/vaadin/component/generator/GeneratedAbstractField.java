@@ -92,6 +92,24 @@ public class GeneratedAbstractField<T> extends CustomField<T> {
 		super.setValue(newFieldValue);
 	}
 	
+	void forceSetValue(T newFieldValue) throws com.vaadin.data.Property.ReadOnlyException, ConversionException {
+		for (int i = 0; i < fieldCount; i++) {
+			forceSetFieldValue(fields.get(i), accessTuples.get(i));
+		}
+		super.setValue(newFieldValue);
+	}
+	
+	/**
+	 * @param abstractField
+	 * @param accessTuple
+	 */
+	private void forceSetFieldValue(AbstractField<?> abstractField, AccessTuple<?> accessTuple) {
+		boolean ro = abstractField.isReadOnly();
+		abstractField.setReadOnly(false);
+		setFieldValue(abstractField, accessTuple);
+		abstractField.setReadOnly(ro);
+	}
+
 	private void setFieldValue(AbstractField field, AccessTuple tuple){
 		field.setValue(tuple.getGetter().apply(this.value));
 	}

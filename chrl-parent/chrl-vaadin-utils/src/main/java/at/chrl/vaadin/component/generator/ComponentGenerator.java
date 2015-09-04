@@ -35,7 +35,7 @@ public interface ComponentGenerator {
 	@SuppressWarnings("unchecked")
 	public default <T> GeneratedAbstractField<T> generate(T o, boolean readOnly){
 		GeneratedAbstractField<T> generate = (GeneratedAbstractField<T>) generate(o.getClass(), readOnly);
-		generate.setValue(o);
+		generate.forceSetValue(o);
 		return generate;
 	}
 	
