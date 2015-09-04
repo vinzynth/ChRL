@@ -32,6 +32,7 @@ import at.chrl.nutils.ClassUtils;
 import at.chrl.nutils.CollectionUtils;
 import at.chrl.orm.hibernate.SessionTemplate;
 import at.chrl.spring.generics.repositories.utils.RepositoryTransactionPool;
+import at.chrl.spring.hibernate.config.SessionTemplateFactory;
 
 /**
  * 
@@ -75,6 +76,9 @@ public class GenericRepository<T> {
 	@Autowired
 	protected RepositoryTransactionPool transactionPool;
 	
+	@Autowired
+	protected SessionTemplateFactory sessionTemplateFactory;
+	
 	@PostConstruct
 	private void setIdFieldName() {
 		this.idFieldName = transactionPool.getIdentifierPropertyName(this.persistentClass);
@@ -114,7 +118,7 @@ public class GenericRepository<T> {
 	}
 
 	public void process(Consumer<SessionTemplate> consumer){
-		try (SessionTemplate session = transactionPool.getSessionTemplate()){
+		try (SessionTemplate session = sessionTemplateFactory.createTemplate(entityManager)){
 			consumer.accept(session);
 		} catch (Exception e) {
 			e.printStackTrace();
