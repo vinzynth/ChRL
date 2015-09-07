@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.jar.JarEntry;
@@ -28,13 +29,20 @@ public final class ClassUtils {
 	public static final <T> String getString(T obj, Function<T ,?>...getters){
 		StringBuilder sb = new StringBuilder();
 		sb.append(obj.getClass().getSimpleName()).append(" |");
-		for (Function<T, ?> function : getters)
-			sb.append(' ').append(function.apply(obj).toString()).append(" |");
+		for (Function<T, ?> function : getters){
+			Object apply = function.apply(obj);
+			String s = "null";
+			if(Objects.nonNull(apply))
+				s = apply.toString();
+			sb.append(' ').append(s).append(" |");
+		}
 		return sb.toString();
 	}
 	
 	/**
 	 * Helper function to calculate a hashcode from selected getter functions
+	 * <p>
+	 * null values are treated as 0
 	 * 
 	 * @param obj
 	 * @param getters
@@ -48,6 +56,9 @@ public final class ClassUtils {
 			if(applied instanceof Number){
 				hash = 31 * hash + ((Number) applied).intValue();
 				continue;
+			}
+			else if(Objects.isNull(applied)){
+				hash = 31 * hash;
 			}
 				
 			hash = 31 * hash + f.apply(obj).hashCode();
@@ -75,7 +86,11 @@ public final class ClassUtils {
 		T obj2Casted = (T) obj2;
 		
 		for (Function<T, ?> function : getters)
-			if(!function.apply(obj1).equals(function.apply(obj2Casted)))
+			if(Objects.isNull(function.apply(obj1))){
+				if(Objects.nonNull(function.apply(obj2Casted)))
+					return false;
+			}
+			else if(!function.apply(obj1).equals(function.apply(obj2Casted)))
 				return false;
 		
 		return true;

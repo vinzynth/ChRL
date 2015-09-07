@@ -10,15 +10,16 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import at.chrl.nutils.DatasetGenerator;
-
 import com.vaadin.data.util.converter.Converter.ConversionException;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomField;
 import com.vaadin.ui.VerticalLayout;
+
+import at.chrl.nutils.DatasetGenerator;
 
 /**
  * @author Christian Richard Leopold - ChRL <br>
@@ -61,7 +62,7 @@ public class GeneratedAbstractField<T> extends CustomField<T> {
 		components.forEach(layout::addComponent);
 		
 		if(!readOnly){
-			saveButton = new Button("Save");
+			saveButton = new Button("Save", FontAwesome.CHECK);
 			layout.addComponent(saveButton);
 		}
 	}
