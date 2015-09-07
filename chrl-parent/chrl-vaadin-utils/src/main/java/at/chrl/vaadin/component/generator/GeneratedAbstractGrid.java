@@ -12,6 +12,7 @@ import java.util.TreeSet;
 
 import org.vaadin.viritin.FilterableListContainer;
 
+import com.google.gwt.event.shared.GwtEvent.Type;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
@@ -107,10 +108,14 @@ public class GeneratedAbstractGrid<T> extends HorizontalLayout {
 			this.field.addSaveListener(c -> {
 				this.listContainer.getItemIds().remove(t);
 				this.saveListener.forEach(sl -> sl.saveOnChange(this.field));
-				Set<T> set = new TreeSet<>(this.listContainer.getItemIds());
-				set.add(this.field.getValue());
-				this.listContainer.removeAllItems();
-				this.listContainer.addAll(set);
+				if(t instanceof Comparable){
+					Set<T> set = new TreeSet<>(this.listContainer.getItemIds());
+					set.add(this.field.getValue());
+					this.listContainer.removeAllItems();
+					this.listContainer.addAll(set);
+				}
+				else
+					this.listContainer.addItem(this.field.getValue());
 				this.right.removeAllComponents();
 				this.right.addComponent(this.addButton);	
 			});
