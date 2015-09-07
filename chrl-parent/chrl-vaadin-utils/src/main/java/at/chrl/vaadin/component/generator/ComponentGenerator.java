@@ -17,6 +17,9 @@
  */
 package at.chrl.vaadin.component.generator;
 
+import java.util.Collection;
+import java.util.Objects;
+
 /**
  * @author Vinzynth
  * 29.08.2015 - 02:12:11
@@ -42,7 +45,22 @@ public interface ComponentGenerator {
 	public default <T> GeneratedAbstractField<T> generate(Class<T> cls){
 		return generate(cls, false);
 	}
+	
 	public default <T> GeneratedAbstractField<T> generate(T o){
 		return generate(o, false);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public default <T> GeneratedAbstractGrid<T> generateGrid(Collection<T> col){
+		T t = col.stream().findFirst().orElse(null);
+		if(Objects.isNull(t))
+			return null;
+		GeneratedAbstractGrid<T> generatedAbstractGrid = new GeneratedAbstractGrid<T>((Class<T>) t.getClass());
+		generatedAbstractGrid.getContainer().addAll(col);
+		return generatedAbstractGrid;
+	}
+	
+	public default <T> GeneratedAbstractGrid<T> generateGrid(Class<T> cls){
+		return new GeneratedAbstractGrid<>(cls);
 	}
 }
