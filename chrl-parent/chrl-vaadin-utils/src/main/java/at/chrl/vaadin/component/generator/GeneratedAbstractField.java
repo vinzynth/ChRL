@@ -107,11 +107,11 @@ public class GeneratedAbstractField<T> extends CustomField<T> {
 	}
 
 	private void setFieldValue(AbstractField field, AccessTuple tuple, T newFieldValue){
-		field.setValue(tuple.getGetter().apply(newFieldValue));
+		field.setConvertedValue(tuple.getGetter().apply(newFieldValue));
 	}
 	
 	private void getFieldValue(AbstractField field, AccessTuple tuple){
-		tuple.getSetter().accept(this.value, field.getValue());
+		tuple.getSetter().accept(this.value, field.getConvertedValue());
 	}
 	
 	/**

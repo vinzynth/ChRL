@@ -133,7 +133,7 @@ public class ComponentGeneratorImpl implements ComponentGenerator{
 		return getSupplierForField(field, true);
 	}
 	
-	@SuppressWarnings({ "unchecked", "unused" })
+	@SuppressWarnings({ "unchecked" })
 	private final <T> Supplier<Component> getSupplierForField(Field field, Boolean readOnly){
 		String error = "";
 		ComponentField annotation = field.getAnnotation(ComponentField.class);
@@ -170,7 +170,7 @@ public class ComponentGeneratorImpl implements ComponentGenerator{
 			
 			Supplier<Component> returnMe = () -> {
 				AbstractField<T> component = COMPONENT_GENERATOR.createInstanceOnly(componentType);
-				
+				component.setConverter(fieldType);
 				try {
 					for (Method method : callingMethods) {
 						method.invoke(component);
