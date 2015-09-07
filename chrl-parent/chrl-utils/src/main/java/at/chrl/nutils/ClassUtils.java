@@ -55,13 +55,12 @@ public final class ClassUtils {
 			Object applied = f.apply(obj);
 			if(applied instanceof Number){
 				hash = 31 * hash + ((Number) applied).intValue();
-				continue;
 			}
 			else if(Objects.isNull(applied)){
 				hash = 31 * hash;
 			}
-				
-			hash = 31 * hash + f.apply(obj).hashCode();
+			else
+				hash = 31 * hash + applied.hashCode();
 		}
 		
 		return hash;

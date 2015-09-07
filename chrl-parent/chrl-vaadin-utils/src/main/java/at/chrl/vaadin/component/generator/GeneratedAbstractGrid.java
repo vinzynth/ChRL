@@ -90,6 +90,9 @@ public class GeneratedAbstractGrid<T> extends HorizontalLayout {
 		this.left = new VerticalLayout();
 		this.right = new VerticalLayout();
 		
+		this.left.setSizeFull();
+		this.right.setSizeFull();
+		
 		this.left.setSpacing(true);
 		this.right.setSpacing(true);
 		
