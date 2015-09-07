@@ -12,13 +12,12 @@ import java.util.TreeSet;
 
 import org.vaadin.viritin.FilterableListContainer;
 
-import com.google.gwt.event.shared.GwtEvent.Type;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Grid.SelectionMode;
 
 import at.chrl.nutils.CollectionUtils;
 import at.chrl.nutils.DatasetGenerator;
