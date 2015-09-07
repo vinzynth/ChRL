@@ -153,7 +153,11 @@ public class GenericRepository<T> {
 	
 	@Transactional
 	public void delete(T entity){
-		getSession().delete(entity);
+		try {
+			getSession().delete(entity);			
+		} catch (IllegalArgumentException e) {
+			getSession().delete(getSession().merge(entity));
+		}
 	}
 	
 	@Transactional

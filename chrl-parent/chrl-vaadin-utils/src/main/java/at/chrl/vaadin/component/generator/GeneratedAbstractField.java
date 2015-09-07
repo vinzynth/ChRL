@@ -87,7 +87,8 @@ public class GeneratedAbstractField<T> extends CustomField<T> {
 	 */
 	@Override
 	public void setValue(T newFieldValue) throws com.vaadin.data.Property.ReadOnlyException, ConversionException {
-		forceSetValue(newFieldValue);
+		this.value = newFieldValue;
+		forceSetValue(this.value);
 	}
 	
 	void forceSetValue(T newFieldValue) throws com.vaadin.data.Property.ReadOnlyException, ConversionException {
