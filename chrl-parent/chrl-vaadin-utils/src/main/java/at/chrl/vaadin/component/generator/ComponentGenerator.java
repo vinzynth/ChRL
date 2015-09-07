@@ -50,12 +50,23 @@ public interface ComponentGenerator {
 		return generate(o, false);
 	}
 	
+	/**
+	 * col must not be empty! use {@link ComponentGenerator#generateGrid(Class, Collection)} instead.
+	 * @param col
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public default <T> GeneratedAbstractGrid<T> generateGrid(Collection<T> col){
 		T t = col.stream().findFirst().orElse(null);
 		if(Objects.isNull(t))
 			return null;
 		GeneratedAbstractGrid<T> generatedAbstractGrid = new GeneratedAbstractGrid<T>((Class<T>) t.getClass());
+		generatedAbstractGrid.getContainer().addAll(col);
+		return generatedAbstractGrid;
+	}
+	
+	public default <T> GeneratedAbstractGrid<T> generateGrid(Class<T> cls, Collection<T> col){
+		GeneratedAbstractGrid<T> generatedAbstractGrid = new GeneratedAbstractGrid<T>(cls);
 		generatedAbstractGrid.getContainer().addAll(col);
 		return generatedAbstractGrid;
 	}
