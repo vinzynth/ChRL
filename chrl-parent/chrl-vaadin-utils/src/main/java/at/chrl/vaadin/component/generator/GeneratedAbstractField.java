@@ -86,32 +86,28 @@ public class GeneratedAbstractField<T> extends CustomField<T> {
 	 */
 	@Override
 	public void setValue(T newFieldValue) throws com.vaadin.data.Property.ReadOnlyException, ConversionException {
-		for (int i = 0; i < fieldCount; i++) {
-			setFieldValue(fields.get(i), accessTuples.get(i));
-		}
-		super.setValue(newFieldValue);
+		forceSetValue(newFieldValue);
 	}
 	
 	void forceSetValue(T newFieldValue) throws com.vaadin.data.Property.ReadOnlyException, ConversionException {
 		for (int i = 0; i < fieldCount; i++) {
-			forceSetFieldValue(fields.get(i), accessTuples.get(i));
+			forceSetFieldValue(fields.get(i), accessTuples.get(i), newFieldValue);
 		}
-		super.setValue(newFieldValue);
 	}
 	
 	/**
 	 * @param abstractField
 	 * @param accessTuple
 	 */
-	private void forceSetFieldValue(AbstractField<?> abstractField, AccessTuple<?> accessTuple) {
+	private void forceSetFieldValue(AbstractField<?> abstractField, AccessTuple<?> accessTuple, T newFieldValue) {
 		boolean ro = abstractField.isReadOnly();
 		abstractField.setReadOnly(false);
-		setFieldValue(abstractField, accessTuple);
+		setFieldValue(abstractField, accessTuple, newFieldValue);
 		abstractField.setReadOnly(ro);
 	}
 
-	private void setFieldValue(AbstractField field, AccessTuple tuple){
-		field.setValue(tuple.getGetter().apply(this.value));
+	private void setFieldValue(AbstractField field, AccessTuple tuple, T newFieldValue){
+		field.setValue(tuple.getGetter().apply(newFieldValue));
 	}
 	
 	private void getFieldValue(AbstractField field, AccessTuple tuple){
@@ -127,7 +123,7 @@ public class GeneratedAbstractField<T> extends CustomField<T> {
 		for (int i = 0; i < fieldCount; i++) {
 			getFieldValue(fields.get(i), accessTuples.get(i));
 		}
-		return super.getValue();
+		return this.value;
 	}
 
 	/**
