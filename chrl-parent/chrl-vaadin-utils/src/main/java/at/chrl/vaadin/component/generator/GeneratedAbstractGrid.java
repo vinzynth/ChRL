@@ -8,6 +8,7 @@ package at.chrl.vaadin.component.generator;
 
 import java.util.Objects;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.vaadin.viritin.FilterableListContainer;
 
@@ -67,6 +68,8 @@ public class GeneratedAbstractGrid<T> extends HorizontalLayout {
 			if(Objects.nonNull(t) && Objects.nonNull(this.field)){
 				this.listContainer.removeItem(t);
 				this.deleteListener.forEach(sl -> sl.saveOnChange(this.field));
+				this.right.removeAllComponents();
+				this.right.addComponent(this.addButton);	
 			}
 		});
 		
@@ -77,8 +80,9 @@ public class GeneratedAbstractGrid<T> extends HorizontalLayout {
 		this.grid.addSelectionListener(e -> {
 			T t = (T) this.grid.getSelectedRow();
 			this.createEditor(t);
-			if(Objects.nonNull(t))
+			if(Objects.nonNull(t)) {
 				this.right.addComponent(this.deleteButton);
+			}
 		});
 		
 		
@@ -103,8 +107,12 @@ public class GeneratedAbstractGrid<T> extends HorizontalLayout {
 			this.field.addSaveListener(c -> {
 				this.listContainer.getItemIds().remove(t);
 				this.saveListener.forEach(sl -> sl.saveOnChange(this.field));
-				this.listContainer.addItem(this.field.getValue());
+				Set<T> set = new TreeSet<>(this.listContainer.getItemIds());
+				set.add(this.field.getValue());
+				this.listContainer.removeAllItems();
+				this.listContainer.addAll(set);
 				this.right.removeAllComponents();
+				this.right.addComponent(this.addButton);	
 			});
 			this.right.addComponent(this.field);
 		}
