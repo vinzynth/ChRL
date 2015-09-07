@@ -79,10 +79,9 @@ public class GeneratedAbstractGrid<T> extends HorizontalLayout {
 		});
 		this.grid.addSelectionListener(e -> {
 			T t = (T) this.grid.getSelectedRow();
-			if(Objects.nonNull(t)) {
-				this.right.addComponent(this.deleteButton);
-			}
 			this.createEditor(t);
+			if(Objects.nonNull(t))
+				this.right.addComponent(this.deleteButton);
 		});
 		
 		
