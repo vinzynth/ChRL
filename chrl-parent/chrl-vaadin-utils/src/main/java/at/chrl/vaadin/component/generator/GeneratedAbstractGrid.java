@@ -75,13 +75,15 @@ public class GeneratedAbstractGrid<T> extends HorizontalLayout {
 		
 		this.addButton = new Button("New", FontAwesome.PLUS);
 		this.addButton.addClickListener(e -> {
+			this.right.removeAllComponents();
 			this.createEditor(DATA_GEN.createInstanceOnly(type));
 		});
 		this.grid.addSelectionListener(e -> {
 			T t = (T) this.grid.getSelectedRow();
-			this.createEditor(t);
+			this.right.removeAllComponents();
 			if(Objects.nonNull(t))
 				this.right.addComponent(this.deleteButton);
+			this.createEditor(t);
 		});
 		
 		
@@ -103,7 +105,6 @@ public class GeneratedAbstractGrid<T> extends HorizontalLayout {
 	}
 	
 	private void createEditor(T t){
-		this.right.removeAllComponents();
 		if(Objects.nonNull(t)){
 			this.field = COMP_GEN.generate(t);
 			this.field.addSaveListener(c -> {
