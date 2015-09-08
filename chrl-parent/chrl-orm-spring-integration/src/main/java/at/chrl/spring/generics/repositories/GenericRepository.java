@@ -24,6 +24,7 @@ import javax.persistence.PersistenceContextType;
 
 import org.hibernate.Session;
 import org.hibernate.envers.AuditReader;
+import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.jpa.HibernateEntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -86,12 +87,12 @@ public class GenericRepository<T> {
 
 	@Transactional
 	public Map<Date, T> getOlderVersions(Object id){
-		AuditReader reader = transactionPool.getAuditReader();
+		AuditReader reader = AuditReaderFactory.get(entityManager);
 		List<Number> revisions = reader.getRevisions(this.getType(), id).stream().collect(Collectors.toList());
 		List<T> collect = revisions.stream().map(n -> reader.find(this.getType(), id, n)).collect(Collectors.toList());
 		List<Date> dates = revisions.stream().map(reader::getRevisionDate).collect(Collectors.toList());
 		
-		collect.forEach(transactionPool.getEntityManager()::detach);
+		collect.forEach(entityManager::detach);
 		
 		Map<Date, T> returnMe = CollectionUtils.newMap();
 		
