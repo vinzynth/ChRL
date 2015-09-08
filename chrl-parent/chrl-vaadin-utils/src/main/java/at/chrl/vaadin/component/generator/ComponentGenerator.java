@@ -56,22 +56,34 @@ public interface ComponentGenerator {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public default <T> GeneratedAbstractGrid<T> generateGrid(Collection<T> col){
+	public default <T> GeneratedAbstractGrid<T> generateGrid(Collection<T> col, boolean readOnly){
 		T t = col.stream().findFirst().orElse(null);
 		if(Objects.isNull(t))
 			return null;
-		GeneratedAbstractGrid<T> generatedAbstractGrid = new GeneratedAbstractGrid<T>((Class<T>) t.getClass());
+		GeneratedAbstractGrid<T> generatedAbstractGrid = new GeneratedAbstractGrid<T>((Class<T>) t.getClass(), readOnly);
 		generatedAbstractGrid.getContainer().addAll(col);
 		return generatedAbstractGrid;
+	}
+	
+	public default <T> GeneratedAbstractGrid<T> generateGrid(Class<T> cls, Collection<T> col, boolean readOnly){
+		GeneratedAbstractGrid<T> generatedAbstractGrid = new GeneratedAbstractGrid<T>(cls, readOnly);
+		generatedAbstractGrid.getContainer().addAll(col);
+		return generatedAbstractGrid;
+	}
+	
+	public default <T> GeneratedAbstractGrid<T> generateGrid(Class<T> cls, boolean readOnly){
+		return new GeneratedAbstractGrid<>(cls, readOnly);
+	}
+	
+	public default <T> GeneratedAbstractGrid<T> generateGrid(Collection<T> col){
+		return generateGrid(col, false);
 	}
 	
 	public default <T> GeneratedAbstractGrid<T> generateGrid(Class<T> cls, Collection<T> col){
-		GeneratedAbstractGrid<T> generatedAbstractGrid = new GeneratedAbstractGrid<T>(cls);
-		generatedAbstractGrid.getContainer().addAll(col);
-		return generatedAbstractGrid;
+		return generateGrid(cls, col, false);
 	}
 	
 	public default <T> GeneratedAbstractGrid<T> generateGrid(Class<T> cls){
-		return new GeneratedAbstractGrid<>(cls);
+		return generateGrid(cls, false);
 	}
 }

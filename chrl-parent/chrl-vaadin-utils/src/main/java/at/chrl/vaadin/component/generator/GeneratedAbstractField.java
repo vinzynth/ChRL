@@ -6,6 +6,7 @@
  */
 package at.chrl.vaadin.component.generator;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -115,7 +116,18 @@ public class GeneratedAbstractField<T> extends CustomField<T> {
 	private void getFieldValue(AbstractField field, AccessTuple tuple){
 		tuple.getSetter().accept(this.value, field.getConvertedValue());
 	}
+
 	
+	
+	/**
+	 * getter for fields
+	 * @return fields
+	 * 		GeneratedAbstractField.fields
+	 */
+	public List<AbstractField<?>> getFields() {
+		return Collections.unmodifiableList(fields);
+	}
+
 	/**
 	 * {@inheritDoc}
 	 * @see com.vaadin.ui.AbstractField#getValue()

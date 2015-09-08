@@ -16,7 +16,7 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.SelectionMode;
-import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.VerticalLayout;
 
 import at.chrl.nutils.CollectionUtils;
@@ -28,7 +28,7 @@ import at.chrl.nutils.DatasetGenerator;
  *
  */
 @SuppressWarnings("serial")
-public class GeneratedAbstractGrid<T> extends HorizontalLayout {
+public class GeneratedAbstractGrid<T> extends HorizontalSplitPanel {
 
 	private static final ComponentGenerator COMP_GEN = new ComponentGeneratorImpl();
 	private static final DatasetGenerator DATA_GEN = new DatasetGenerator();
@@ -36,7 +36,9 @@ public class GeneratedAbstractGrid<T> extends HorizontalLayout {
 	private final Grid grid;
 	private final FilterableListContainer<T> listContainer;
 	private final Set<ChangeListener<T>> saveListener;
+	private final Set<ChangeListener<T>> selectionListener;
 	private final Set<ChangeListener<T>> deleteListener;
+	private final boolean readOnly;
 
 	private Button addButton;
 	private Button deleteButton;
@@ -49,7 +51,9 @@ public class GeneratedAbstractGrid<T> extends HorizontalLayout {
 	 * 
 	 */
 	@SuppressWarnings("unchecked")
-	GeneratedAbstractGrid(Class<T> type) {
+	public
+	GeneratedAbstractGrid(Class<T> type, boolean readOnly) {
+		this.readOnly = readOnly;
 		this.listContainer = new FilterableListContainer<>(type);
 		this.grid = new Grid(type.getSimpleName(), listContainer);
 		this.grid.setSelectionMode(SelectionMode.SINGLE);
@@ -57,90 +61,102 @@ public class GeneratedAbstractGrid<T> extends HorizontalLayout {
 		this.grid.setSizeFull();
 		
 		this.saveListener = CollectionUtils.newSet();
+		this.selectionListener = CollectionUtils.newSet();
 		this.deleteListener = CollectionUtils.newSet();
 		
 		this.setSizeFull();
-		this.setSpacing(true);
-		
-		this.deleteButton = new Button("Delete", FontAwesome.MINUS);
-		this.deleteButton.addClickListener(e -> {
-			T t = (T) this.grid.getSelectedRow();
-			if(Objects.nonNull(t) && Objects.nonNull(this.field)){
-				this.listContainer.removeItem(t);
-				this.deleteListener.forEach(sl -> sl.saveOnChange(this.field));
+		if(!this.readOnly){
+			this.deleteButton = new Button("Delete", FontAwesome.MINUS);
+			this.deleteButton.addClickListener(e -> {
+				T t = (T) this.grid.getSelectedRow();
+				if(Objects.nonNull(t) && Objects.nonNull(this.field)){
+					this.listContainer.removeItem(t);
+					this.deleteListener.forEach(sl -> sl.saveOnChange(this.field));
+					this.right.removeAllComponents();
+					this.right.addComponent(this.addButton);	
+				}
+			});
+			
+			this.addButton = new Button("New", FontAwesome.PLUS);
+			this.addButton.addClickListener(e -> {
 				this.right.removeAllComponents();
-				this.right.addComponent(this.addButton);	
-			}
-		});
-		
-		this.addButton = new Button("New", FontAwesome.PLUS);
-		this.addButton.addClickListener(e -> {
-			this.right.removeAllComponents();
-			this.createEditor(DATA_GEN.createInstanceOnly(type));
-		});
+				this.createEditor(DATA_GEN.createInstanceOnly(type));
+			});
+		}
 		this.grid.addSelectionListener(e -> {
 			T t = (T) this.grid.getSelectedRow();
 			this.right.removeAllComponents();
-			if(Objects.nonNull(t))
+			if(!this.readOnly && Objects.nonNull(t))
 				this.right.addComponent(this.deleteButton);
 			this.createEditor(t);
+			this.selectionListener.forEach(sl -> sl.saveOnChange(this.field));
 		});
-		
-		
 		
 		this.left = new VerticalLayout();
 		this.right = new VerticalLayout();
 		
 		this.left.setSizeFull();
-		this.right.setSizeFull();
+//		this.right.setSizeFull();
 		
 		this.left.setSpacing(true);
 		this.right.setSpacing(true);
 		
 		this.left.addComponent(this.grid);
 		
-		this.right.addComponent(this.addButton);
+		if(!this.readOnly)
+			this.right.addComponent(this.addButton);
 		
 		this.addComponents(this.left, this.right);
 	}
 	
 	private void createEditor(T t){
 		if(Objects.nonNull(t)){
-			this.field = COMP_GEN.generate(t);
-			this.field.addSaveListener(c -> {
-				this.listContainer.getItemIds().remove(t);
-				this.saveListener.forEach(sl -> sl.saveOnChange(this.field));
-				if(t instanceof Comparable){
-					Set<T> set = new TreeSet<>(this.listContainer.getItemIds());
-					set.add(this.field.getValue());
-					this.listContainer.removeAllItems();
-					this.listContainer.addAll(set);
-				}
-				else
-					this.listContainer.addItem(this.field.getValue());
-				this.right.removeAllComponents();
-				this.right.addComponent(this.addButton);	
-			});
+			this.field = COMP_GEN.generate(t, this.readOnly);
+			this.field.setSizeFull();
+			if(!this.readOnly){
+				this.field.addSaveListener(c -> {
+					this.listContainer.getItemIds().remove(t);
+					this.saveListener.forEach(sl -> sl.saveOnChange(this.field));
+					if(t instanceof Comparable){
+						Set<T> set = new TreeSet<>(this.listContainer.getItemIds());
+						set.add(this.field.getValue());
+						this.listContainer.removeAllItems();
+						this.listContainer.addAll(set);
+					}
+					else
+						this.listContainer.addItem(this.field.getValue());
+					this.right.removeAllComponents();
+					this.right.addComponent(this.addButton);	
+				});
+			}
 			this.right.addComponent(this.field);
 		}
-		else
+		else if(!this.readOnly)
 			this.right.addComponent(this.addButton);
 	}
 	
 	public Grid getGrid(){
-		return grid;
+		return this.grid;
 	}
 	
 	public FilterableListContainer<T> getContainer(){
-		return listContainer;
+		return this.listContainer;
 	}
 	
 	public boolean addDeleteListener(ChangeListener<T> listener){
-		return deleteListener.add(listener);
+		if(!this.readOnly)
+			return this.deleteListener.add(listener);
+		return false;
 	}
 	
 	public boolean addSaveListener(ChangeListener<T> listener){
-		return saveListener.add(listener);
+		if(!this.readOnly)
+			return this.saveListener.add(listener);
+		return false;
+	}
+	
+	public boolean addSelectionListener(ChangeListener<T> listener){
+		return selectionListener.add(listener);
 	}
 	
 	@FunctionalInterface

@@ -91,6 +91,8 @@ public class GenericRepository<T> {
 		List<T> collect = revisions.stream().map(n -> reader.find(this.getType(), id, n)).collect(Collectors.toList());
 		List<Date> dates = revisions.stream().map(reader::getRevisionDate).collect(Collectors.toList());
 		
+		collect.forEach(transactionPool.getEntityManager()::detach);
+		
 		Map<Date, T> returnMe = CollectionUtils.newMap();
 		
 		final int to = Math.min(collect.size(), dates.size());
