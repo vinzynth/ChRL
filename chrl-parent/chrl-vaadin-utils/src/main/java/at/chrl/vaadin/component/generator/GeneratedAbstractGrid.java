@@ -36,6 +36,7 @@ public class GeneratedAbstractGrid<T> extends HorizontalSplitPanel {
 	private final Grid grid;
 	private final FilterableListContainer<T> listContainer;
 	private final Set<ChangeListener<T>> saveListener;
+	private final Set<ChangeListener<T>> afterSaveListener;
 	private final Set<ChangeListener<T>> selectionListener;
 	private final Set<ChangeListener<T>> deleteListener;
 	private final boolean readOnly;
@@ -61,6 +62,7 @@ public class GeneratedAbstractGrid<T> extends HorizontalSplitPanel {
 		this.grid.setSizeFull();
 		
 		this.saveListener = CollectionUtils.newSet();
+		this.afterSaveListener = CollectionUtils.newSet();
 		this.selectionListener = CollectionUtils.newSet();
 		this.deleteListener = CollectionUtils.newSet();
 		
@@ -130,7 +132,8 @@ public class GeneratedAbstractGrid<T> extends HorizontalSplitPanel {
 					else
 						this.listContainer.addItem(this.field.getValue());
 					this.right.removeAllComponents();
-					this.right.addComponent(this.addButton);	
+					this.right.addComponent(this.addButton);
+					this.saveListener.forEach(sl -> sl.saveOnChange(this.field));
 				});
 			}
 			this.right.addComponent(this.field);
@@ -156,6 +159,12 @@ public class GeneratedAbstractGrid<T> extends HorizontalSplitPanel {
 	public boolean addSaveListener(ChangeListener<T> listener){
 		if(!this.readOnly)
 			return this.saveListener.add(listener);
+		return false;
+	}
+	
+	public boolean addAfterSaveListener(ChangeListener<T> listener){
+		if(!this.readOnly)
+			return this.afterSaveListener.add(listener);
 		return false;
 	}
 	
