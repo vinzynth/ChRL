@@ -133,7 +133,7 @@ public class GeneratedAbstractGrid<T> extends HorizontalSplitPanel {
 						this.listContainer.addItem(this.field.getValue());
 					this.right.removeAllComponents();
 					this.right.addComponent(this.addButton);
-					this.saveListener.forEach(sl -> sl.saveOnChange(this.field));
+					this.afterSaveListener.forEach(sl -> sl.saveOnChange(this.field));
 				});
 			}
 			this.right.addComponent(this.field);
