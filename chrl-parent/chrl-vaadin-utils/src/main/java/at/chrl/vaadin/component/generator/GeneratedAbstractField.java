@@ -14,11 +14,12 @@ import java.util.stream.Collectors;
 import com.vaadin.data.util.converter.Converter.ConversionException;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.AbstractField;
+import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomField;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.FormLayout;
 
 import at.chrl.nutils.DatasetGenerator;
 
@@ -36,7 +37,7 @@ public class GeneratedAbstractField<T> extends CustomField<T> {
 	private Class<T> type;
 	private List<AccessTuple<?>> accessTuples;
 	private List<AbstractField<?>> fields;
-	private VerticalLayout layout;
+	private AbstractOrderedLayout layout;
 	private T value;
 	private Button saveButton;
 
@@ -57,7 +58,7 @@ public class GeneratedAbstractField<T> extends CustomField<T> {
 		this.fieldCount = this.fields.size();
 		this.type = type;
 		this.accessTuples = accessTuples;
-		this.layout = new VerticalLayout();
+		this.layout = new FormLayout();
 		layout.setSpacing(true);
 		layout.setMargin(true);
 		components.forEach(layout::addComponent);
