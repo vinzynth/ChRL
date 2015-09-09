@@ -85,11 +85,7 @@ public class GeneratedAbstractGrid<T> extends HorizontalSplitPanel {
 		}
 		this.grid.addSelectionListener(e -> {
 			T t = (T) this.grid.getSelectedRow();
-			this.right.removeAllComponents();
-			if(!this.readOnly && Objects.nonNull(t))
-				this.right.addComponent(this.deleteButton);
-			this.createEditor(t);
-			this.selectionListener.forEach(sl -> sl.saveOnChange(this.field));
+			selectRow(t);
 		});
 		
 		this.left = new VerticalLayout();
@@ -107,6 +103,14 @@ public class GeneratedAbstractGrid<T> extends HorizontalSplitPanel {
 			this.right.addComponent(this.addButton);
 		
 		this.addComponents(this.left, this.right);
+	}
+
+	public void selectRow(T t) {
+		this.right.removeAllComponents();
+		if(!this.readOnly && Objects.nonNull(t))
+			this.right.addComponent(this.deleteButton);
+		this.createEditor(t);
+		this.selectionListener.forEach(sl -> sl.saveOnChange(this.field));
 	}
 	
 	private void createEditor(T t){
