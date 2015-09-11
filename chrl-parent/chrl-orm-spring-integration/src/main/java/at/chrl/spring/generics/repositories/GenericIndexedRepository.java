@@ -44,7 +44,7 @@ public class GenericIndexedRepository<T> extends GenericRepository<T> {
 
 	protected FullTextEntityManager fullTextEntityManager;
 
-	FullTextEntityManager getFullTextEntityManager() {
+	public FullTextEntityManager getFullTextEntityManager() {
 		if (Objects.isNull(fullTextEntityManager))
 			fullTextEntityManager = Search.getFullTextEntityManager(transactionPool.getEntityManager());
 		return fullTextEntityManager;
@@ -52,7 +52,7 @@ public class GenericIndexedRepository<T> extends GenericRepository<T> {
 
 	protected FullTextSession fullTextSession;
 
-	FullTextSession getFullTextSession() {
+	public FullTextSession getFullTextSession() {
 		if (Objects.isNull(fullTextSession))
 			fullTextSession = org.hibernate.search.Search.getFullTextSession(transactionPool.getSession());
 		return fullTextSession;
@@ -120,113 +120,4 @@ public class GenericIndexedRepository<T> extends GenericRepository<T> {
 
 		return ftq.getResultList();
 	}
-
-//	
-//	@Override
-//	public void asyncPersist(T entity){
-//		super.asyncPersist(entity);
-//		getFullTextEntityManager().index(entity);
-//	}
-//	
-//	@Override
-//	public void asyncRefresh(T entity){
-//		super.asyncRefresh(entity);
-//		getFullTextEntityManager().index(entity);
-//	}
-//	
-//	@Override
-//	public void asyncMerge(T entity){
-//		super.asyncMerge(entity);
-//		getFullTextEntityManager().index(entity);
-//	}
-//	
-//	@Override
-//	public void asyncSave(T entity){
-//		super.asyncSave(entity);
-//		getFullTextEntityManager().index(entity);
-//	}
-//	
-//	@Override
-//	public void asyncSaveOrUpdate(T entity){
-//		super.asyncSaveOrUpdate(entity);
-//		getFullTextEntityManager().index(entity);
-//	}
-//	
-//	@Override
-//	public void asyncDelete(T entity){
-//		super.asyncDelete(entity);
-//		//FIXME: remove from index
-//	}
-//	
-//	@Override
-//	public void asyncPersist(Collection<T> entities){
-//		super.asyncPersist(entities);
-//		entities.forEach(getFullTextEntityManager()::index);
-//	}
-//	
-//	@Override
-//	public void asyncRefresh(Collection<T> entities){
-//		super.asyncRefresh(entities);
-//		entities.forEach(getFullTextEntityManager()::index);
-//	}
-//	
-//	@Override
-//	public void asyncMerge(Collection<T> entities){
-//		super.asyncMerge(entities);
-//		entities.forEach(getFullTextEntityManager()::index);
-//	}
-//	
-//	@Override
-//	public void asyncSave(Collection<T> entities){
-//		super.asyncSave(entities);
-//		entities.forEach(getFullTextEntityManager()::index);
-//	}
-//	
-//	@Override
-//	public void asyncSaveOrUpdate(Collection<T> entities){
-//		super.asyncSaveOrUpdate(entities);
-//		entities.forEach(getFullTextEntityManager()::index);
-//	}
-//	
-//	@Override
-//	public void asyncDelete(Collection<T> entities){
-//		super.asyncDelete(entities);
-//		//FIXME: remove from index
-//	}
-//	
-//	@Override
-//	public void asyncPersist(T... entities){
-//		super.asyncPersist(entities);
-//		Arrays.stream(entities).forEach(getFullTextEntityManager()::index);
-//	}
-//	
-//	@Override
-//	public void asyncRefresh(T... entities){
-//		super.asyncRefresh(entities);
-//		Arrays.stream(entities).forEach(getFullTextEntityManager()::index);
-//	}
-//	
-//	@Override
-//	public void asyncMerge(T... entities){
-//		super.asyncMerge(entities);
-//		Arrays.stream(entities).forEach(getFullTextEntityManager()::index);
-//	}
-//	
-//	@Override
-//	public void asyncSave(T... entities){
-//		super.asyncSave(entities);
-//		Arrays.stream(entities).forEach(getFullTextEntityManager()::index);
-//	}
-//	
-//	@Override
-//	public void asyncSaveOrUpdate(T... entities){
-//		super.asyncSaveOrUpdate(entities);
-//		Arrays.stream(entities).forEach(getFullTextEntityManager()::index);
-//	}
-//	
-//	@Override
-//	public void asyncDelete(T... entities){
-//		super.asyncDelete(entities);
-//		//FIXME: remove from index
-//	}
 }

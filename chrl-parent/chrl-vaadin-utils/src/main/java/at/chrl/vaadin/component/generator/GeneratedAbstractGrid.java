@@ -13,7 +13,9 @@ import java.util.TreeSet;
 import org.vaadin.viritin.FilterableListContainer;
 
 import com.vaadin.server.FontAwesome;
+import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalSplitPanel;
@@ -44,8 +46,8 @@ public class GeneratedAbstractGrid<T> extends HorizontalSplitPanel {
 	private Button addButton;
 	private Button deleteButton;
 
-	private VerticalLayout left;
-	private VerticalLayout right;
+	private AbstractOrderedLayout left;
+	private AbstractOrderedLayout right;
 	private GeneratedAbstractField<T> field;
 	
 	/**
@@ -91,7 +93,7 @@ public class GeneratedAbstractGrid<T> extends HorizontalSplitPanel {
 		});
 		
 		this.left = new VerticalLayout();
-		this.right = new VerticalLayout();
+		this.right = new FormLayout();
 		
 		this.left.setSizeFull();
 //		this.right.setSizeFull();
