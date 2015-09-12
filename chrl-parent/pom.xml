@@ -52,10 +52,10 @@
 		<module>chrl-spring</module>
 		<module>chrl-utils</module>
 		<module>chrl-jms</module>
+		<module>chrl-vaadin-utils</module>
 
 		<!-- Archetypes -->
 		<module>chrl-spring-sample</module>
-		<module>chrl-vaadin-utils</module>
 	</modules>
 	<!--  -->
 	<dependencies>

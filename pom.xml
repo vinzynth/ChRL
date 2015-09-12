@@ -55,11 +55,11 @@
 		
 		<chrlVersion>${project.version}</chrlVersion>
 		
-		<hibernateVersion>5.0.0.Final</hibernateVersion>
-		<hibernateSearchVersion>5.5.0.Alpha1</hibernateSearchVersion>
+		<hibernateVersion>5.0.1.Final</hibernateVersion>
+		<hibernateSearchVersion>5.5.0.CR1</hibernateSearchVersion>
 		<hibernateValidatorVersion>5.2.1.Final</hibernateValidatorVersion>
 		<hibernateOGMVersion>4.2.0.Final</hibernateOGMVersion>
-		<springframeworkVersion>4.2.0.RELEASE</springframeworkVersion>
+		<springframeworkVersion>4.2.1.RELEASE</springframeworkVersion>
 		<arquillianVersion>1.1.8.Final</arquillianVersion>
 		<hikariVersion>2.4.1</hikariVersion>
 		
@@ -67,7 +67,7 @@
 		
 		<assertj-core-version>1.5.0</assertj-core-version>
 		
-		<version.vaadin>7.5.4</version.vaadin>
+		<version.vaadin>7.5.5</version.vaadin>
 	</properties>
 	<!--  -->
 	
@@ -403,7 +403,7 @@
 			<dependency>
 				<groupId>org.mariadb.jdbc</groupId>
 				<artifactId>mariadb-java-client</artifactId>
-				<version>1.2.0</version>
+				<version>1.2.2</version>
 			</dependency>
 			<dependency>
 				<groupId>com.microsoft.sqlserver</groupId>
@@ -423,7 +423,7 @@
 			<dependency>
 				<groupId>org.postgresql</groupId>
 				<artifactId>postgresql</artifactId>
-				<version>9.4-1201-jdbc41</version>
+				<version>9.4-1202-jdbc42</version>
 			</dependency>
 			<dependency>
 				<groupId>com.h2database</groupId>
@@ -548,7 +548,7 @@
 					<plugin>
 						<groupId>org.eluder.coveralls</groupId>
 						<artifactId>coveralls-maven-plugin</artifactId>
-						<version>3.2.0</version>
+						<version>4.0.0</version>
 						<executions>
 							<execution>
 								<id>coveralls</id>
