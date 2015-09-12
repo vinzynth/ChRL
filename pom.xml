@@ -220,11 +220,6 @@
 			</dependency>
 			<dependency>
 				<groupId>at.chrl</groupId>
-				<artifactId>chrl-amqp</artifactId>
-				<version>${chrlVersion}</version>
-			</dependency>
-			<dependency>
-				<groupId>at.chrl</groupId>
 				<artifactId>chrl-spring</artifactId>
 				<version>${chrlVersion}</version>
 			</dependency>
