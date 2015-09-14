@@ -61,6 +61,8 @@ public final class HibernateService implements AutoCloseable {
 	private final ConcurrentHashMap<JPAConfig, EntityManagerFactory> jpaDatabaseConnections;
 	private final ConcurrentHashMap<HibernateConfig, SessionFactory> databaseConnections;
 
+	private IHibernateConfig currentFlywayConfig;
+	
 	// --------------------------------------------------------------------------
 	// private Methods
 	// --------------------------------------------------------------------------
@@ -114,10 +116,12 @@ public final class HibernateService implements AutoCloseable {
 	}
 	
 	private boolean initFlyway(final JPAConfig config){
+		this.currentFlywayConfig = config;
 		return initFlyway(config.JDBC_URL, config.JDBC_USER, config.JDBC_PASSWORD);
 	}
 	
 	private boolean initFlyway(final HibernateConfig config){
+		this.currentFlywayConfig = config;
 		return initFlyway(config.URL, config.USER, config.PASS);
 	}
 	
@@ -138,15 +142,26 @@ public final class HibernateService implements AutoCloseable {
 		} catch (Exception e) {
 			err.println("[Hibernate Service] Flyway Failed");
 			e.printStackTrace(err);
+			this.currentFlywayConfig = null;
 			return false;
 		}
 
 		out.println("[Hibernate Service] Finished Flyway");
-
+		this.currentFlywayConfig = null;
+		
 		return true;
 	}
 	
-
+	/**
+	 * returns current Flyway Hibernate Configuration.
+	 * <p>
+	 * null if no Flyway migration is in progress.
+	 * <p>
+	 * Normally there is no need to use this method.
+	 */
+	public IHibernateConfig getCurrentFlywayConfig() {
+		return currentFlywayConfig;
+	}
 
 	private static Session persistSubList(final List<?> sublist, final HibernateConfig conf, Session session) {
 		if (session.isOpen() && TransactionStatus.NOT_ACTIVE.equals(session.getTransaction().getStatus()))
