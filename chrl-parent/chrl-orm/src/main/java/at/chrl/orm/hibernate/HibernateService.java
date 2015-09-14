@@ -53,7 +53,9 @@ import at.chrl.orm.hibernate.configuration.OGMConfig;
 import at.chrl.orm.hibernate.flyway.HibernateCallback;
 
 /**
- * @author bravestone
+ * 
+ * @author Christian Richard Leopold - ChRL <br>
+ * Sep 14, 2015 - 5:24:42 PM
  *
  */
 public final class HibernateService implements AutoCloseable {
