@@ -14,10 +14,15 @@ import org.hibernate.Session;
 import org.hibernate.envers.AuditReader;
 
 import at.chrl.orm.hibernate.SessionTemplate;
+import at.chrl.spring.generics.repositories.utils.impl.RepositoryTransactionPoolImplementation;
 
 /**
  * @author Christian Richard Leopold - ChRL <br>
  * Aug 26, 2015 - 7:32:32 PM
+ *
+ * <p>
+ * 
+ * Default implementation: {@link RepositoryTransactionPoolImplementation} 
  *
  */
 public interface RepositoryTransactionPool {
