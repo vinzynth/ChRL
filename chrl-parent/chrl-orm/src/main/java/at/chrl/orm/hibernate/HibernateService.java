@@ -565,6 +565,20 @@ public final class HibernateService implements AutoCloseable {
 	}
 
 	/**
+	 * Returns active and connected database configuration instance
+	 * which mapps given class
+	 * @param cls
+	 * @return instance of {@link JPAConfig}
+	 */
+	public JPAConfig getConfigWithAnnotatedClass(Class<?> cls){
+		for (JPAConfig jpaConfig : jpaDatabaseConnections.keySet())
+			if(jpaConfig.getAnnotatedClasses().contains(cls))
+				return jpaConfig;
+		
+		return null;
+	}
+	
+	/**
 	 * Calls {@link #persistList(List, HibernateConfig)} concurrently. <br>
 	 * Creates {@link HibernateConfig#C3P0_MAX_SIZE} * laodFactor Threads. <br>
 	 * If single threaded processing is needed (loadFacoter == 0) use
