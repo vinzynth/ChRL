@@ -56,7 +56,7 @@
 		<chrlVersion>${project.version}</chrlVersion>
 		
 		<hibernateVersion>5.0.1.Final</hibernateVersion>
-		<hibernateSearchVersion>5.5.0.CR1</hibernateSearchVersion>
+		<hibernateSearchVersion>5.5.0.Final</hibernateSearchVersion>
 		<hibernateValidatorVersion>5.2.1.Final</hibernateValidatorVersion>
 		<hibernateOGMVersion>4.2.0.Final</hibernateOGMVersion>
 		<springframeworkVersion>4.2.1.RELEASE</springframeworkVersion>
@@ -64,10 +64,11 @@
 		<hikariVersion>2.4.1</hikariVersion>
 		
 		<io.spring.platform-version>1.1.3.RELEASE</io.spring.platform-version>
+		<org.springframework.cloud>Brixton.BUILD-SNAPSHOT</org.springframework.cloud>
 		
 		<assertj-core-version>1.5.0</assertj-core-version>
 		
-		<version.vaadin>7.5.5</version.vaadin>
+		<version.vaadin>7.5.6</version.vaadin>
 	</properties>
 	<!--  -->
 	
@@ -86,13 +87,28 @@
 			<url>http://maven.vaadin.com/vaadin-addons</url>
 		</repository>
 		<repository>
+			<id>spring-snapshots</id>
+			<name>Spring Snapshots</name>
+			<url>http://repo.spring.io/libs-snapshot-local</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
 			<id>spring-milestones</id>
-			<url>http://repo.spring.io/simple/libs-milestone-local/</url>
+			<name>Spring Milestones</name>
+			<url>http://repo.spring.io/libs-milestone-local</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
 		</repository>
 		<repository>
 			<id>spring-releases</id>
 			<name>Spring Releases</name>
-			<url>https://repo.spring.io/libs-release</url>
+			<url>http://repo.spring.io/libs-release-local</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
 		</repository>
 	</repositories>
 	<pluginRepositories>
@@ -381,6 +397,13 @@
 				<scope>import</scope>
 			</dependency>
 			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-starter-parent</artifactId>
+				<version>${org.springframework.cloud}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
 				<groupId>org.flywaydb</groupId>
 				<artifactId>flyway-core</artifactId>
 				<version>3.2.1</version>
@@ -418,12 +441,12 @@
 			<dependency>
 				<groupId>org.postgresql</groupId>
 				<artifactId>postgresql</artifactId>
-				<version>9.4-1202-jdbc42</version>
+				<version>9.4-1203-jdbc42</version>
 			</dependency>
 			<dependency>
 				<groupId>com.h2database</groupId>
 				<artifactId>h2</artifactId>
-				<version>1.4.188</version>
+				<version>1.4.189</version>
 			</dependency>
 			<dependency>
 				<groupId>org.vaadin</groupId>
