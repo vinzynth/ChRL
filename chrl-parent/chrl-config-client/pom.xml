@@ -1,7 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
 	<!--  -->
 	<parent>
 		<groupId>at.chrl</groupId>
@@ -11,9 +10,9 @@
 	<!--  -->
 	
 	<!--  -->
-	<artifactId>chrl-config-server</artifactId>
-	<name>ChRL - Config Server</name>
-	<description>ChRL - Config Server</description>
+	<artifactId>chrl-config-client</artifactId>
+	<name>ChRL - Config Client</name>
+	<description>ChRL - Config Client</description>
 	<!--  -->
 	
 	<!--  -->
@@ -24,19 +23,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-hystrix-dashboard</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-feign</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-eureka</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>at.chrl</groupId>
-			<artifactId>chrl-config</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>javax.ws.rs</groupId>
@@ -44,8 +31,12 @@
 			<version>2.0.1</version>
 		</dependency>
 		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
+			<groupId>at.chrl</groupId>
+			<artifactId>chrl-config</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-eureka</artifactId>
 		</dependency>
 	</dependencies>
 	<!--  -->

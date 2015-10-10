@@ -55,7 +55,7 @@
 		
 		<chrlVersion>${project.version}</chrlVersion>
 		
-		<hibernateVersion>5.0.1.Final</hibernateVersion>
+		<hibernateVersion>5.0.2.Final</hibernateVersion>
 		<hibernateSearchVersion>5.5.0.Final</hibernateSearchVersion>
 		<hibernateValidatorVersion>5.2.1.Final</hibernateValidatorVersion>
 		<hibernateOGMVersion>4.2.0.Final</hibernateOGMVersion>

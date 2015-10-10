@@ -15,9 +15,26 @@
  * along with ChRL Util Collection.
  * If not, see <http://www.gnu.org/licenses/>.
  */
+package at.chrl.config;
+
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.netflix.feign.EnableFeignClients;
+
 /**
  * @author Vinzynth
- * 04.10.2015 - 21:43:49
+ * 05.10.2015 - 01:35:05
  *
  */
-package at.chrl.config;
+@SpringBootApplication
+@EnableEurekaClient
+@EnableFeignClients
+public class ConfigClientApplication {
+
+	public static void main(String[] args) {
+		 new SpringApplicationBuilder(ConfigClientApplication.class)
+		 .web(false)
+		 .run(args);
+	}
+}

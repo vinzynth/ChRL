@@ -42,10 +42,15 @@
 
 	<!--  -->
 	<modules>
+		<!-- Archetypes -->
+		<module>chrl-spring-sample</module>
+		
+		<!-- Modules -->
 		<module>chrl-callback-utils</module>
 		<module>chrl-callbacks</module>
 		<module>chrl-config</module>
 		<module>chrl-config-server</module>
+		<module>chrl-config-client</module>
 		<module>chrl-cron</module>
 		<module>chrl-orm-spring-integration</module>
 		<module>chrl-orm</module>
@@ -54,9 +59,6 @@
 		<module>chrl-utils</module>
 		<module>chrl-jms</module>
 		<module>chrl-vaadin-utils</module>
-
-		<!-- Archetypes -->
-		<module>chrl-spring-sample</module>
 	</modules>
 	<!--  -->
 	<dependencies>

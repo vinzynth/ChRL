@@ -1,0 +1,7 @@
+server:
+  port: 8051
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://84.200.122.226:8761/eureka/
