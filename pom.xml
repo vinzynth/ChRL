@@ -55,7 +55,7 @@
 		
 		<chrlVersion>${project.version}</chrlVersion>
 		
-		<hibernateVersion>5.0.2.Final</hibernateVersion>
+		<hibernateVersion>5.0.3.Final</hibernateVersion>
 		<hibernateSearchVersion>5.5.0.Final</hibernateSearchVersion>
 		<hibernateValidatorVersion>5.2.2.Final</hibernateValidatorVersion>
 		<hibernateOGMVersion>4.2.0.Final</hibernateOGMVersion>
@@ -68,7 +68,7 @@
 		
 		<assertj-core-version>1.5.0</assertj-core-version>
 		
-		<version.vaadin>7.5.7</version.vaadin>
+		<version.vaadin>7.5.8</version.vaadin>
 	</properties>
 	<!--  -->
 	
@@ -431,7 +431,7 @@
 			<dependency>
 				<groupId>org.firebirdsql.jdbc</groupId>
 				<artifactId>jaybird-jdk18</artifactId>
-				<version>2.2.8</version>
+				<version>2.2.9</version>
 			</dependency>
 			<dependency>
 				<groupId>org.neo4j</groupId>
