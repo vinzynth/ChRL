@@ -19,7 +19,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
-import javax.transaction.NotSupportedException;
 
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.FlywayException;
@@ -447,9 +446,6 @@ public final class HibernateService implements AutoCloseable {
 	 * @throws NullPointerException
 	 *             if config is no instance of {@link HibernateConfig} or
 	 *             {@link JPAConfig}
-	 * @throws NotSupportedException
-	 * 			   if config is a isntance of {@link OGMConfig} since Stateless
-	 * 			   sessions are not supported in ogm databases 
 	 * 
 	 * @see {@link HibernateService#connect(IHibernateConfig)}
 	 * @see {@link HibernateService#disconnect(IHibernateConfig)}
