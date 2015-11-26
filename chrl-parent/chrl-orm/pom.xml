@@ -32,7 +32,12 @@
 
 	<!--  -->
 	<dependencies>
-		<dependency>
+        <dependency>
+            <groupId>javax.transaction</groupId>
+            <artifactId>jta</artifactId>
+            <version>1.1</version>
+        </dependency>
+        <dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-envers</artifactId>
 		</dependency>
@@ -58,11 +63,6 @@
 	        <groupId>com.zaxxer</groupId>
 	        <artifactId>HikariCP</artifactId>
 	    </dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<scope>test</scope>
-		</dependency>
 		<dependency>
 			<groupId>at.chrl</groupId>
 			<artifactId>chrl-cron</artifactId>

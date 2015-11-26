@@ -35,7 +35,6 @@ public class HibernateServiceTest {
 	private static class HibernateJPATestConfig extends H2Config{
 		/**
 		 * {@inheritDoc}
-		 * @see com.bravestone.hibernate.configuration.IHibernateConfig#getAnnotatedClasses()
 		 */
 		@Override
 		public List<Class<?>> getAnnotatedClasses() {
@@ -179,9 +178,9 @@ public class HibernateServiceTest {
 		session = HibernateService.getInstance().getSession(HibernateJPATestConfig.getInstance());
 		session.getTransaction().begin();
 		
-		TestClass tc = (TestClass) session.get(TestClass.class, 1L);
-		tc.getTypesss().put(TestTypes.TEST_2_CLASS_1, (TestClass) session.get(TestClass.class, 2L));
-		tc.getTypesss().put(TestTypes.TEST_2_CLASS_2, (TestClass) session.get(TestClass.class, 3L));
+		TestClass tc = session.get(TestClass.class, 1L);
+		tc.getTypesss().put(TestTypes.TEST_2_CLASS_1, session.get(TestClass.class, 2L));
+		tc.getTypesss().put(TestTypes.TEST_2_CLASS_2, session.get(TestClass.class, 3L));
 		
 		session.getTransaction().commit();
 		
@@ -193,10 +192,10 @@ public class HibernateServiceTest {
 		session = HibernateService.getInstance().getSession(HibernateJPATestConfig.getInstance());
 		session.getTransaction().begin();
 
-		tc = (TestClass) session.get(TestClass.class, 1L);
+		tc = session.get(TestClass.class, 1L);
 		
 		tc.getTypesss().values().forEach(System.out::println);
-		TestClass testClass2 = (TestClass) tc.getTypesss().get(session, TestTypes.TEST_2_CLASS_1);
+		TestClass testClass2 = tc.getTypesss().get(session, TestTypes.TEST_2_CLASS_1);
 		System.out.println(testClass2);
 		
 		session.getTransaction().commit();
@@ -209,7 +208,7 @@ public class HibernateServiceTest {
 		session = HibernateService.getInstance().getSession(HibernateJPATestConfig.getInstance());
 		session.getTransaction().begin();
 		
-		tc = (TestClass) session.get(TestClass.class, 1L);
+		tc = session.get(TestClass.class, 1L);
 //		tc.getMaap().add(TestTypes.TEST_2_CLASS_1, (TestClass) session.get(TestClass.class, 3L));
 //		tc.getMaap().add(TestTypes.TEST_2_CLASS_1, (TestClass) session.get(TestClass.class, 4L));
 		
@@ -223,7 +222,7 @@ public class HibernateServiceTest {
 		session = HibernateService.getInstance().getSession(HibernateJPATestConfig.getInstance());
 		session.getTransaction().begin();
 
-		tc = (TestClass) session.get(TestClass.class, 1L);
+		tc = session.get(TestClass.class, 1L);
 		
 //		tc.getMaap().get(session, TestTypes.TEST_2_CLASS_1).forEach(System.out::println);
 		
