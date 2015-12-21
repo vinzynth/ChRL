@@ -204,6 +204,11 @@
 				<artifactId>chrl-config</artifactId>
 				<version>${chrlVersion}</version>
 			</dependency>
+            <dependency>
+                <groupId>at.chrl</groupId>
+                <artifactId>chrl-config-spring-integration</artifactId>
+                <version>${chrlVersion}</version>
+            </dependency>
 			<dependency>
 				<groupId>at.chrl</groupId>
 				<artifactId>chrl-callbacks</artifactId>
