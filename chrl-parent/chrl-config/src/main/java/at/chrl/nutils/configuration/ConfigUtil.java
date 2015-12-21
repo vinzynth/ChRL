@@ -6,13 +6,9 @@ package at.chrl.nutils.configuration;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Properties;
+import java.util.*;
 
+import at.chrl.nutils.configuration.listener.ConfigEventListener;
 import org.apache.commons.io.FileUtils;
 
 import at.chrl.nutils.configuration.ConfigurableProcessor;
@@ -31,6 +27,7 @@ public final class ConfigUtil {
 	private static Properties[] props = new Properties[0];
 	private static File configDirectory;
 	private static Map<Class<?>, File> exportedFiles = new HashMap<>();
+    private static Collection<ConfigEventListener> configEventListeners = new ArrayList<>();
 
 	static {
 		propertiesFiles = FileUtils.listFiles(new File("."), new String[] { "properties" }, true);
@@ -77,13 +74,27 @@ public final class ConfigUtil {
 		ConfigurableProcessor.process(classToLoad, getLoadedProperties(classToLoad));
 		if (!classes.contains(classToLoad))
 			classes.add(classToLoad);
-	}
+        for (ConfigEventListener cel : configEventListeners) {
+            try {
+                cel.onLoadedConfigClass(classToLoad);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
 
 	public synchronized static final void load(final Object obj) {
 		Class<?> classToLoad = obj.getClass();
 		ConfigurableProcessor.process(obj, getLoadedProperties(classToLoad));
 		if (!classes.contains(classToLoad))
 			classes.add(classToLoad);
+        for (ConfigEventListener cel : configEventListeners) {
+            try {
+                cel.onLoadedConfigObject(obj);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
 	}
 
 	private static Properties[] getLoadedProperties(final Class<?> classToLoad) {
@@ -169,4 +180,12 @@ public final class ConfigUtil {
 		}
 		return new Properties();
 	}
+
+    public static boolean addConfigEventListener(final ConfigEventListener listener){
+        return !configEventListeners.contains(listener) && configEventListeners.add(listener);
+    }
+
+    public static boolean removeConfigEventListener(final ConfigEventListener listener){
+        return configEventListeners.contains(listener) && configEventListeners.remove(listener);
+    }
 }
