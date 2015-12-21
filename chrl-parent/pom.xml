@@ -49,8 +49,6 @@
 		<module>chrl-callback-utils</module>
 		<module>chrl-callbacks</module>
 		<module>chrl-config</module>
-		<module>chrl-config-server</module>
-		<module>chrl-config-client</module>
 		<module>chrl-cron</module>
 		<module>chrl-orm-spring-integration</module>
 		<module>chrl-orm</module>
