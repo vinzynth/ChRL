@@ -188,4 +188,26 @@ public final class ConfigUtil {
     public static boolean removeConfigEventListener(final ConfigEventListener listener){
         return configEventListeners.contains(listener) && configEventListeners.remove(listener);
     }
+
+    /**
+     * Deletes config files afterwards
+     */
+    public static void cleanupConfig(){
+        exportedFiles.values().forEach(f -> {
+            try {
+                f.delete();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        });
+        File f = getConfigDirectory();
+        if(f != null && f.isDirectory() && f.list().length <= 0){
+            try {
+                FileUtils.deleteDirectory(f);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }
+    }
 }
