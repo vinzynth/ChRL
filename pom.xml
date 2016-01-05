@@ -55,15 +55,15 @@
 		
 		<chrlVersion>${project.version}</chrlVersion>
 		
-		<hibernateVersion>5.0.5.Final</hibernateVersion>
+		<hibernateVersion>5.0.6.Final</hibernateVersion>
 		<hibernateSearchVersion>5.5.1.Final</hibernateSearchVersion>
 		<hibernateValidatorVersion>5.2.2.Final</hibernateValidatorVersion>
 		<hibernateOGMVersion>4.2.0.Final</hibernateOGMVersion>
-		<springframeworkVersion>4.2.3.RELEASE</springframeworkVersion>
+		<springframeworkVersion>4.2.4.RELEASE</springframeworkVersion>
 		<arquillianVersion>1.1.8.Final</arquillianVersion>
 		<hikariVersion>2.4.3</hikariVersion>
 		
-		<io.spring.platform-version>2.0.0.RELEASE</io.spring.platform-version>
+		<io.spring.platform-version>2.0.1.RELEASE</io.spring.platform-version>
 		<org.springframework.cloud>1.0.2.RELEASE</org.springframework.cloud>
 		
 		<assertj-core-version>1.5.0</assertj-core-version>
