@@ -171,7 +171,7 @@ public abstract class SessionTemplate implements AutoCloseable {
 		// System.out.println(Thread.currentThread().getStackTrace()[4].toString());
 		StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
 		StringBuilder sb = new StringBuilder(250);
-		for (int i = 6; i >= 4; i--) {
+		for (int i = stackTrace.length-1; i >= 4; i--) {
 			if (stackTrace.length > i) {
 				sb.append(stackTrace[i].toString()).append(" -> ");
 			}
