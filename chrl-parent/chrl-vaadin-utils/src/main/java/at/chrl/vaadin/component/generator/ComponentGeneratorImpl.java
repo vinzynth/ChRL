@@ -28,6 +28,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import com.vaadin.ui.ComboBox;
 import org.vaadin.viritin.fields.EnumSelect;
 
 import at.chrl.nutils.DatasetGenerator;
@@ -144,6 +145,7 @@ public class ComponentGeneratorImpl implements ComponentGenerator{
 		if(annotation.value().equals(EnumSelect.class) && field.getType().isEnum()){
 			return () -> {
 				EnumSelect<T> t = new EnumSelect<>();
+                t.setCaption(annotation.caption());
 				t.setOptions(((Class<T>) field.getType()).getEnumConstants());
 				return t;
 			};
@@ -224,7 +226,6 @@ public class ComponentGeneratorImpl implements ComponentGenerator{
 
 	/**
 	 * {@inheritDoc}
-	 * @see com.bravestone.diango.gui.ComponentGenerator#generate(java.lang.Object)
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
