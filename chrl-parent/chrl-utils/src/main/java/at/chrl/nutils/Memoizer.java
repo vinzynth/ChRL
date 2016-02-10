@@ -33,8 +33,8 @@ public class Memoizer {
 	 * @param function
 	 * @return
 	 */
-	private static <T, U> Function<T, U> doMemoize(final Function<T, U> function) {
-		Map<T, U> cache = CollectionUtils.newMap();
+	private static <T, U> Function<T, U> doMemoize(final Function<T, U> function, Map<T, U> cache) {
+		//Map<T, U> cache = CollectionUtils.newMap();
 		return new Function<T, U>() {
 			@Override
 			public U apply(T t) {
@@ -49,8 +49,8 @@ public class Memoizer {
 	 * @param function
 	 * @return
 	 */
-	private static <T> Predicate<T> doMemoize(final Predicate<T> predicate) {
-		Map<T, Boolean> cache = CollectionUtils.newMap();
+	private static <T> Predicate<T> doMemoize(final Predicate<T> predicate, Map<T, Boolean> cache) {
+		//Map<T, Boolean> cache = CollectionUtils.newMap();
 		return new Predicate<T>() {
 
 			@Override
@@ -60,11 +60,19 @@ public class Memoizer {
 		};
 	}
 
-	public static <T, U> Function<T, U> memoize(final Function<T, U> function) {
-		return doMemoize(function);
+    public static <T, U> Function<T, U> memoize(final Function<T, U> function) {
+        return doMemoize(function, CollectionUtils.newMap());
+    }
+
+    public static <T> Predicate<T> memoizePredicate(final Predicate<T> predicate) {
+        return doMemoize(predicate, CollectionUtils.newMap());
+    }
+
+	public static <T, U> Function<T, U> memoize(final Function<T, U> function, Map<T, U> cache) {
+		return doMemoize(function, cache);
 	}
 
-	public static <T> Predicate<T> memoizePredicate(final Predicate<T> predicate) {
-		return doMemoize(predicate);
+	public static <T> Predicate<T> memoizePredicate(final Predicate<T> predicate, Map<T, Boolean> cache) {
+		return doMemoize(predicate, cache);
 	}
 }
