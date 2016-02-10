@@ -1,6 +1,13 @@
 package at.chrl.git.impl;
 
 import at.chrl.git.GitRepository;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.api.errors.TransportException;
+import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by ChRL on 10.02.16.
@@ -12,10 +19,44 @@ import at.chrl.git.GitRepository;
  */
 public class GitRepositoryImplementation implements GitRepository {
 
-    private String remoteUrl;
+    private static final String DEFAULT_LABEL = "master";
+    private static final String FILE_URI_PREFIX = "file:";
+    private static final String HTTP_URI_PREFIX = "http";
 
-    public GitRepositoryImplementation(String remoteUrl) {
+    private String remoteUrl;
+    private String username;
+    private String password;
+    private Git git;
+
+    public GitRepositoryImplementation(String remoteUrl, String username, String password) throws IOException, GitAPIException {
         this.remoteUrl = remoteUrl;
+        this.username = username;
+        this.password = password;
+
+        if(remoteUrl.startsWith(FILE_URI_PREFIX)) {
+            git = Git.open(new File(remoteUrl.substring(FILE_URI_PREFIX.length())));
+            return;
+        }
+
+        String dirStr = remoteUrl;
+        if(dirStr.startsWith(HTTP_URI_PREFIX))
+            dirStr = dirStr.substring(dirStr.indexOf("//")+2);
+
+        final File dir = new File(dirStr);
+
+        if(!dir.exists())
+            dir.mkdirs();
+
+        git = clone(dir, remoteUrl);
+    }
+
+    private Git clone(File directory, String remoteUrl) throws GitAPIException {
+        return Git.cloneRepository()
+                .setDirectory(directory)
+                .setURI(remoteUrl)
+                .setTimeout(10)
+                .setCredentialsProvider(new UsernamePasswordCredentialsProvider(username, password))
+                .call();
     }
 
     @Override
