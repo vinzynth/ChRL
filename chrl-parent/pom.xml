@@ -56,7 +56,7 @@
 		<module>chrl-utils</module>
 		<module>chrl-jms</module>
 		<module>chrl-vaadin-utils</module>
-        <module>chrl-config-spring-integration</module>
+        <!--<module>chrl-config-spring-integration</module>-->
         <module>chrl-git</module>
   </modules>
 	<!--  -->

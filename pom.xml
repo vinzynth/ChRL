@@ -239,6 +239,11 @@
 				<artifactId>chrl-rebellion</artifactId>
 				<version>${chrlVersion}</version>
 			</dependency>
+            <dependency>
+                <groupId>at.chrl</groupId>
+                <artifactId>chrl-git</artifactId>
+                <version>${chrlVersion}</version>
+            </dependency>
 			<dependency>
 				<groupId>at.chrl</groupId>
 				<artifactId>chrl-spring</artifactId>
