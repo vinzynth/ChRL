@@ -32,13 +32,15 @@ public interface ConfigEventListener {
      *
      * @param targetClass - loaded class
      */
-    void onExportedConfigClass(final Class<?> targetClass);
+    default void onExportedConfigClass(final Class<?> targetClass){
+    }
 
     /**
      * Gets triggered after export was executed
      *
      * @param obj - loaded object
      */
-    void onExportedConfigObject(final Object obj);
+    default void onExportedConfigObject(final Object obj){
+    }
 
 }
