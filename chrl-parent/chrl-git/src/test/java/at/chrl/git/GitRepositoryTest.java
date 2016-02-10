@@ -1,13 +1,7 @@
 package at.chrl.git;
 
-import at.chrl.git.config.DefaultTestConfiguration;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -17,14 +11,14 @@ import java.io.FileWriter;
  *
  * Git Service Testclass
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = DefaultTestConfiguration.class)
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@ContextConfiguration(classes = DefaultTestConfiguration.class)
 public class GitRepositoryTest {
 
-    @Autowired
+//    @Autowired
     GitRepositoryProvider gitRepositoryProvider;
 
-    @Test
+//    @Test
     public void testCreateFile() throws Exception {
         final GitRepository repository = gitRepositoryProvider.getRepository("file:test");
 
@@ -42,7 +36,7 @@ public class GitRepositoryTest {
         Assert.assertTrue(!file.exists());
     }
 
-    @Test
+//    @Test
     public void testListFiles() throws Exception {
         final GitRepository repository = gitRepositoryProvider.getRepository("file:test");
 
