@@ -28,4 +28,5 @@ public class GitRepositoryProviderTest {
         Assert.assertNotEquals(gitRepositoryProvider.getRepository("file:test1" + File.separator + ".git"), gitRepositoryProvider.getRepository("file:test2" + File.separator + ".git"));
     }
 
+
 }

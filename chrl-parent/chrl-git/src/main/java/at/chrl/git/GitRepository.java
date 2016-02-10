@@ -1,6 +1,7 @@
 package at.chrl.git;
 
 import java.io.File;
+import java.util.Collection;
 
 /**
  * Created by chrl on 10.02.16.
@@ -16,7 +17,7 @@ public interface GitRepository {
     File readFile(String file);
     void updateFile(String file);
     void deleteFile(String file);
-    void listFiles(String dir);
+    Collection<File> listFiles(String dir);
 
     /**
      * Returns Parent directory

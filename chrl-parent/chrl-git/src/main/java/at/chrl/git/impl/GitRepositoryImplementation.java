@@ -4,12 +4,17 @@ import at.chrl.git.GitRepository;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.api.errors.JGitInternalException;
+import org.eclipse.jgit.errors.UnsupportedCredentialItem;
 import org.eclipse.jgit.merge.MergeStrategy;
+import org.eclipse.jgit.transport.CredentialItem;
 import org.eclipse.jgit.transport.CredentialsProvider;
+import org.eclipse.jgit.transport.URIish;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 
 /**
  * Created by ChRL on 10.02.16.
@@ -29,16 +34,22 @@ public class GitRepositoryImplementation implements GitRepository {
     private Git git;
     private CredentialsProvider credentials;
 
+    private boolean isLocal;
+
     public GitRepositoryImplementation(String remoteUrl, String username, String password, File baseDir) throws IOException, GitAPIException {
         this.remoteUrl = remoteUrl;
-        this.credentials = new UsernamePasswordCredentialsProvider(username, password);
+        if(username != null && password != null)
+            this.credentials = new UsernamePasswordCredentialsProvider(username, password);
 
         if(remoteUrl.startsWith(FILE_URI_PREFIX)) {
             baseDir = new File(remoteUrl.substring(FILE_URI_PREFIX.length()));
             git = Git.open(baseDir);
             parentDir = baseDir;
+            isLocal = true;
             return;
         }
+
+        isLocal = false;
 
         String dirStr = remoteUrl;
         if(dirStr.startsWith(HTTP_URI_PREFIX))
@@ -64,14 +75,15 @@ public class GitRepositoryImplementation implements GitRepository {
     @Override
     public void createFile(String file) {
         String f = file;
-        if(f.startsWith(parentDir.getPath()))
+        if(!isLocal && f.startsWith(parentDir.getPath()))
             f = f.substring(parentDir.getPath().length());
 
         try {
-            git.pull()
-                    .setCredentialsProvider(credentials)
-                    .setStrategy(MergeStrategy.THEIRS)
-                    .call();
+            if(!isLocal)
+                git.pull()
+                        .setCredentialsProvider(credentials)
+                        .setStrategy(MergeStrategy.THEIRS)
+                        .call();
             git.add()
                     .addFilepattern(f)
                     .call();
@@ -79,38 +91,43 @@ public class GitRepositoryImplementation implements GitRepository {
                     .setOnly(f)
                     .setMessage("JGit: Created File: " + f)
                     .call();
-            git.push()
-                    .setCredentialsProvider(credentials)
-                    .call();
-        } catch (GitAPIException e) {
-            e.printStackTrace();
+            if(!isLocal)
+                git.push()
+                        .setCredentialsProvider(credentials)
+                        .call();
+        } catch (GitAPIException | JGitInternalException e) {
+            if(!e.getMessage().equals("No changes"))
+                e.printStackTrace();
         }
     }
 
     @Override
     public File readFile(String file) {
-        try {
-            git.pull()
-                    .setCredentialsProvider(credentials)
-                    .setStrategy(MergeStrategy.THEIRS)
-                    .call();
-        } catch (GitAPIException e) {
-            e.printStackTrace();
-        }
+        if(!isLocal)
+            try {
+                git.pull()
+                        .setCredentialsProvider(credentials)
+                        .setStrategy(MergeStrategy.THEIRS)
+                        .call();
+            } catch (GitAPIException | JGitInternalException e) {
+                if(!e.getMessage().equals("No changes"))
+                    e.printStackTrace();
+            }
         return new File(parentDir, file);
     }
 
     @Override
     public void updateFile(String file) {
         String f = file;
-        if(f.startsWith(parentDir.getPath()))
+        if(!isLocal && f.startsWith(parentDir.getPath()))
             f = f.substring(parentDir.getPath().length());
 
         try {
-            git.pull()
-                    .setCredentialsProvider(credentials)
-                    .setStrategy(MergeStrategy.OURS)
-                    .call();
+            if(!isLocal)
+                git.pull()
+                        .setCredentialsProvider(credentials)
+                        .setStrategy(MergeStrategy.OURS)
+                        .call();
             git.add()
                     .setUpdate(true)
                     .call();
@@ -118,25 +135,28 @@ public class GitRepositoryImplementation implements GitRepository {
                     .setOnly(f)
                     .setMessage("JGit: Updated File: " + f)
                     .call();
-            git.push()
-                    .setCredentialsProvider(credentials)
-                    .call();
-        } catch (GitAPIException e) {
-            e.printStackTrace();
+            if(!isLocal)
+                git.push()
+                        .setCredentialsProvider(credentials)
+                        .call();
+        } catch (GitAPIException | JGitInternalException e) {
+            if(!e.getMessage().equals("No changes"))
+                e.printStackTrace();
         }
     }
 
     @Override
     public void deleteFile(String file) {
         String f = file;
-        if(f.startsWith(parentDir.getPath()))
+        if(!isLocal && f.startsWith(parentDir.getPath()))
             f = f.substring(parentDir.getPath().length());
 
         try {
-            git.pull()
-                    .setCredentialsProvider(credentials)
-                    .setStrategy(MergeStrategy.THEIRS)
-                    .call();
+            if(!isLocal)
+                git.pull()
+                        .setCredentialsProvider(credentials)
+                        .setStrategy(MergeStrategy.THEIRS)
+                        .call();
             git.rm()
                     .addFilepattern(f)
                     .call();
@@ -144,11 +164,13 @@ public class GitRepositoryImplementation implements GitRepository {
                     .setOnly(f)
                     .setMessage("JGit: Deleted File: " + f)
                     .call();
-            git.push()
-                    .setCredentialsProvider(credentials)
-                    .call();
-        } catch (GitAPIException e) {
-            e.printStackTrace();
+            if(!isLocal)
+                git.push()
+                        .setCredentialsProvider(credentials)
+                        .call();
+        } catch (GitAPIException | JGitInternalException e) {
+            if(!e.getMessage().equals("No changes"))
+                e.printStackTrace();
         }
     }
 
@@ -158,8 +180,8 @@ public class GitRepositoryImplementation implements GitRepository {
     }
 
     @Override
-    public void listFiles(String dir) {
-        FileUtils.listFiles(new File(parentDir, dir), null, true).forEach(System.out::println);
+    public Collection<File> listFiles(String dir) {
+        return FileUtils.listFiles(new File(parentDir, dir), null, true);
     }
 
     @Override
