@@ -4,17 +4,13 @@
  */
 package at.chrl.nutils.configuration;
 
+import at.chrl.nutils.configuration.listener.ConfigEventListener;
+import at.chrl.nutils.configuration.printer.PropertyFileStreamPrinter;
+import org.apache.commons.io.FileUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-
-import at.chrl.nutils.configuration.listener.ConfigEventListener;
-import org.apache.commons.io.FileUtils;
-
-import at.chrl.nutils.configuration.ConfigurableProcessor;
-import at.chrl.nutils.configuration.ConfigurationExporter;
-import at.chrl.nutils.configuration.IConfigPrinter;
-import at.chrl.nutils.configuration.printer.PropertyFileStreamPrinter;
 
 /**
  * @author Vinzynth
