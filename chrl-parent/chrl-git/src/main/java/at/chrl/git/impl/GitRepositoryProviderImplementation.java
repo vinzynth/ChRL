@@ -4,7 +4,6 @@ import at.chrl.git.GitRepository;
 import at.chrl.git.GitRepositoryProvider;
 import at.chrl.nutils.CollectionUtils;
 import at.chrl.nutils.Memoizer;
-import org.eclipse.jgit.errors.RepositoryNotFoundException;
 import org.eclipse.jgit.util.FileUtils;
 
 import java.io.File;
@@ -72,5 +71,13 @@ public class GitRepositoryProviderImplementation implements GitRepositoryProvide
     @Override
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    private static class SingletonHolder{
+        private static final GitRepositoryProviderImplementation instance = new GitRepositoryProviderImplementation();
+    }
+
+    public static GitRepositoryProvider getInstance(){
+        return SingletonHolder.instance;
     }
 }

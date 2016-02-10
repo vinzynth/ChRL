@@ -58,6 +58,7 @@
 		<module>chrl-vaadin-utils</module>
         <!--<module>chrl-config-spring-integration</module>-->
         <module>chrl-git</module>
+        <module>chrl-config-git-integration</module>
   </modules>
 	<!--  -->
 	<dependencies>

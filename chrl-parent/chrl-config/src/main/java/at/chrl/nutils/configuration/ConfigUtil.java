@@ -54,6 +54,13 @@ public final class ConfigUtil {
 		File toExport = new File(configDirectory, classToExport.getSimpleName() + ".properties");
 		export(classToExport, new PropertyFileStreamPrinter(toExport));
 		exportedFiles.put(classToExport, toExport);
+        for (ConfigEventListener cel : configEventListeners) {
+            try {
+                cel.onLoadedConfigClass(classToExport);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
 	}
 
 	public synchronized static final void export(final Class<?> classToExport, final IConfigPrinter printer) {
@@ -64,6 +71,13 @@ public final class ConfigUtil {
 		File toExport = new File(configDirectory, obj.getClass().getSimpleName() + ".properties");
 		ConfigurationExporter.process(obj, new PropertyFileStreamPrinter(toExport));
 		exportedFiles.put(obj.getClass(), toExport);
+        for (ConfigEventListener cel : configEventListeners) {
+            try {
+                cel.onExportedConfigObject(obj);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
 	}
 
 	public synchronized static final void load(final Class<?> classToLoad) {
