@@ -18,4 +18,8 @@ public interface GitRepository {
     void deleteFile(String file);
     void listFiles(String dir);
 
+    /**
+     * Returns Parent directory
+     */
+    File getParent();
 }

@@ -63,17 +63,21 @@ public class GitRepositoryImplementation implements GitRepository {
 
     @Override
     public void createFile(String file) {
+        String f = file;
+        if(f.startsWith(parentDir.getPath()))
+            f = f.substring(parentDir.getPath().length());
+
         try {
             git.pull()
                     .setCredentialsProvider(credentials)
                     .setStrategy(MergeStrategy.THEIRS)
                     .call();
             git.add()
-                    .addFilepattern(file)
+                    .addFilepattern(f)
                     .call();
             git.commit()
-                    .setOnly(new File(parentDir, file).getPath())
-                    .setMessage("Created File: " + file)
+                    .setOnly(f)
+                    .setMessage("JGit: Created File: " + f)
                     .call();
             git.push()
                     .setCredentialsProvider(credentials)
@@ -98,6 +102,10 @@ public class GitRepositoryImplementation implements GitRepository {
 
     @Override
     public void updateFile(String file) {
+        String f = file;
+        if(f.startsWith(parentDir.getPath()))
+            f = f.substring(parentDir.getPath().length());
+
         try {
             git.pull()
                     .setCredentialsProvider(credentials)
@@ -107,8 +115,8 @@ public class GitRepositoryImplementation implements GitRepository {
                     .setUpdate(true)
                     .call();
             git.commit()
-                    .setOnly(new File(parentDir, file).getPath())
-                    .setMessage("Updated File: " + file)
+                    .setOnly(f)
+                    .setMessage("JGit: Updated File: " + f)
                     .call();
             git.push()
                     .setCredentialsProvider(credentials)
@@ -120,17 +128,21 @@ public class GitRepositoryImplementation implements GitRepository {
 
     @Override
     public void deleteFile(String file) {
+        String f = file;
+        if(f.startsWith(parentDir.getPath()))
+            f = f.substring(parentDir.getPath().length());
+
         try {
             git.pull()
                     .setCredentialsProvider(credentials)
                     .setStrategy(MergeStrategy.THEIRS)
                     .call();
             git.rm()
-                    .addFilepattern(file)
+                    .addFilepattern(f)
                     .call();
             git.commit()
-                    .setOnly(new File(parentDir, file).getPath())
-                    .setMessage("Deleted File: " + file)
+                    .setOnly(f)
+                    .setMessage("JGit: Deleted File: " + f)
                     .call();
             git.push()
                     .setCredentialsProvider(credentials)
@@ -138,6 +150,11 @@ public class GitRepositoryImplementation implements GitRepository {
         } catch (GitAPIException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public File getParent() {
+        return parentDir;
     }
 
     @Override
