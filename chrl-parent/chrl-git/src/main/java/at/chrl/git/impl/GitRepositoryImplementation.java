@@ -1,9 +1,11 @@
 package at.chrl.git.impl;
 
 import at.chrl.git.GitRepository;
+import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.api.errors.TransportException;
+import org.eclipse.jgit.merge.MergeStrategy;
+import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
 import java.io.File;
@@ -19,24 +21,22 @@ import java.io.IOException;
  */
 public class GitRepositoryImplementation implements GitRepository {
 
-    private static final String DEFAULT_LABEL = "master";
     private static final String FILE_URI_PREFIX = "file:";
     private static final String HTTP_URI_PREFIX = "http";
 
     private String remoteUrl;
-    private String username;
-    private String password;
-    private File baseDir;
+    private File parentDir;
     private Git git;
+    private CredentialsProvider credentials;
 
     public GitRepositoryImplementation(String remoteUrl, String username, String password, File baseDir) throws IOException, GitAPIException {
         this.remoteUrl = remoteUrl;
-        this.username = username;
-        this.password = password;
-        this.baseDir = baseDir;
+        this.credentials = new UsernamePasswordCredentialsProvider(username, password);
 
         if(remoteUrl.startsWith(FILE_URI_PREFIX)) {
-            git = Git.open(new File(remoteUrl.substring(FILE_URI_PREFIX.length())));
+            baseDir = new File(remoteUrl.substring(FILE_URI_PREFIX.length()));
+            git = Git.open(baseDir);
+            parentDir = baseDir;
             return;
         }
 
@@ -44,12 +44,12 @@ public class GitRepositoryImplementation implements GitRepository {
         if(dirStr.startsWith(HTTP_URI_PREFIX))
             dirStr = dirStr.substring(dirStr.indexOf("//")+2);
 
-        final File dir = new File(baseDir, dirStr);
+        parentDir = new File(baseDir, dirStr);
 
-        if(!dir.exists())
-            dir.mkdirs();
+        if(!parentDir.exists())
+            parentDir.mkdirs();
 
-        git = clone(dir, remoteUrl);
+        git = clone(parentDir, remoteUrl);
     }
 
     private Git clone(File directory, String remoteUrl) throws GitAPIException {
@@ -57,28 +57,92 @@ public class GitRepositoryImplementation implements GitRepository {
                 .setDirectory(directory)
                 .setURI(remoteUrl)
                 .setTimeout(10)
-                .setCredentialsProvider(new UsernamePasswordCredentialsProvider(username, password))
+                .setCredentialsProvider(credentials)
                 .call();
     }
 
     @Override
-    public void createFile() {
-
+    public void createFile(String file) {
+        try {
+            git.pull()
+                    .setCredentialsProvider(credentials)
+                    .setStrategy(MergeStrategy.THEIRS)
+                    .call();
+            git.add()
+                    .addFilepattern(file)
+                    .call();
+            git.commit()
+                    .setOnly(new File(parentDir, file).getPath())
+                    .setMessage("Created File: " + file)
+                    .call();
+            git.push()
+                    .setCredentialsProvider(credentials)
+                    .call();
+        } catch (GitAPIException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void readFile() {
-
+    public File readFile(String file) {
+        try {
+            git.pull()
+                    .setCredentialsProvider(credentials)
+                    .setStrategy(MergeStrategy.THEIRS)
+                    .call();
+        } catch (GitAPIException e) {
+            e.printStackTrace();
+        }
+        return new File(parentDir, file);
     }
 
     @Override
-    public void updateFile() {
-
+    public void updateFile(String file) {
+        try {
+            git.pull()
+                    .setCredentialsProvider(credentials)
+                    .setStrategy(MergeStrategy.OURS)
+                    .call();
+            git.add()
+                    .setUpdate(true)
+                    .call();
+            git.commit()
+                    .setOnly(new File(parentDir, file).getPath())
+                    .setMessage("Updated File: " + file)
+                    .call();
+            git.push()
+                    .setCredentialsProvider(credentials)
+                    .call();
+        } catch (GitAPIException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void deleteFile() {
+    public void deleteFile(String file) {
+        try {
+            git.pull()
+                    .setCredentialsProvider(credentials)
+                    .setStrategy(MergeStrategy.THEIRS)
+                    .call();
+            git.rm()
+                    .addFilepattern(file)
+                    .call();
+            git.commit()
+                    .setOnly(new File(parentDir, file).getPath())
+                    .setMessage("Deleted File: " + file)
+                    .call();
+            git.push()
+                    .setCredentialsProvider(credentials)
+                    .call();
+        } catch (GitAPIException e) {
+            e.printStackTrace();
+        }
+    }
 
+    @Override
+    public void listFiles(String dir) {
+        FileUtils.listFiles(new File(parentDir, dir), null, true).forEach(System.out::println);
     }
 
     @Override
