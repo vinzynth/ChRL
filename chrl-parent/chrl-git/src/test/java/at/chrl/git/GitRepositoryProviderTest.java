@@ -28,10 +28,4 @@ public class GitRepositoryProviderTest {
         Assert.assertNotEquals(gitRepositoryProvider.getRepository("file:test1" + File.separator + ".git"), gitRepositoryProvider.getRepository("file:test2" + File.separator + ".git"));
     }
 
-    @Test
-    public void testCloneRepo() throws Exception {
-        gitRepositoryProvider.setUsername("gitlab");
-        gitRepositoryProvider.setPassword("git");
-        gitRepositoryProvider.getRepository("http://repo.bravestone.at/arc/config.git");
-    }
 }

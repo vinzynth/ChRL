@@ -5,6 +5,7 @@ import at.chrl.git.GitRepositoryProvider;
 import at.chrl.nutils.CollectionUtils;
 import at.chrl.nutils.Memoizer;
 import org.eclipse.jgit.errors.RepositoryNotFoundException;
+import org.eclipse.jgit.util.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,15 +26,33 @@ public class GitRepositoryProviderImplementation implements GitRepositoryProvide
     private String password;
     private String username;
 
+    private File baseDir = new File("git_repositories");
+
     private Map<String, GitRepository> cache = CollectionUtils.newMap();
     private Function<String, GitRepository> REPO_GETTER = Memoizer.memoize(s -> {
         try {
-            return new GitRepositoryImplementation(s, username, password);
+            return new GitRepositoryImplementation(s, username, password, baseDir);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }, cache);
+
+    public GitRepositoryProviderImplementation() {
+        this(null);
+    }
+
+    public GitRepositoryProviderImplementation(File baseDir) {
+        if(baseDir != null)
+            this.baseDir = baseDir;
+
+        try {
+            FileUtils.delete(this.baseDir, FileUtils.RECURSIVE);
+        } catch (IOException ignored) {
+        }
+
+        this.baseDir.mkdirs();
+    }
 
     @Override
     public GitRepository getRepository(String remoteUrl) {

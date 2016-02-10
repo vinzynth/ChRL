@@ -26,12 +26,14 @@ public class GitRepositoryImplementation implements GitRepository {
     private String remoteUrl;
     private String username;
     private String password;
+    private File baseDir;
     private Git git;
 
-    public GitRepositoryImplementation(String remoteUrl, String username, String password) throws IOException, GitAPIException {
+    public GitRepositoryImplementation(String remoteUrl, String username, String password, File baseDir) throws IOException, GitAPIException {
         this.remoteUrl = remoteUrl;
         this.username = username;
         this.password = password;
+        this.baseDir = baseDir;
 
         if(remoteUrl.startsWith(FILE_URI_PREFIX)) {
             git = Git.open(new File(remoteUrl.substring(FILE_URI_PREFIX.length())));
@@ -42,7 +44,7 @@ public class GitRepositoryImplementation implements GitRepository {
         if(dirStr.startsWith(HTTP_URI_PREFIX))
             dirStr = dirStr.substring(dirStr.indexOf("//")+2);
 
-        final File dir = new File(dirStr);
+        final File dir = new File(baseDir, dirStr);
 
         if(!dir.exists())
             dir.mkdirs();
