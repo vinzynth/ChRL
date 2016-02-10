@@ -2,6 +2,7 @@ package at.chrl.git.impl;
 
 import at.chrl.git.GitRepository;
 import at.chrl.git.GitRepositoryProvider;
+import at.chrl.nutils.Memoizer;
 
 /**
  * Created by ChRL on 10.02.16.
@@ -15,6 +16,6 @@ public class GitRepositoryProviderImplementation implements GitRepositoryProvide
 
     @Override
     public GitRepository getRepository(String remoteUrl) {
-        return new GitRepositoryImplementation();
+        return Memoizer.<String, GitRepository>memoize(GitRepositoryImplementation::new).apply(remoteUrl);
     }
 }

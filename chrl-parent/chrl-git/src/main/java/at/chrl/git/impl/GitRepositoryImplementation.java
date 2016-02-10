@@ -12,6 +12,12 @@ import at.chrl.git.GitRepository;
  */
 public class GitRepositoryImplementation implements GitRepository {
 
+    private String remoteUrl;
+
+    public GitRepositoryImplementation(String remoteUrl) {
+        this.remoteUrl = remoteUrl;
+    }
+
     @Override
     public void createFile() {
 
@@ -30,5 +36,28 @@ public class GitRepositoryImplementation implements GitRepository {
     @Override
     public void deleteFile() {
 
+    }
+
+    @Override
+    public String toString() {
+        return "GitRepositoryImplementation{" +
+                "remoteUrl='" + remoteUrl + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GitRepositoryImplementation that = (GitRepositoryImplementation) o;
+
+        return remoteUrl != null ? remoteUrl.equals(that.remoteUrl) : that.remoteUrl == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return remoteUrl != null ? remoteUrl.hashCode() : 0;
     }
 }
