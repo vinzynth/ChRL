@@ -111,9 +111,7 @@ public final class ConfigUtil {
 		for (File file : propertiesFiles) {
 			if (file.getName().equals(classToLoad.getSimpleName() + ".properties")) {
 				try {
-                    final Properties load = PropertiesUtils.load(file);
-                    load.forEach((k, v) -> System.setProperty(k.toString(), v.toString()));
-                    return new Properties[] { load };
+					return new Properties[] { PropertiesUtils.load(file) };
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
