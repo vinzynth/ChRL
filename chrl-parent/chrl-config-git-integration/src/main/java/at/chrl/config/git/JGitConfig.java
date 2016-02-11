@@ -28,10 +28,10 @@ public class JGitConfig {
     public static String HOSTNAME;
 
     static {
-        ConfigUtil.loadAndExport(JGitConfig.class);
+        ConfigUtil.getInstance().loadAndExport(JGitConfig.class);
         try {
             HOSTNAME = InetAddress.getLocalHost().getHostName();
-            ConfigUtil.export(JGitConfig.class);
+            ConfigUtil.getInstance().export(JGitConfig.class);
         } catch (UnknownHostException e) {
             System.out.println("Can not resolve hostname");
             e.printStackTrace();

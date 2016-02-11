@@ -1,10 +1,29 @@
 package at.chrl.orm.hibernate;
 
-import static at.chrl.orm.hibernate.configuration.HibernateServiceConfig.err;
-import static at.chrl.orm.hibernate.configuration.HibernateServiceConfig.out;
-import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
+import at.chrl.nutils.ArrayUtils;
+import at.chrl.nutils.JVMInfoUtil;
+import at.chrl.nutils.configuration.ConfigUtil;
+import at.chrl.nutils.configuration.PropertiesUtils;
+import at.chrl.nutils.cron.CronService;
+import at.chrl.orm.hibernate.configuration.HibernateConfig;
+import at.chrl.orm.hibernate.configuration.IHibernateConfig;
+import at.chrl.orm.hibernate.configuration.JPAConfig;
+import at.chrl.orm.hibernate.flyway.HibernateCallback;
+import org.flywaydb.core.Flyway;
+import org.flywaydb.core.api.FlywayException;
+import org.hibernate.*;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.jpa.AvailableSettings;
+import org.hibernate.jpa.HibernateEntityManager;
+import org.hibernate.jpa.HibernateEntityManagerFactory;
+import org.hibernate.resource.transaction.spi.TransactionStatus;
+import org.hibernate.tool.hbm2ddl.SchemaExport;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.PersistenceException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -15,41 +34,14 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceException;
+import static at.chrl.orm.hibernate.configuration.HibernateServiceConfig.err;
+import static at.chrl.orm.hibernate.configuration.HibernateServiceConfig.out;
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
-import org.flywaydb.core.Flyway;
-import org.flywaydb.core.api.FlywayException;
-import org.hibernate.FlushMode;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.SessionException;
-import org.hibernate.SessionFactory;
-import org.hibernate.StatelessSession;
-import org.hibernate.Transaction;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.jpa.AvailableSettings;
-import org.hibernate.jpa.HibernateEntityManager;
-import org.hibernate.jpa.HibernateEntityManagerFactory;
 //import org.hibernate.ogm.OgmSession;
 //import org.hibernate.ogm.cfg.OgmConfiguration;
 //import org.hibernate.ogm.exception.NotSupportedException;
-import org.hibernate.resource.transaction.spi.TransactionStatus;
-import org.hibernate.tool.hbm2ddl.SchemaExport;
-
-import at.chrl.nutils.ArrayUtils;
-import at.chrl.nutils.JVMInfoUtil;
-import at.chrl.nutils.configuration.ConfigUtil;
-import at.chrl.nutils.configuration.PropertiesUtils;
-import at.chrl.nutils.cron.CronService;
-import at.chrl.orm.hibernate.configuration.HibernateConfig;
-import at.chrl.orm.hibernate.configuration.IHibernateConfig;
-import at.chrl.orm.hibernate.configuration.JPAConfig;
-import at.chrl.orm.hibernate.configuration.OGMConfig;
-import at.chrl.orm.hibernate.flyway.HibernateCallback;
 
 /**
  * 
@@ -72,7 +64,7 @@ public final class HibernateService implements AutoCloseable {
 		if (jpaDatabaseConnections.containsKey(config))
 			return false;
 
-		Properties props = PropertiesUtils.filterEmtpyValues(ConfigUtil.getProperties(config.getClass()));
+		Properties props = PropertiesUtils.filterEmtpyValues(ConfigUtil.getInstance().getProperties(config.getClass()));
 
 		props.put(AvailableSettings.LOADED_CLASSES, config.getAnnotatedClasses());
 
@@ -94,7 +86,7 @@ public final class HibernateService implements AutoCloseable {
 		if (databaseConnections.containsKey(config))
 			return false;
 
-		Properties props = PropertiesUtils.filterEmtpyValues(ConfigUtil.getProperties(config.getClass()));
+		Properties props = PropertiesUtils.filterEmtpyValues(ConfigUtil.getInstance().getProperties(config.getClass()));
 		
 		Configuration hibernateCfg = 
 //				(config instanceof OGMConfig) ? new OgmConfiguration() :
@@ -241,11 +233,11 @@ public final class HibernateService implements AutoCloseable {
 		if (isNull(hibernateConfig))
 			throw new IllegalArgumentException("Parameter hibernateConfig of HibernateService.connect is null");
 
-		ConfigUtil.loadAndExport(hibernateConfig);
+		ConfigUtil.getInstance().loadAndExport(hibernateConfig);
 
 		hibernateConfig.overrideConfig();
 		
-		ConfigUtil.export(hibernateConfig);
+		ConfigUtil.getInstance().export(hibernateConfig);
 		
 		if (hibernateConfig instanceof JPAConfig)
 			return initJPA((JPAConfig) hibernateConfig);
@@ -529,7 +521,7 @@ public final class HibernateService implements AutoCloseable {
 	 */
 	@SuppressWarnings("deprecation")
 	public void exportSchema(final HibernateConfig config, final String exportFile) {
-		Properties props = PropertiesUtils.filterEmtpyValues(ConfigUtil.getProperties(config.getClass()));
+		Properties props = PropertiesUtils.filterEmtpyValues(ConfigUtil.getInstance().getProperties(config.getClass()));
 
 		Configuration hibernateCfg = new Configuration();
 		hibernateCfg.setProperties(props);

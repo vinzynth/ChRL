@@ -28,7 +28,7 @@ public final class GitConfigUtil {
         configRepo.checkoutBranch(JGitConfig.HOSTNAME);
 
         //System.out.println("Add Config Listener");
-        ConfigUtil.addConfigEventListener(new ConfigEventListener() {
+        ConfigUtil.getInstance().addConfigEventListener(new ConfigEventListener() {
 
             @Override
             public void beforeOnLoadedConfigClass(Class<?> targetClass) {
@@ -44,8 +44,8 @@ public final class GitConfigUtil {
 
             @Override
             public void onExportedConfigClass(Class<?> targetClass) {
-                if(targetClass.equals(JGitConfig.class))
-                    return;
+                //if(targetClass.equals(JGitConfig.class))
+                //    return;
                 String fileName = targetClass.getSimpleName() + ".properties";
                 //System.out.println("onExportedLoadConfigClass: " + fileName);
                 configRepo.updateFile(fileName);
@@ -58,7 +58,7 @@ public final class GitConfigUtil {
         });
 
         //System.out.println("Set Config Directory");
-        ConfigUtil.setConfigDirectory(configRepo.getParent().getAbsolutePath());
-        ConfigUtil.export(JGitConfig.class);
+        ConfigUtil.getInstance().export(JGitConfig.class);
+        ConfigUtil.getInstance().setConfigDirectory(configRepo.getParent().getAbsolutePath());
     }
 }

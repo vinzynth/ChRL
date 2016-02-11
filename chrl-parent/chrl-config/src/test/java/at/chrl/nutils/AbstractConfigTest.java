@@ -3,10 +3,9 @@
  */
 package at.chrl.nutils;
 
-import org.junit.Test;
-
 import at.chrl.nutils.configuration.ConfigUtil;
 import at.chrl.nutils.configuration.Property;
+import org.junit.Test;
 
 /**
  * @author bravestone
@@ -18,7 +17,7 @@ public class AbstractConfigTest {
 	public void test() {
 
 		SubConfig sc = new SubConfig();
-		ConfigUtil.loadAndExport(sc);
+		ConfigUtil.getInstance().loadAndExport(sc);
 
 //		System.out.println(sc.GAME_BIND_ADDRESS);
 

@@ -6,10 +6,10 @@
  */
 package at.chrl.orm.hibernate.configuration;
 
-import java.io.PrintStream;
-
 import at.chrl.nutils.configuration.ConfigUtil;
 import at.chrl.nutils.configuration.Property;
+
+import java.io.PrintStream;
 
 /**
  * @author bravestone
@@ -17,7 +17,7 @@ import at.chrl.nutils.configuration.Property;
  */
 public class HibernateServiceConfig {
 	
-	static{ ConfigUtil.load(HibernateServiceConfig.class); }
+	static{ ConfigUtil.getInstance().load(HibernateServiceConfig.class); }
 	
 	@Property(key = "hibernate.service.output_stream", defaultValue = "System.out", description = "Output stream for logging purposes. Turn off with \"nop\" or change to a valid filepath for logging into a seperate log file")
 	public static PrintStream out;

@@ -4,17 +4,16 @@
  */
 package at.chrl.vaadin.ui.views;
 
+import at.chrl.nutils.configuration.ConfigUtil;
+import at.chrl.nutils.configuration.PropertiesUtils;
+import at.chrl.vaadin.ui.BasicUIView;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.ui.Table;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Properties;
-
-import at.chrl.nutils.configuration.ConfigUtil;
-import at.chrl.nutils.configuration.PropertiesUtils;
-import at.chrl.vaadin.ui.BasicUIView;
-
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.ui.Table;
 
 /**
  * @author bravestone
@@ -53,17 +52,14 @@ public class ConfigView extends BasicUIView {
 					tbl.addItem(new Object[] { e.getKey(), e.getValue() }, e.getKey());
 				});
 			}
-		} catch (UnsupportedOperationException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (UnsupportedOperationException | IOException e) {
 			e.printStackTrace();
 		}
-
-	}
+    }
 
 	private static Properties[] getActiveProperties() throws IOException {
-		if (Objects.nonNull(ConfigUtil.getConfigDirectory()))
-			return PropertiesUtils.loadAllFromDirectory(ConfigUtil.getConfigDirectory(), false);
+		if (Objects.nonNull(ConfigUtil.getInstance().getConfigDirectory()))
+			return PropertiesUtils.loadAllFromDirectory(ConfigUtil.getInstance().getConfigDirectory(), false);
 		return PropertiesUtils.loadAllFromDirectory(new File("."), false);
 	}
 

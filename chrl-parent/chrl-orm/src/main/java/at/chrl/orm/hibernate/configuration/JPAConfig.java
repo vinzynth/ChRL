@@ -6,18 +6,16 @@
  */
 package at.chrl.orm.hibernate.configuration;
 
-import java.util.Properties;
-
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceException;
-
-import org.hibernate.jpa.AvailableSettings;
-
 import at.chrl.nutils.configuration.ConfigUtil;
 import at.chrl.nutils.configuration.PropertiesUtils;
 import at.chrl.nutils.configuration.Property;
 import at.chrl.orm.hibernate.HibernateService;
+import org.hibernate.jpa.AvailableSettings;
+
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.PersistenceException;
+import java.util.Properties;
 
 /**
  * 
@@ -55,7 +53,7 @@ public abstract class JPAConfig extends HibernateConfig {
 	 * @return {@link EntityManagerFactory} instance
 	 */
 	public EntityManagerFactory getEntityManagerFactory() {
-		Properties props = PropertiesUtils.filterEmtpyValues(ConfigUtil.getProperties(this.getClass()));
+		Properties props = PropertiesUtils.filterEmtpyValues(ConfigUtil.getInstance().getProperties(this.getClass()));
 		
 		props.put(AvailableSettings.LOADED_CLASSES, this.getAnnotatedClasses());
 		

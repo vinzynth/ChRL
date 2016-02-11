@@ -1,5 +1,19 @@
 package at.chrl.spring.controller;
 
+import at.chrl.nutils.JVMInfoUtil;
+import at.chrl.nutils.configuration.ConfigUtil;
+import at.chrl.nutils.configuration.PropertiesUtils;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.ObjectWriter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import javax.servlet.http.HttpServletRequest;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -7,27 +21,6 @@ import java.io.PrintStream;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Properties;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.ObjectWriter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
-import at.chrl.nutils.JVMInfoUtil;
-import at.chrl.nutils.configuration.ConfigUtil;
-import at.chrl.nutils.configuration.PropertiesUtils;
 
 @RestController
 public class BasicController {
@@ -74,8 +67,8 @@ public class BasicController {
 	}
 
 	private static Properties[] getActiveProperties() throws IOException {
-		if (Objects.nonNull(ConfigUtil.getConfigDirectory()))
-			return PropertiesUtils.loadAllFromDirectory(ConfigUtil.getConfigDirectory(), false);
+		if (Objects.nonNull(ConfigUtil.getInstance().getConfigDirectory()))
+			return PropertiesUtils.loadAllFromDirectory(ConfigUtil.getInstance().getConfigDirectory(), false);
 		return PropertiesUtils.loadAllFromDirectory(new File("."), false);
 	}
 }

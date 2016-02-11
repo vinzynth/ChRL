@@ -4,19 +4,18 @@
  */
 package at.chrl.nutils;
 
-import static org.junit.Assert.assertTrue;
+import at.chrl.nutils.configuration.ConfigUtil;
+import at.chrl.nutils.configuration.Property;
+import at.chrl.nutils.configuration.printer.PrintStreamPrinter;
+import at.chrl.nutils.configuration.printer.PropertyFileStreamPrinter;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import org.junit.Test;
-
-import at.chrl.nutils.configuration.ConfigUtil;
-import at.chrl.nutils.configuration.Property;
-import at.chrl.nutils.configuration.printer.PrintStreamPrinter;
-import at.chrl.nutils.configuration.printer.PropertyFileStreamPrinter;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Vinzynth
@@ -26,7 +25,7 @@ public class ConfigUtilTest {
 
 	@Test
 	public void testLoad() throws IOException {
-		ConfigUtil.reload();
+		ConfigUtil.getInstance().reload();
 	}
 
 	@Test
@@ -51,8 +50,8 @@ public class ConfigUtilTest {
 
 	@Test
 	public void testPrint() {
-		ConfigUtil.export(ExampleConfig.class, new PrintStreamPrinter(System.out));
-		ConfigUtil.export(ExampleConfig.class, new PropertyFileStreamPrinter(new File(ExampleConfig.class.getSimpleName() + ".properties")));
+		ConfigUtil.getInstance().export(ExampleConfig.class, new PrintStreamPrinter(System.out));
+		ConfigUtil.getInstance().export(ExampleConfig.class, new PropertyFileStreamPrinter(new File(ExampleConfig.class.getSimpleName() + ".properties")));
 	}
 
 	@Test
@@ -77,7 +76,7 @@ public class ConfigUtilTest {
 	public static class ExampleConfig {
 
 		static {
-			ConfigUtil.load(ExampleConfig.class);
+			ConfigUtil.getInstance().load(ExampleConfig.class);
 		}
 
 		@Property(key = "test.math", defaultValue = "java.lang.Math::sqrt",

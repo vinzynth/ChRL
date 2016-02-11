@@ -6,17 +6,16 @@
  */
 package at.chrl.orm.hibernate.configuration;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Properties;
-
+import at.chrl.nutils.configuration.ConfigUtil;
+import at.chrl.nutils.configuration.PropertiesUtils;
+import at.chrl.orm.hibernate.HibernateService;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
-import at.chrl.nutils.configuration.ConfigUtil;
-import at.chrl.nutils.configuration.PropertiesUtils;
-import at.chrl.orm.hibernate.HibernateService;
+import java.util.Collections;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * 
@@ -79,7 +78,7 @@ public interface IHibernateConfig {
 	 * @return {@link SessionFactory} instance
 	 */
 	public default SessionFactory getSessionFactory(){
-		Properties props = PropertiesUtils.filterEmtpyValues(ConfigUtil.getProperties(this.getClass()));
+		Properties props = PropertiesUtils.filterEmtpyValues(ConfigUtil.getInstance().getProperties(this.getClass()));
 
 		Configuration hibernateCfg = new Configuration();
 		hibernateCfg.setProperties(props);

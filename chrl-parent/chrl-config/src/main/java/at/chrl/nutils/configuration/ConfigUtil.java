@@ -18,19 +18,19 @@ import java.util.*;
  */
 public final class ConfigUtil {
 
-	private static Collection<File> propertiesFiles;
-	private static final LinkedList<Class<?>> classes = new LinkedList<Class<?>>();
-	private static Properties[] props = new Properties[0];
-	private static File configDirectory;
-	private static Map<Class<?>, File> exportedFiles = new HashMap<>();
-    private static Collection<ConfigEventListener> configEventListeners = new ArrayList<>();
+	private Collection<File> propertiesFiles;
+	private final LinkedList<Class<?>> classes = new LinkedList<>();
+	private Properties[] props = new Properties[0];
+	private File configDirectory;
+	private Map<Class<?>, File> exportedFiles = new HashMap<>();
+    private Collection<ConfigEventListener> configEventListeners = new ArrayList<>();
 
-	static {
+	private ConfigUtil(){
 		propertiesFiles = FileUtils.listFiles(new File("."), new String[] { "properties" }, true);
 		props = loadPropertiesFiles();
 	}
 
-	static final Properties[] loadPropertiesFiles() {
+    final Properties[] loadPropertiesFiles() {
 		try {
 			return PropertiesUtils.load(propertiesFiles.toArray(new File[propertiesFiles.size()]));
 		} catch (IOException e) {
@@ -40,17 +40,17 @@ public final class ConfigUtil {
 		return props;
 	}
 
-	public synchronized static final void loadAndExport(final Class<?> targetClass) {
+	public synchronized final void loadAndExport(final Class<?> targetClass) {
 		load(targetClass);
 		export(targetClass);
 	}
 
-	public synchronized static final void loadAndExport(final Object obj) {
+	public synchronized final void loadAndExport(final Object obj) {
 		load(obj);
 		export(obj.getClass());
 	}
 
-	public synchronized static final void export(final Class<?> classToExport) {
+	public synchronized final void export(final Class<?> classToExport) {
 		File toExport = new File(configDirectory, classToExport.getSimpleName() + ".properties");
 		export(classToExport, new PropertyFileStreamPrinter(toExport));
 		exportedFiles.put(classToExport, toExport);
@@ -63,11 +63,11 @@ public final class ConfigUtil {
         }
 	}
 
-	public synchronized static final void export(final Class<?> classToExport, final IConfigPrinter printer) {
+	public synchronized final void export(final Class<?> classToExport, final IConfigPrinter printer) {
 		ConfigurationExporter.process(classToExport, printer, getLoadedProperties(classToExport));
 	}
 
-	public synchronized static final void export(final Object obj) {
+	public synchronized final void export(final Object obj) {
 		File toExport = new File(configDirectory, obj.getClass().getSimpleName() + ".properties");
 		ConfigurationExporter.process(obj, new PropertyFileStreamPrinter(toExport));
 		exportedFiles.put(obj.getClass(), toExport);
@@ -80,7 +80,7 @@ public final class ConfigUtil {
         }
 	}
 
-	public synchronized static final void load(final Class<?> classToLoad) {
+	public synchronized final void load(final Class<?> classToLoad) {
         for (ConfigEventListener cel : configEventListeners) {
             try {
                 cel.beforeOnLoadedConfigClass(classToLoad);
@@ -100,7 +100,7 @@ public final class ConfigUtil {
         }
     }
 
-	public synchronized static final void load(final Object obj) {
+	public synchronized final void load(final Object obj) {
         for (ConfigEventListener cel : configEventListeners) {
             try {
                 cel.beforeOnLoadedConfigObject(obj);
@@ -121,7 +121,7 @@ public final class ConfigUtil {
         }
 	}
 
-	private static Properties[] getLoadedProperties(final Class<?> classToLoad) {
+	private Properties[] getLoadedProperties(final Class<?> classToLoad) {
 		for (File file : propertiesFiles) {
 			if (file.getName().equals(classToLoad.getSimpleName() + ".properties")) {
 				try {
@@ -134,29 +134,21 @@ public final class ConfigUtil {
 		return props;
 	}
 
-	public static final void reload() {
+	public final void reload() {
 		props = loadPropertiesFiles();
-		for (Class<?> ie : classes) {
-			load(ie);
-		}
+        classes.forEach(this::load);
 	}
 
-	public static final void reload(final Class<?> classToReload) {
+	public final void reload(final Class<?> classToReload) {
 		props = loadPropertiesFiles();
 		load(classToReload);
 	}
 
-	/**
-	 * 
-	 */
-	private ConfigUtil() {
-	}
-
-	public synchronized static File getConfigDirectory() {
+	public synchronized File getConfigDirectory() {
 		return configDirectory;
 	}
 
-	public synchronized static void setConfigDirectory(final File configDirectory) {
+	public synchronized void setConfigDirectory(final File configDirectory) {
 		if (Objects.isNull(configDirectory))
 			throw new IllegalArgumentException("Configuration folder passed as parameter is null");
 		if (!configDirectory.exists())
@@ -168,17 +160,15 @@ public final class ConfigUtil {
 		if (!configDirectory.canRead())
 			throw new IllegalArgumentException("Cannot read from configuration folder: " + configDirectory.getAbsolutePath());
 
-		ConfigUtil.configDirectory = configDirectory;
+		this.configDirectory = configDirectory;
 
 		propertiesFiles = FileUtils.listFiles(configDirectory, new String[] { "properties" }, true);
 
 		reload();
-		for (Class<?> class1 : classes) {
-			export(class1);
-		}
+        classes.forEach(this::export);
 	}
 
-	public static void setConfigDirectory(String configDirectory) {
+	public void setConfigDirectory(String configDirectory) {
 		if (Objects.isNull(configDirectory))
 			throw new IllegalArgumentException("Configuration folder passed as parameter is null");
 		if (configDirectory.isEmpty())
@@ -186,7 +176,7 @@ public final class ConfigUtil {
 		setConfigDirectory(new File(configDirectory));
 	}
 
-	public synchronized static Properties getProperties(final Class<?> targetClass) {
+	public synchronized Properties getProperties(final Class<?> targetClass) {
 		if (exportedFiles.containsKey(targetClass)) {
 			try {
 				return PropertiesUtils.load(exportedFiles.get(targetClass));
@@ -205,18 +195,18 @@ public final class ConfigUtil {
 		return new Properties();
 	}
 
-    public static boolean addConfigEventListener(final ConfigEventListener listener){
+    public boolean addConfigEventListener(final ConfigEventListener listener){
         return !configEventListeners.contains(listener) && configEventListeners.add(listener);
     }
 
-    public static boolean removeConfigEventListener(final ConfigEventListener listener){
+    public boolean removeConfigEventListener(final ConfigEventListener listener){
         return configEventListeners.contains(listener) && configEventListeners.remove(listener);
     }
 
     /**
      * Deletes config files afterwards
      */
-    public static void cleanupConfig(){
+    public void cleanupConfig(){
         exportedFiles.values().forEach(f -> {
             try {
                 f.delete();
@@ -233,5 +223,13 @@ public final class ConfigUtil {
             }
 
         }
+    }
+
+    private static class SingletonHoler{
+        private static final ConfigUtil instance = new ConfigUtil();
+    }
+
+    public static ConfigUtil getInstance(){
+        return SingletonHoler.instance;
     }
 }
