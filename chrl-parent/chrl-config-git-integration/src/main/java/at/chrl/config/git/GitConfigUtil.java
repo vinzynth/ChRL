@@ -21,12 +21,16 @@ public final class GitConfigUtil {
         GitRepository configRepo = GitRepositoryProviderImplementation.getInstance().getRepository(remoteUrl);
 
         ConfigUtil.addConfigEventListener(new ConfigEventListener() {
+
             @Override
-            public void onLoadedConfigClass(Class<?> targetClass) {
+            public void beforeOnLoadedConfigClass(Class<?> targetClass) {
+                String fileName = targetClass.getSimpleName() + ".properties";
+                configRepo.readFile(fileName);
             }
 
             @Override
-            public void onLoadedConfigObject(Object obj) {
+            public void beforeOnLoadedConfigObject(Object obj) {
+                this.beforeOnLoadedConfigClass(obj.getClass());
             }
 
             @Override
@@ -40,8 +44,6 @@ public final class GitConfigUtil {
                 this.onExportedConfigClass(obj.getClass());
             }
         });
-
         ConfigUtil.setConfigDirectory(configRepo.getParent().getAbsolutePath());
     }
-
 }

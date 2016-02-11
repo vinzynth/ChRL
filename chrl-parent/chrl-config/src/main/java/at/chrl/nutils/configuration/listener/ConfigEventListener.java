@@ -8,6 +8,28 @@ package at.chrl.nutils.configuration.listener;
 public interface ConfigEventListener {
 
     /**
+     * Load event befor load configuration Files.
+     * <p>
+     *     Triggered before Config Field parsing
+     * </p>
+     *
+     * @param targetClass - loaded class
+     */
+    default void beforeOnLoadedConfigClass(final Class<?> targetClass){
+    }
+
+    /**
+     * Load event befor load of configuration Files.
+     * <p>
+     *     Triggered before Config Field parsing
+     * </p>
+     *
+     * @param obj - loaded object with annotated member fields
+     */
+    default void beforeOnLoadedConfigObject(final Object obj){
+    }
+
+    /**
      * Load event for configuration Files.
      * <p>
      *     Triggered after Config Field parsing
@@ -15,7 +37,8 @@ public interface ConfigEventListener {
      *
      * @param targetClass - loaded class
      */
-    void onLoadedConfigClass(final Class<?> targetClass);
+    default void onLoadedConfigClass(final Class<?> targetClass){
+    }
 
     /**
      * Load event for configuration Files.
@@ -25,7 +48,8 @@ public interface ConfigEventListener {
      *
      * @param obj - loaded object with annotated member fields
      */
-    void onLoadedConfigObject(final Object obj);
+    default void onLoadedConfigObject(final Object obj){
+    }
 
     /**
      * Gets triggered after export was executed

@@ -81,6 +81,13 @@ public final class ConfigUtil {
 	}
 
 	public synchronized static final void load(final Class<?> classToLoad) {
+        for (ConfigEventListener cel : configEventListeners) {
+            try {
+                cel.beforeOnLoadedConfigClass(classToLoad);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
 		ConfigurableProcessor.process(classToLoad, getLoadedProperties(classToLoad));
 		if (!classes.contains(classToLoad))
 			classes.add(classToLoad);
@@ -94,6 +101,13 @@ public final class ConfigUtil {
     }
 
 	public synchronized static final void load(final Object obj) {
+        for (ConfigEventListener cel : configEventListeners) {
+            try {
+                cel.beforeOnLoadedConfigObject(obj);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
 		Class<?> classToLoad = obj.getClass();
 		ConfigurableProcessor.process(obj, getLoadedProperties(classToLoad));
 		if (!classes.contains(classToLoad))
