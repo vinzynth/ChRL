@@ -54,7 +54,7 @@ public class GitRepositoryProviderImplementation implements GitRepositoryProvide
     }
 
     @Override
-    public GitRepository getRepository(String remoteUrl) {
+    public GitRepository getRepository(String remoteUrl, String branch) {
         REPO_GETTER.apply(remoteUrl);
 
         if(Objects.isNull(cache.get(remoteUrl)))

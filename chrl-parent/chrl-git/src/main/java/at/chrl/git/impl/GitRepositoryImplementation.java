@@ -2,6 +2,7 @@ package at.chrl.git.impl;
 
 import at.chrl.git.GitRepository;
 import org.apache.commons.io.FileUtils;
+import org.eclipse.jgit.api.CreateBranchCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.JGitInternalException;
@@ -176,6 +177,24 @@ public class GitRepositoryImplementation implements GitRepository {
     @Override
     public File getParent() {
         return parentDir;
+    }
+
+    @Override
+    public void checkoutBranch(String branch) {
+        try {
+            boolean branchExists = git.getRepository().getRef(branch) != null;
+            if (!branchExists) {
+                git.branchCreate()
+                        .setName(branch)
+                        .setUpstreamMode(CreateBranchCommand.SetupUpstreamMode.TRACK)
+                        .setStartPoint("origin/" + branch)
+                        .call();
+            }
+
+            git.checkout().setName(branch).call();
+        } catch (GitAPIException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

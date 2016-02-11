@@ -23,4 +23,11 @@ public interface GitRepository {
      * Returns Parent directory
      */
     File getParent();
+
+    /**
+     * Checks out another Branch
+     *
+     * @param branch branch name
+     */
+    void checkoutBranch(String branch);
 }

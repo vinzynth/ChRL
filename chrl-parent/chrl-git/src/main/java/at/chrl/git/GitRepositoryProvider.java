@@ -10,6 +10,9 @@ public interface GitRepositoryProvider {
     void setUsername(String username);
     void setPassword(String password);
 
-    GitRepository getRepository(String remoteUrl);
+    default GitRepository getRepository(String remoteUrl){
+        return getRepository(remoteUrl, "master");
+    }
+    GitRepository getRepository(String remoteUrl, String branch);
 
 }

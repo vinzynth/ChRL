@@ -14,16 +14,22 @@ import at.chrl.nutils.configuration.listener.ConfigEventListener;
  */
 public final class GitConfigUtil {
 
-    public static void setGitConfigRepository(String remoteUrl, String username, String password){
-        GitRepositoryProviderImplementation.getInstance().setUsername(username);
-        GitRepositoryProviderImplementation.getInstance().setPassword(password);
+    static {
+        ConfigUtil.loadAndExport(JGitConfig.class);
+    }
 
-        GitRepository configRepo = GitRepositoryProviderImplementation.getInstance().getRepository(remoteUrl);
+    public static void init(){
+        GitRepositoryProviderImplementation.getInstance().setUsername(JGitConfig.USERNAME);
+        GitRepositoryProviderImplementation.getInstance().setPassword(JGitConfig.PASSWORD);
+
+        GitRepository configRepo = GitRepositoryProviderImplementation.getInstance().getRepository(JGitConfig.HOSTNAME);
 
         if(configRepo == null){
             System.out.println("WARNING: Config repository is not available. Using local configuration as fallback!");
             return;
         }
+
+        configRepo.checkoutBranch(JGitConfig.HOSTNAME);
 
         //System.out.println("Add Config Listener");
         ConfigUtil.addConfigEventListener(new ConfigEventListener() {
@@ -42,6 +48,8 @@ public final class GitConfigUtil {
 
             @Override
             public void onExportedConfigClass(Class<?> targetClass) {
+                if(targetClass.equals(JGitConfig.class))
+                    return;
                 String fileName = targetClass.getSimpleName() + ".properties";
                 //System.out.println("onExportedLoadConfigClass: " + fileName);
                 configRepo.updateFile(fileName);
