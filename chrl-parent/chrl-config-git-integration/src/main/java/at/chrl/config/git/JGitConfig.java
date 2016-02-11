@@ -24,14 +24,14 @@ public class JGitConfig {
     @Property(key = "at.chrl.config.git.repo.password", defaultValue = "")
     public static String PASSWORD;
 
-    @Property(key = "at.chrl.config.git.hostname", defaultValue = "", description = "Hostname - Used for git Branch")
+    @Property(key = "at.chrl.config.git.hostname", defaultValue = "master", description = "Hostname - Used for git Branch")
     public static String HOSTNAME;
 
     static {
-        ConfigUtil.load(JGitConfig.class);
+        ConfigUtil.loadAndExport(JGitConfig.class);
         try {
-            if(HOSTNAME == null || HOSTNAME.isEmpty())
             HOSTNAME = InetAddress.getLocalHost().getHostName();
+            ConfigUtil.export(JGitConfig.class);
         } catch (UnknownHostException e) {
             System.out.println("Can not resolve hostname");
             e.printStackTrace();
