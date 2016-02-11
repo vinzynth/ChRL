@@ -59,5 +59,6 @@ public final class GitConfigUtil {
 
         //System.out.println("Set Config Directory");
         ConfigUtil.setConfigDirectory(configRepo.getParent().getAbsolutePath());
+        ConfigUtil.export(JGitConfig.class);
     }
 }
