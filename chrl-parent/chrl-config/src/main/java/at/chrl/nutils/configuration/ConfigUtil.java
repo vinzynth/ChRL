@@ -25,7 +25,7 @@ public final class ConfigUtil {
 	private Map<Class<?>, File> exportedFiles = new HashMap<>();
     private Collection<ConfigEventListener> configEventListeners = new ArrayList<>();
 
-	private ConfigUtil(){
+	public ConfigUtil(){
 		propertiesFiles = FileUtils.listFiles(new File("."), new String[] { "properties" }, true);
 		props = loadPropertiesFiles();
 	}
