@@ -74,7 +74,7 @@ public class GitRepositoryImplementation implements GitRepository {
         String f = file;
         if(!isLocal && f.startsWith(parentDir.getPath()))
             f = f.substring(parentDir.getPath().length());
-
+        //System.out.println("create File: " + f);
         try {
             if(!isLocal)
                 git.pull()
@@ -118,6 +118,7 @@ public class GitRepositoryImplementation implements GitRepository {
         String f = file;
         if(!isLocal && f.startsWith(parentDir.getPath()))
             f = f.substring(parentDir.getPath().length());
+        //System.out.println("update File: " + f);
         try {
             if(!isLocal)
                 git.pull()
@@ -131,11 +132,13 @@ public class GitRepositoryImplementation implements GitRepository {
                     .setOnly(f)
                     .setMessage("JGit: Updated File: " + f)
                     .call();
-            if(!isLocal)
+            if(!isLocal) {
+                //System.out.println("Push it now!");
                 git.push()
                         .setCredentialsProvider(credentials)
                         .call();
-        } catch (GitAPIException | JGitInternalException e) {
+            }
+        } catch (Exception e) {
             if(!e.getMessage().equals("No changes"))
                 e.printStackTrace();
         }

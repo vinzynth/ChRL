@@ -56,7 +56,7 @@ public final class ConfigUtil {
 		exportedFiles.put(classToExport, toExport);
         for (ConfigEventListener cel : configEventListeners) {
             try {
-                cel.onLoadedConfigClass(classToExport);
+                cel.onExportedConfigClass(classToExport);
             } catch (Exception e){
                 e.printStackTrace();
             }

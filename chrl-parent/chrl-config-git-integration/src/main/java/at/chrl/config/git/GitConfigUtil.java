@@ -25,11 +25,13 @@ public final class GitConfigUtil {
             return;
         }
 
+        //System.out.println("Add Config Listener");
         ConfigUtil.addConfigEventListener(new ConfigEventListener() {
 
             @Override
             public void beforeOnLoadedConfigClass(Class<?> targetClass) {
                 String fileName = targetClass.getSimpleName() + ".properties";
+                //System.out.println("BeforeOnLoadConfigClass: " + fileName);
                 configRepo.readFile(fileName);
             }
 
@@ -41,6 +43,7 @@ public final class GitConfigUtil {
             @Override
             public void onExportedConfigClass(Class<?> targetClass) {
                 String fileName = targetClass.getSimpleName() + ".properties";
+                //System.out.println("onExportedLoadConfigClass: " + fileName);
                 configRepo.updateFile(fileName);
             }
 
@@ -49,6 +52,8 @@ public final class GitConfigUtil {
                 this.onExportedConfigClass(obj.getClass());
             }
         });
+
+        //System.out.println("Set Config Directory");
         ConfigUtil.setConfigDirectory(configRepo.getParent().getAbsolutePath());
     }
 }
