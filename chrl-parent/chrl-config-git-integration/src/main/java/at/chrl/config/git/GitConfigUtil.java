@@ -14,7 +14,7 @@ import at.chrl.nutils.configuration.listener.ConfigEventListener;
  */
 public final class GitConfigUtil {
 
-    public static void init(){
+    public GitConfigUtil(){
         GitRepositoryProviderImplementation.getInstance().setUsername(JGitConfig.USERNAME);
         GitRepositoryProviderImplementation.getInstance().setPassword(JGitConfig.PASSWORD);
 
@@ -60,5 +60,13 @@ public final class GitConfigUtil {
         //System.out.println("Set Config Directory");
         ConfigUtil.getInstance().export(JGitConfig.class);
         ConfigUtil.getInstance().setConfigDirectory(configRepo.getParent().getAbsolutePath());
+    }
+
+    private static final class SingletonHolder{
+        private static final GitConfigUtil instance = new GitConfigUtil();
+    }
+
+    public static final GitConfigUtil getInstance(){
+        return SingletonHolder.instance;
     }
 }
