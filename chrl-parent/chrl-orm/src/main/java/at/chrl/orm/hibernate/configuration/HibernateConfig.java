@@ -6,11 +6,10 @@
  */
 package at.chrl.orm.hibernate.configuration;
 
-import java.util.Objects;
-
+import at.chrl.nutils.configuration.Property;
 import org.hibernate.cfg.AvailableSettings;
 
-import at.chrl.nutils.configuration.Property;
+import java.util.Objects;
 
 /**
  * 
@@ -414,6 +413,6 @@ public abstract class HibernateConfig implements IHibernateConfig{
 	/**
 	 * Flyway
 	 */
-	@Property(key = "chrl.orm.flyway.active", defaultValue = "true", description = "Defines if Flyway is active or not")
+	@Property(key = "chrl.orm.flyway.active", defaultValue = "false", description = "Defines if Flyway is active or not")
 	public boolean FLYWAY_ACTIVE;
 }
