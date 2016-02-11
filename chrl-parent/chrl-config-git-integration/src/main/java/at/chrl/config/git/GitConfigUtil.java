@@ -22,7 +22,7 @@ public final class GitConfigUtil {
         GitRepositoryProviderImplementation.getInstance().setUsername(JGitConfig.USERNAME);
         GitRepositoryProviderImplementation.getInstance().setPassword(JGitConfig.PASSWORD);
 
-        GitRepository configRepo = GitRepositoryProviderImplementation.getInstance().getRepository(JGitConfig.HOSTNAME);
+        GitRepository configRepo = GitRepositoryProviderImplementation.getInstance().getRepository(JGitConfig.REPO);
 
         if(configRepo == null){
             System.out.println("WARNING: Config repository is not available. Using local configuration as fallback!");
