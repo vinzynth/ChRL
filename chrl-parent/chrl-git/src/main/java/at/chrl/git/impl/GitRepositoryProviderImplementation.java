@@ -4,8 +4,10 @@ import at.chrl.git.GitRepository;
 import at.chrl.git.GitRepositoryProvider;
 import at.chrl.nutils.CollectionUtils;
 import at.chrl.nutils.Memoizer;
+import org.eclipse.jgit.util.FileUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
@@ -43,12 +45,12 @@ public class GitRepositoryProviderImplementation implements GitRepositoryProvide
         if(baseDir != null)
             this.baseDir = baseDir;
 
-        /*
+
         try {
             FileUtils.delete(this.baseDir, FileUtils.RECURSIVE);
         } catch (IOException ignored) {
         }
-        */
+
 
         this.baseDir.mkdirs();
     }
