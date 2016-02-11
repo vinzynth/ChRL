@@ -118,7 +118,6 @@ public class GitRepositoryImplementation implements GitRepository {
         String f = file;
         if(!isLocal && f.startsWith(parentDir.getPath()))
             f = f.substring(parentDir.getPath().length());
-
         try {
             if(!isLocal)
                 git.pull()
@@ -126,7 +125,7 @@ public class GitRepositoryImplementation implements GitRepository {
                         .setStrategy(MergeStrategy.OURS)
                         .call();
             git.add()
-                    .setUpdate(true)
+                    .addFilepattern(f)
                     .call();
             git.commit()
                     .setOnly(f)
