@@ -62,6 +62,9 @@ public class GitRepositoryProviderImplementation implements GitRepositoryProvide
         if(Objects.isNull(cache.get(remoteUrl)))
             cache.remove(remoteUrl);
 
+        if(Objects.nonNull(branch) && cache.containsKey(remoteUrl))
+            cache.get(remoteUrl).checkoutBranch(branch);
+
         return cache.getOrDefault(remoteUrl, null);
     }
 

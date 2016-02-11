@@ -194,6 +194,11 @@ public class GitRepositoryImplementation implements GitRepository {
                     git.push()
                             .setCredentialsProvider(credentials)
                             .call();
+                if(!isLocal)
+                    git.pull()
+                            .setCredentialsProvider(credentials)
+                            .setStrategy(MergeStrategy.THEIRS)
+                            .call();
             }
 
             git.checkout().setName(branch).call();
