@@ -66,6 +66,7 @@ public class GitRepositoryImplementation implements GitRepository {
                 .setDirectory(directory)
                 .setURI(remoteUrl)
                 .setTimeout(10)
+                .setCloneAllBranches(true)
                 .setCredentialsProvider(credentials)
                 .call();
     }
@@ -184,11 +185,15 @@ public class GitRepositoryImplementation implements GitRepository {
         try {
             boolean branchExists = git.getRepository().getRef(branch) != null;
             if (!branchExists) {
-                git.branchCreate()
+                git.checkout()
+                        .setCreateBranch(true)
                         .setName(branch)
-                        .setUpstreamMode(CreateBranchCommand.SetupUpstreamMode.TRACK)
-                        .setStartPoint("origin/" + branch)
+                        .setUpstreamMode(CreateBranchCommand.SetupUpstreamMode.SET_UPSTREAM)
                         .call();
+                if(!isLocal)
+                    git.push()
+                            .setCredentialsProvider(credentials)
+                            .call();
             }
 
             git.checkout().setName(branch).call();

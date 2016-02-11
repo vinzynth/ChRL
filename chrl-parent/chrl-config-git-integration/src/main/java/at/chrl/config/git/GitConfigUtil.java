@@ -14,10 +14,6 @@ import at.chrl.nutils.configuration.listener.ConfigEventListener;
  */
 public final class GitConfigUtil {
 
-    static {
-        ConfigUtil.loadAndExport(JGitConfig.class);
-    }
-
     public static void init(){
         GitRepositoryProviderImplementation.getInstance().setUsername(JGitConfig.USERNAME);
         GitRepositoryProviderImplementation.getInstance().setPassword(JGitConfig.PASSWORD);
