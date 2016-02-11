@@ -20,6 +20,11 @@ public final class GitConfigUtil {
 
         GitRepository configRepo = GitRepositoryProviderImplementation.getInstance().getRepository(remoteUrl);
 
+        if(configRepo == null){
+            System.out.println("WARNING: Config repository is not available. Using local configuration as fallback!");
+            return;
+        }
+
         ConfigUtil.addConfigEventListener(new ConfigEventListener() {
 
             @Override
