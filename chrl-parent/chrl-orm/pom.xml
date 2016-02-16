@@ -20,7 +20,7 @@
 	<description>Custom ORM Framework with Hibernate</description>
 	<!--  -->
 
-	<!--  -->
+	<!--  
 	<repositories>
 		<repository>
 			<id>local-libs</id>
@@ -28,7 +28,7 @@
 			<url>file://${basedir}/repo/</url>
 		</repository>
 	</repositories>
-	<!--  -->
+	      -->
 
 	<!--  -->
 	<dependencies>
