@@ -521,7 +521,8 @@ public final class HibernateService implements AutoCloseable {
 	 */
 	@SuppressWarnings("deprecation")
 	public void exportSchema(final HibernateConfig config, final String exportFile) {
-		Properties props = PropertiesUtils.filterEmtpyValues(ConfigUtil.getInstance().getProperties(config.getClass()));
+		/*
+        Properties props = PropertiesUtils.filterEmtpyValues(ConfigUtil.getInstance().getProperties(config.getClass()));
 
 		Configuration hibernateCfg = new Configuration();
 		hibernateCfg.setProperties(props);
@@ -529,10 +530,11 @@ public final class HibernateService implements AutoCloseable {
 		for (Class<?> ie : config.getAnnotatedClasses())
 			hibernateCfg.addAnnotatedClass(ie);
 
-		SchemaExport ex = new SchemaExport(hibernateCfg);
+		SchemaExport ex = new SchemaExport();
 
 		ex.setOutputFile(exportFile);
-		ex.create(true, false);
+		ex.create();*/
+        throw new UnsupportedOperationException("Schema export is not supported anymore");
 	}
 
 	/**
